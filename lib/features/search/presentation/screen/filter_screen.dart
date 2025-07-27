@@ -428,7 +428,6 @@
 // //   }
 // // }
 
-
 // import 'dart:math';
 // import 'package:flutter/material.dart';
 // import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -962,10 +961,10 @@
 //     );
 //   }
 // }
-
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
+import 'package:ttrueno_fo827e642a0c4/core/theme/app_sizes.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/widget/custom_thumb_shap.dart';
 
@@ -985,9 +984,72 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
   DateTime? _selectedDate;
   int passengers = 1;
 
-  double departureDistanceFlex = 2;
-  double departureTimeFlex = 30;
-  double arrivalFlex = 30;
+  // Departure time flexibility values (in minutes)
+  static const List<int> timeFlexValues = [
+    0,
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    90,
+    120,
+    180,
+    240,
+    300,
+    360,
+  ];
+  int departureTimeFlexIndex = 3; // Default to 30 minutes
+
+  // Departure distance flexibility values (in meters)
+  static const List<int> departureDistanceValues = [
+    0,
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+    3500,
+    4000,
+    4500,
+    5000,
+  ];
+  int departureDistanceFlexIndex = 2; // Default to 200 meters
+
+  // Arrival distance flexibility values (in meters)
+  static const List<int> arrivalDistanceValues = [
+    0,
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000,
+    2000,
+    3000,
+    4000,
+    5000,
+    6000,
+    7000,
+    8000,
+    9000,
+    10000,
+  ];
+  int arrivalFlexIndex = 3; // Default to 300 meters
 
   Future<void> _selectDate() async {
     DateTime now = DateTime.now();
@@ -1007,16 +1069,35 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
     }
   }
 
-  Widget buildDepartureFlexSliders() {
+  String _formatDuration(int minutes) {
+    if (minutes < 60) {
+      return '$minutes min';
+    } else {
+      final hours = minutes ~/ 60;
+      return '$hours h';
+    }
+  }
+
+  String _formatDistance(int meters) {
+    if (meters < 1000) {
+      return '$meters m';
+    } else {
+      final km = meters / 1000;
+      return '${km.toStringAsFixed(km % 1 == 0 ? 0 : 1)} km';
+    }
+  }
+
+  Widget _buildDepartureDistanceSlider() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Departure Flexibility",
+          "Minimum Departure Distance",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         Gap.h12,
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
@@ -1027,30 +1108,44 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
                   inactiveTrackColor: AppColors.progressBg,
                   thumbColor: Colors.white,
                   thumbShape: CustomThumbShape(),
-                  overlayShape: const RoundSliderOverlayShape(
-                    overlayRadius: 0,
-                  ),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
                 ),
                 child: Slider(
-                  value: departureDistanceFlex,
+                  value: departureDistanceFlexIndex.toDouble(),
                   min: 0,
-                  max: 10,
-                  label: "${departureDistanceFlex.round()} km",
+                  max: departureDistanceValues.length - 1,
+                  divisions: departureDistanceValues.length - 1,
+                  label: _formatDistance(
+                    departureDistanceValues[departureDistanceFlexIndex],
+                  ),
                   onChanged: (value) {
-                    setState(() => departureDistanceFlex = value);
+                    setState(() => departureDistanceFlexIndex = value.round());
                   },
                 ),
               ),
             ),
-            Gap.w24,
-            Text(
-              "${departureDistanceFlex.round()} km",
-              style: const TextStyle(fontSize: 14),
+            // Gap.w24,
+            SizedBox(
+              width: 50,
+              child: Text(
+                _formatDistance(
+                  departureDistanceValues[departureDistanceFlexIndex],
+                ),
+                style: const TextStyle(fontSize: 14),
+              ),
             ),
           ],
         ),
-        Gap.h16,
+      ],
+    );
+  }
+
+  Widget _buildDepartureTimeSlider() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
@@ -1061,25 +1156,79 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
                   inactiveTrackColor: AppColors.progressBg,
                   thumbColor: Colors.white,
                   thumbShape: CustomThumbShape(),
-                  overlayShape: const RoundSliderOverlayShape(
-                    overlayRadius: 0,
-                  ),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
                 ),
                 child: Slider(
-                  value: departureTimeFlex,
+                  value: departureTimeFlexIndex.toDouble(),
                   min: 0,
-                  max: 180,
-                  label: "${departureTimeFlex.round()} min",
+                  max: timeFlexValues.length - 1,
+                  divisions: timeFlexValues.length - 1,
+                  label: _formatDuration(
+                    timeFlexValues[departureTimeFlexIndex],
+                  ),
                   onChanged: (value) {
-                    setState(() => departureTimeFlex = value);
+                    setState(() => departureTimeFlexIndex = value.round());
                   },
                 ),
               ),
             ),
-            Gap.w8,
-            Text(
-              "${departureTimeFlex.round()} min",
-              style: const TextStyle(fontSize: 14),
+            // Gap.w24,
+            SizedBox(
+              width: 50,
+              child: Text(
+                _formatDuration(timeFlexValues[departureTimeFlexIndex]),
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildArrivalDistanceSlider() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Minimum Arrival Distance",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        Gap.h12,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  trackHeight: 8,
+                  activeTrackColor: AppColors.primarybutton,
+                  inactiveTrackColor: AppColors.progressBg,
+                  thumbColor: Colors.white,
+                  thumbShape: CustomThumbShape(),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
+                ),
+                child: Slider(
+                  value: arrivalFlexIndex.toDouble(),
+                  min: 0,
+                  max: arrivalDistanceValues.length - 1,
+                  divisions: arrivalDistanceValues.length - 1,
+                  label: _formatDistance(
+                    arrivalDistanceValues[arrivalFlexIndex],
+                  ),
+                  onChanged: (value) {
+                    setState(() => arrivalFlexIndex = value.round());
+                  },
+                ),
+              ),
+            ),
+            // Gap.w8,
+            SizedBox(
+              width: 50,
+              child: Text(
+                _formatDistance(arrivalDistanceValues[arrivalFlexIndex]),
+                style: const TextStyle(fontSize: 14),
+              ),
             ),
           ],
         ),
@@ -1096,14 +1245,13 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              // Reset filters
               fromController.clear();
               toController.clear();
               setState(() {
                 passengers = 1;
-                departureDistanceFlex = 2;
-                departureTimeFlex = 30;
-                arrivalFlex = 30;
+                departureTimeFlexIndex = 3;
+                departureDistanceFlexIndex = 2;
+                arrivalFlexIndex = 3;
                 _dateController.clear();
                 _timeController.clear();
                 _selectedDate = null;
@@ -1150,7 +1298,7 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
                 Expanded(
                   child: TextField(
                     controller: _timeController,
-                    readOnly: false, // Allows manual input
+                    readOnly: false,
                     keyboardType: TextInputType.datetime,
                     decoration: InputDecoration(
                       prefixIcon: GestureDetector(
@@ -1232,57 +1380,17 @@ class _FilterRidesScreenState extends State<FilterRidesScreen> {
               ],
             ),
             Gap.h24,
-
-            // Use the refactored departure sliders here:
-            buildDepartureFlexSliders(),
-
+            _buildDepartureDistanceSlider(),
+            Gap.h24,
+            _buildDepartureTimeSlider(),
+            Gap.h24,
+            _buildArrivalDistanceSlider(),
             Gap.h40,
-            Text(
-              "Arrival Flexibility",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            Gap.h12,
-            Row(
-              children: [
-                Expanded(
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      trackHeight: 8,
-                      activeTrackColor: AppColors.primarybutton,
-                      inactiveTrackColor: AppColors.progressBg,
-                      thumbColor: Colors.white,
-                      thumbShape: CustomThumbShape(),
-                      overlayShape: const RoundSliderOverlayShape(
-                        overlayRadius: 0,
-                      ),
-                    ),
-                    child: Slider(
-                      value: arrivalFlex,
-                      min: 0,
-                      max: 60,
-                      label: "${arrivalFlex.round()} Km",
-                      onChanged: (value) {
-                        setState(() => arrivalFlex = value);
-                      },
-                    ),
-                  ),
-                ),
-                Gap.w8,
-                Text(
-                  "${arrivalFlex.round()} Km",
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-
-            Gap.h80,
             SizedBox(
               width: double.infinity,
               height: 51,
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Add your booking conflict check and apply logic here
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primarybutton,
                   foregroundColor: Colors.white,

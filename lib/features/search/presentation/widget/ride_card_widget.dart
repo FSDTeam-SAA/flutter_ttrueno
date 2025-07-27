@@ -194,7 +194,10 @@ class _RideCardState extends State<RideCard> {
             child: Icon(Icons.add, color: Colors.grey.shade600, size: 20),
           ),
           Gap.h4,
-          const Text("Add", style: TextStyle(color: Colors.grey, fontSize: 12)),
+          const Text(
+            "Join",
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          ),
         ],
       ),
     );
