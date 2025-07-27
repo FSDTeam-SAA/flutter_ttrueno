@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
-                            text: 'Continue With Google',
+                            text: 'Continue With Email',
                           ),
                           Gap.h40,
                           Row(

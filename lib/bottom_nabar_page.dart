@@ -88,7 +88,7 @@ class _BottomNabarScreenState extends State<BottomNabarScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const RideSearchScreen(),
+    const SearchScreen(), //SearchScreenDelete    RideSearchScreen
     const InboxScreen(),
     const BookingScreen(),
     const ProfileScreen(),

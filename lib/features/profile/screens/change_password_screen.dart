@@ -67,7 +67,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Gap.h8,
             ReusableTextField(
               hintText: "Enter current password",
-              prefixIcon: Icons.lock_outline,
+              prefix: Icons.lock_outline,
               obscureText: _obscureCurrent,
               controller: _currentPasswordController,
               suffixIcon: IconButton(
@@ -99,7 +99,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Gap.h8,
             ReusableTextField(
               hintText: "Enter new password",
-              prefixIcon: Icons.lock_outline,
+              prefix: Icons.lock_outline,
               obscureText: _obscureNew,
               controller: _newPasswordController,
               validator: (value) {
@@ -139,7 +139,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Gap.h8,
             ReusableTextField(
               hintText: "Re-enter new password",
-              prefixIcon: Icons.lock_outline,
+              prefix: Icons.lock_outline,
               obscureText: _obscureConfirm,
               controller: _confirmNewPasswordController,
               validator: (value) {

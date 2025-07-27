@@ -82,7 +82,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                         Gap.h8,
                         ReusableTextField(
                           hintText: "New password",
-                          prefixIcon: Icons.lock_outline,
+                          prefix: Icons.lock_outline,
                           obscureText: _obscurenewpassword,
                           controller: _newPasswordController,
                           validator: (value) {
@@ -103,7 +103,8 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                             ),
                             onPressed: () {
                               setState(
-                                () => _obscurenewpassword = !_obscurenewpassword,
+                                () =>
+                                    _obscurenewpassword = !_obscurenewpassword,
                               );
                             },
                           ),
@@ -118,7 +119,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                         Gap.h8,
                         ReusableTextField(
                           hintText: "Confirm new password",
-                          prefixIcon: Icons.lock_outline,
+                          prefix: Icons.lock_outline,
                           obscureText: _obscureconfirmnewpassword,
                           controller: _confirmPasswordController,
                           validator: (value) {

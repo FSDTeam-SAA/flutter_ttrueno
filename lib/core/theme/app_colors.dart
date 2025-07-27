@@ -16,6 +16,7 @@ class AppColors {
   static const Color textFieldBackground = Color(0xFF121212);
   static const Color textFieldTextiHint = Color(0xFFB0B0B0);
   static const Color textFieldBorder = Color(0xFFB0B0B0);
+  static const Color progressBg = Color(0xFFE7E8EA);
 
   static const Color textLink = Color(0xFF3B82F6);
 

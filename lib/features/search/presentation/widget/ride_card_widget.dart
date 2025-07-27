@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
-
 import '../../../../core/theme/app_colors.dart';
 
 class RideCard extends StatefulWidget {
@@ -24,7 +23,24 @@ class RideCard extends StatefulWidget {
 
 class _RideCardState extends State<RideCard> {
   final List<Map<String, dynamic>> joinedUsers = [];
-  final Set<String> selectedBaggageTypes = {};
+  final int maxUsers = 4;
+
+  String? selectedBaggageType;
+
+  final List<Map<String, dynamic>> existingUsers = [
+    {
+      "image": "assets/images/user5.png",
+      "name": "John",
+      "rating": "4.5",
+      "baggage": <String>{'Small'},
+    },
+    {
+      "image": "assets/images/user3.png",
+      "name": "Smith",
+      "rating": "4.5",
+      "baggage": <String>{'Medium'},
+    },
+  ];
 
   void _showJoinBottomSheet() {
     showModalBottomSheet(
@@ -36,11 +52,11 @@ class _RideCardState extends State<RideCard> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     "Select Baggage Type",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
@@ -50,7 +66,7 @@ class _RideCardState extends State<RideCard> {
                     children: [
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/largebaggage.png',
-                        isSelected: selectedBaggageTypes.contains('Small'),
+                        isSelected: selectedBaggageType == 'Small',
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('Small');
@@ -60,7 +76,7 @@ class _RideCardState extends State<RideCard> {
                       Gap.h16,
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/smallbaggage.png',
-                        isSelected: selectedBaggageTypes.contains('Medium'),
+                        isSelected: selectedBaggageType == 'Medium',
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('Medium');
@@ -70,21 +86,15 @@ class _RideCardState extends State<RideCard> {
                       Gap.h16,
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/empty.png',
-                        isSelected: selectedBaggageTypes.contains('No Baggage'),
+                        isSelected: selectedBaggageType == 'No Baggage',
                         onTap: () {
                           setModalState(() {
-                            if (!selectedBaggageTypes.contains('No Baggage')) {
-                              selectedBaggageTypes.clear();
-                              selectedBaggageTypes.add('No Baggage');
-                            } else {
-                              selectedBaggageTypes.remove('No Baggage');
-                            }
+                            toggleBaggage('No Baggage');
                           });
                         },
                       ),
                     ],
                   ),
-
                   Gap.h24,
                   Row(
                     children: [
@@ -104,9 +114,9 @@ class _RideCardState extends State<RideCard> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (selectedBaggageTypes.isEmpty) {
+                            if (selectedBaggageType == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text(
                                     "Please select a baggage type.",
                                   ),
@@ -114,25 +124,24 @@ class _RideCardState extends State<RideCard> {
                               );
                               return;
                             }
-
                             setState(() {
                               joinedUsers.add({
                                 "image": "assets/images/user1.png",
                                 "name": "You",
                                 "rating": "5.0",
-                                "baggage": Set<String>.from(
-                                  selectedBaggageTypes,
-                                ), // Store a copy of the selected baggage
+                                "baggage": {selectedBaggageType!},
                               });
                             });
-
-                            selectedBaggageTypes.clear();
+                            selectedBaggageType = null;
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          child: const Text("Join Ride"),
+                          child: const Text(
+                            "Join Ride",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ],
@@ -147,14 +156,10 @@ class _RideCardState extends State<RideCard> {
   }
 
   void toggleBaggage(String type) {
-    if (selectedBaggageTypes.contains('No Baggage') && type != 'No Baggage') {
-      selectedBaggageTypes.remove('No Baggage');
-    }
-
-    if (selectedBaggageTypes.contains(type)) {
-      selectedBaggageTypes.remove(type);
+    if (selectedBaggageType == type) {
+      selectedBaggageType = null;
     } else {
-      selectedBaggageTypes.add(type);
+      selectedBaggageType = type;
     }
   }
 
@@ -165,93 +170,159 @@ class _RideCardState extends State<RideCard> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(8),
-        child: Image.asset(
-          imagePath,
-          width: 24,
-          height: 24,
-          color: isSelected ? AppColors.primarybutton : Colors.grey,
-        ),
+      child: Image.asset(
+        imagePath,
+        width: 24,
+        height: 24,
+        color: isSelected ? AppColors.primarybutton : Colors.grey,
       ),
     );
+  }
+
+  Widget _buildAddButton() {
+    return InkWell(
+      onTap: () => _showJoinBottomSheet(),
+      child: Column(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade400, width: 2),
+            ),
+            child: Icon(Icons.add, color: Colors.grey.shade600, size: 20),
+          ),
+          Gap.h4,
+          const Text("Add", style: TextStyle(color: Colors.grey, fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildUserSlots() {
+    List<Widget> slots = [];
+
+    for (var user in existingUsers) {
+      slots.add(
+        _buildProfile(
+          user["image"]!,
+          user["name"]!,
+          user["rating"]!,
+          user["baggage"]!,
+        ),
+      );
+    }
+
+    for (var user in joinedUsers) {
+      slots.add(
+        _buildProfile(
+          user["image"]!,
+          user["name"]!,
+          user["rating"]!,
+          user["baggage"]!,
+        ),
+      );
+    }
+
+    int totalUsers = existingUsers.length + joinedUsers.length;
+    int remainingSlots = maxUsers - totalUsers;
+
+    for (int i = 0; i < remainingSlots; i++) {
+      slots.add(_buildAddButton());
+    }
+
+    return slots;
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              decoration: BoxDecoration(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Gap.h12,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "From",
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                        Text(
+                          widget.fromLocation,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "To",
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                        Text(
+                          widget.toLocation,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Gap.h12,
+                const CarDivider(),
+                Gap.h20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _buildUserSlots(),
+                ),
+                Gap.h8,
+              ],
+            ),
+          ),
+          Positioned(
+            top: 16,
+            left: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              decoration: const BoxDecoration(
                 color: AppColors.primarybutton,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
               child: Text(
                 "${widget.date} at ${widget.time}",
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            Gap.h12,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("From", style: TextStyle(color: Colors.grey)),
-                    Text(
-                      widget.fromLocation,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                //const Icon(Icons.directions_car, color: Colors.grey),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("To", style: TextStyle(color: Colors.grey)),
-                    Text(
-                      widget.toLocation,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            CarDivider(),
-            Gap.h12,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildProfile("assets/images/user1.png", "John", "4.5", {}),
-                _buildProfile("assets/images/user3.png", "Smith", "4.5", {}),
-                for (var user in joinedUsers)
-                  _buildProfile(
-                    user["image"]!,
-                    user["name"]!,
-                    user["rating"]!,
-                    user["baggage"]!,
-                  ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                  onPressed: _showJoinBottomSheet,
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -266,7 +337,10 @@ class _RideCardState extends State<RideCard> {
       children: [
         CircleAvatar(radius: 18, backgroundImage: AssetImage(imagePath)),
         Gap.h4,
-        Text(name, style: const TextStyle(fontSize: 12)),
+        Text(
+          name,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -274,30 +348,29 @@ class _RideCardState extends State<RideCard> {
             Text(rating, style: const TextStyle(fontSize: 12)),
           ],
         ),
+        Gap.h4,
         //if (!baggageTypes.contains('No Baggage') && baggageTypes.isNotEmpty)
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: baggageTypes.map((type) {
-            String imagePath;
+            String iconPath;
             switch (type) {
               case 'Small':
-                imagePath = 'assets/images/largebaggage.png';
+                iconPath = 'assets/images/largebaggage.png';
                 break;
               case 'Medium':
-                imagePath = 'assets/images/smallbaggage.png';
+                iconPath = 'assets/images/smallbaggage.png';
                 break;
               default:
-                imagePath = 'assets/images/empty.png';
+                iconPath = 'assets/images/empty.png';
             }
-
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
               child: Image.asset(
-                imagePath,
-                width: 18,
-                height: 18,
-                color: AppColors
-                    .primaryTextblack, // Optional: remove if you want the original image color
+                iconPath,
+                width: 14,
+                height: 14,
+                color: AppColors.primaryTextblack,
               ),
             );
           }).toList(),

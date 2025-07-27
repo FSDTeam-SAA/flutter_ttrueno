@@ -494,64 +494,41 @@ class _MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Chat', style: TextStyle(color: Colors.black)),
+        title: const Text('Chat', style: TextStyle(color: Colors.black)),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
         actions: [
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: GestureDetector(
+              onTap: () {
+                // Handle tap: show bottom sheet, dialog, or go back
+              },
+              child: Row(
+                children: [
+                  Text(
+                    'Leave',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                     ),
-                    contentPadding: const EdgeInsets.all(24),
-                    content: Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/leave.png',
-                                  width: 32,
-                                  height: 32,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "Leave",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 32,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(Icons.menu, size: 28, color: Colors.black),
+                  ),
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    'assets/images/leave.png',
+                    width: 28,
+                    height: 28,
+                    color: Colors.red, // Optional tint
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
+
       body: Column(
         children: [
           const _LocationHeader(),
@@ -587,7 +564,7 @@ class _LocationHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('From', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              Text('From', style: TextStyle(color: Colors.grey, fontSize: 16)),
               Text(
                 'Dublin Airport T1',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -597,7 +574,7 @@ class _LocationHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('To', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              Text('To', style: TextStyle(color: Colors.grey, fontSize: 16)),
               Text(
                 'Connell St 175',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

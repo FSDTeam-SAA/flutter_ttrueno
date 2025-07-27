@@ -9,10 +9,10 @@ class PostRideScreen extends StatefulWidget {
   const PostRideScreen({super.key});
 
   @override
-  State<PostRideScreen> createState() => _RideSearchScreenState();
+  State<PostRideScreen> createState() => _PostRideScreenState();
 }
 
-class _RideSearchScreenState extends State<PostRideScreen> {
+class _PostRideScreenState extends State<PostRideScreen> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
@@ -49,8 +49,9 @@ class _RideSearchScreenState extends State<PostRideScreen> {
         title: Text(
           'Post Ride',
           style: AppText.mdSemiBold_16_600.copyWith(
-          color: AppColors.primaryTextblack,
-        )),
+            color: AppColors.primaryTextblack,
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -58,7 +59,7 @@ class _RideSearchScreenState extends State<PostRideScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _LocationInputs(),
+              const _LocationInputs(),
               Gap.h20,
               Text(
                 "Departure",
@@ -72,20 +73,22 @@ class _RideSearchScreenState extends State<PostRideScreen> {
                   Expanded(
                     child: TextField(
                       controller: _dateController,
-                      readOnly: false,
+                      readOnly: true,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
-                          icon: Icon(Icons.calendar_today_outlined),
+                          icon: const Icon(Icons.calendar_today_outlined),
                           onPressed: _selectDate,
                         ),
                         hintText: 'Date',
-                        contentPadding: EdgeInsets.symmetric(vertical: 20),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                        ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
                             color: AppColors.primarybutton,
                             width: 2,
@@ -98,8 +101,7 @@ class _RideSearchScreenState extends State<PostRideScreen> {
                   Expanded(
                     child: TextField(
                       controller: _timeController,
-                      readOnly: false, // Allows manual input
-                      keyboardType: TextInputType.datetime,
+                      readOnly: true,
                       decoration: InputDecoration(
                         prefixIcon: GestureDetector(
                           onTap: () async {
@@ -112,16 +114,18 @@ class _RideSearchScreenState extends State<PostRideScreen> {
                               _timeController.text = formattedTime;
                             }
                           },
-                          child: Icon(Icons.watch_later_outlined),
+                          child: const Icon(Icons.watch_later_outlined),
                         ),
                         hintText: 'Time',
-                        contentPadding: EdgeInsets.symmetric(vertical: 20),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                        ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
                             color: AppColors.primarybutton,
                             width: 2,
@@ -135,7 +139,7 @@ class _RideSearchScreenState extends State<PostRideScreen> {
               Gap.h20,
               Row(
                 children: [
-                  Icon(Icons.person_outline, size: 28),
+                  const Icon(Icons.person_outline, size: 28),
                   Gap.w12,
                   Text(
                     "Passengers Allowed",
@@ -143,25 +147,22 @@ class _RideSearchScreenState extends State<PostRideScreen> {
                       color: AppColors.primaryTextblack,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       if (passengers > 1) {
                         setState(() => passengers--);
                       }
                     },
-                    icon: Icon(Icons.remove_circle_outline),
+                    icon: const Icon(Icons.remove_circle_outline),
                   ),
                   Container(
                     height: 35,
                     width: 80,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.grey[200]!,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(color: Colors.grey[200]!, width: 2),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -172,74 +173,33 @@ class _RideSearchScreenState extends State<PostRideScreen> {
                       ),
                     ),
                   ),
-
                   IconButton(
                     onPressed: () {
                       setState(() => passengers++);
                     },
-                    icon: Icon(Icons.add_circle_outline),
+                    icon: const Icon(Icons.add_circle_outline),
                   ),
                 ],
               ),
               Gap.h20,
 
-              Text(
-                "NOTE",
-                style: AppText.lgMedium_18_500.copyWith(
-                  color: AppColors.primaryTextblack,
-                ),
-              ),
-              Gap.h12,
-              TextField(
-                maxLines: null,
-                minLines: 6,
-                decoration: InputDecoration(
-                  hintText: 'e.g. Be on time',
-                  hintStyle: AppText.xlSemiBold_20_400.copyWith(
-                    color: AppColors.secondaryTextblack,
-                  ),
-                  //filled: true,
-                  fillColor: Colors.transparent,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: AppColors.textFieldBorder,
-                      width: 1,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: AppColors.textFieldBorder,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: AppColors.textFieldBorder,
-                      width: 1,
-                    ),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: AppColors.textFieldBorder,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                style: const TextStyle(color: Colors.black),
-              ),
+              // Add baggage selector here
+              BaggageSelector(),
 
-              Gap.h24,
-              context.primaryButton(
-                width: double.infinity,
-                onPressed: () {},
-                text: 'POST',
-              ),
+              // Bottom padding to avoid overlap with button
+              const SizedBox(height: 40),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        child: context.primaryButton(
+          width: double.infinity,
+          onPressed: () {
+            // TODO: Your submit logic
+          },
+          text: 'POST',
         ),
       ),
     );
@@ -282,8 +242,8 @@ class _LocationInputs extends StatelessWidget {
 
   Widget _buildCircleIcon(Image image) {
     return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
         color: Color(0xFFF5F5F5),
         shape: BoxShape.circle,
       ),
@@ -344,6 +304,80 @@ class _LocationInputs extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BaggageSelector extends StatefulWidget {
+  const BaggageSelector({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _BaggageSelectorState createState() => _BaggageSelectorState();
+}
+
+class _BaggageSelectorState extends State<BaggageSelector> {
+  int? selectedIndex;
+
+  final List<String> baggageImages = [
+    'assets/images/largebaggage.png', // normal baggage
+    'assets/images/smallbaggage.png', // small luggage
+    'assets/images/empty.png', // no baggage
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Gap.h40,
+        Text(
+          "Please select your baggage type",
+          style: AppText.xlSemiBold_20_400.copyWith(
+                  color: AppColors.primaryTextblack,
+                ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white, // or any background color you want
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.grey.shade300, // border color
+              width: 2,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(baggageImages.length, (index) {
+              final isSelected = selectedIndex == index;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                child: ColorFiltered(
+                  colorFilter: isSelected
+                      ? const ColorFilter.mode(
+                          AppColors.primarybutton,
+                          BlendMode.srcIn,
+                        )
+                      : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                  child: Image.asset(
+                    baggageImages[index],
+                    width: 28,
+                    height: 28,
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+
+        const SizedBox(height: 40),
+      ],
     );
   }
 }

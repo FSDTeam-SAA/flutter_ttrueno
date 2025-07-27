@@ -3,7 +3,8 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/active_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/cancelled_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/complete_widget.dart';
+
+import '../widget/complete_widget.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -47,9 +48,9 @@ class _BookingScreenState extends State<BookingScreen>
         ),
         bottom: TabBar(
           controller: _tabController,
-          labelColor: AppColors.tabselect,
+          labelColor: AppColors.primarybutton,
           unselectedLabelColor: Colors.grey,
-          indicatorColor: AppColors.tabselect,
+          indicatorColor: AppColors.primarybutton,
           tabs: [
             Tab(text: 'Active (2)'),
             Tab(text: 'Completed (3)'),

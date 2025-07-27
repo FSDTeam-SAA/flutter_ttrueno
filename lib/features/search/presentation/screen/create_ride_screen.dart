@@ -17,9 +17,12 @@ class SearchResultsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Top Bar', style: AppText.mdSemiBold_16_600.copyWith(
-          color: AppColors.primaryTextblack,
-        )),
+        title: Text(
+          'Top Bar',
+          style: AppText.mdSemiBold_16_600.copyWith(
+            color: AppColors.primaryTextblack,
+          ),
+        ),
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
@@ -45,7 +48,7 @@ class SearchResultsScreen extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -67,8 +70,121 @@ class SearchResultsScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             Gap.h12,
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            //       child: ElevatedButton(
+            //         onPressed: () {},
+            //         style: ElevatedButton.styleFrom(
+            //           padding: EdgeInsets.symmetric(
+            //             horizontal: 12,
+            //             vertical: 8,
+            //           ),
+            //           textStyle: TextStyle(fontSize: 12),
+            //         ),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Icon(Icons.list, size: 16),
+            //             SizedBox(width: 6),
+            //             Text('All'),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            //       child: ElevatedButton(
+            //         onPressed: () {},
+            //         style: ElevatedButton.styleFrom(
+            //           padding: EdgeInsets.symmetric(
+            //             horizontal: 12,
+            //             vertical: 8,
+            //           ),
+            //           textStyle: TextStyle(fontSize: 12),
+            //         ),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Icon(Icons.today, size: 16),
+            //             SizedBox(width: 6),
+            //             Text('Today'),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            //       child: ElevatedButton(
+            //         onPressed: () {},
+            //         style: ElevatedButton.styleFrom(
+            //           padding: EdgeInsets.symmetric(
+            //             horizontal: 12,
+            //             vertical: 8,
+            //           ),
+            //           textStyle: TextStyle(fontSize: 12),
+            //         ),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Icon(Icons.schedule, size: 16),
+            //             SizedBox(width: 6),
+            //             Text('Upcoming'),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // Ordenar
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.swap_vert, size: 24, color: Colors.black),
+                  label: Text('Ordenar', style: TextStyle(fontSize: 16, color: Colors.black)),
+                ),
+
+                // Filtrar with red dot
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.tune, size: 24, color: Colors.black),
+                      label: Text(
+                        'Filtrar',
+                        style: TextStyle(fontSize: 16,color: Colors.black),
+                      ),
+                    ),
+                    // Positioned(
+                    //   right: 12,
+                    //   top: 6,
+                    //   child: Container(
+                    //     width: 8,
+                    //     height: 8,
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.red,
+                    //       shape: BoxShape.circle,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+
+                // Mapa
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.map_outlined, size: 24, color: Colors.black),
+                  label: Text('Mapa', style: TextStyle(fontSize: 16,color: Colors.black)),
+                ),
+              ],
+            ),
+
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
