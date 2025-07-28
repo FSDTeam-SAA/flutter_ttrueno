@@ -1029,7 +1029,7 @@ class _BookingCardState extends State<BookingCard> {
                     imagePath,
                     width: 14,
                     height: 14,
-                    color: AppColors.primaryTextblack,
+                    color: AppColors.primaryTextblack, 
                   ),
                 );
               }).toList()

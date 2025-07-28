@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/filter_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/features/search/presentation/widget/filterchipwidget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/widget/ride_card_widget.dart';
 
 import '../../../../core/theme/text_style.dart';
@@ -74,115 +75,66 @@ class SearchResultsScreen extends StatelessWidget {
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceAround,
             //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-            //       child: ElevatedButton(
-            //         onPressed: () {},
-            //         style: ElevatedButton.styleFrom(
-            //           padding: EdgeInsets.symmetric(
-            //             horizontal: 12,
-            //             vertical: 8,
-            //           ),
-            //           textStyle: TextStyle(fontSize: 12),
-            //         ),
-            //         child: Row(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: [
-            //             Icon(Icons.list, size: 16),
-            //             SizedBox(width: 6),
-            //             Text('All'),
-            //           ],
-            //         ),
-            //       ),
+            //     // Ordenar
+            //     TextButton.icon(
+            //       onPressed: () {},
+            //       icon: Icon(Icons.swap_vert, size: 24, color: Colors.black),
+            //       label: Text('Ordenar', style: TextStyle(fontSize: 16, color: Colors.black)),
             //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            //       child: ElevatedButton(
-            //         onPressed: () {},
-            //         style: ElevatedButton.styleFrom(
-            //           padding: EdgeInsets.symmetric(
-            //             horizontal: 12,
-            //             vertical: 8,
+
+            //     // Filtrar with red dot
+            //     Stack(
+            //       alignment: Alignment.topRight,
+            //       children: [
+            //         TextButton.icon(
+            //           onPressed: () {},
+            //           icon: Icon(Icons.tune, size: 24, color: Colors.black),
+            //           label: Text(
+            //             'Filtrar',
+            //             style: TextStyle(fontSize: 16,color: Colors.black),
             //           ),
-            //           textStyle: TextStyle(fontSize: 12),
             //         ),
-            //         child: Row(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: [
-            //             Icon(Icons.today, size: 16),
-            //             SizedBox(width: 6),
-            //             Text('Today'),
-            //           ],
-            //         ),
-            //       ),
+            //       ],
             //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            //       child: ElevatedButton(
-            //         onPressed: () {},
-            //         style: ElevatedButton.styleFrom(
-            //           padding: EdgeInsets.symmetric(
-            //             horizontal: 12,
-            //             vertical: 8,
-            //           ),
-            //           textStyle: TextStyle(fontSize: 12),
-            //         ),
-            //         child: Row(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: [
-            //             Icon(Icons.schedule, size: 16),
-            //             SizedBox(width: 6),
-            //             Text('Upcoming'),
-            //           ],
-            //         ),
-            //       ),
+
+            //     // Mapa
+            //     TextButton.icon(
+            //       onPressed: () {},
+            //       icon: Icon(Icons.map_outlined, size: 24, color: Colors.black),
+            //       label: Text('Mapa', style: TextStyle(fontSize: 16,color: Colors.black)),
             //     ),
             //   ],
             // ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Ordenar
-                TextButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.swap_vert, size: 24, color: Colors.black),
-                  label: Text('Ordenar', style: TextStyle(fontSize: 16, color: Colors.black)),
-                ),
-
-                // Filtrar with red dot
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.tune, size: 24, color: Colors.black),
-                      label: Text(
-                        'Filtrar',
-                        style: TextStyle(fontSize: 16,color: Colors.black),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  // Departure Flex Distance
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      height:
+                          48, // Adjust height as needed to fit your chip size
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            FilterChipWidget(
+                              label: 'Departure Flex : 200 meters',
+                            ),
+                            SizedBox(width: 8),
+                            FilterChipWidget(label: 'Departure Flex : 30 min'),
+                            SizedBox(width: 8),
+                            FilterChipWidget(
+                              label: 'Arrival Flex : 200 meters',
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    // Positioned(
-                    //   right: 12,
-                    //   top: 6,
-                    //   child: Container(
-                    //     width: 8,
-                    //     height: 8,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.red,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-
-                // Mapa
-                TextButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.map_outlined, size: 24, color: Colors.black),
-                  label: Text('Mapa', style: TextStyle(fontSize: 16,color: Colors.black)),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
 
             Expanded(

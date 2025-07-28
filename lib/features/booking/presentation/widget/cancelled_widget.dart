@@ -1172,6 +1172,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                   ),
                 ],
               ),
+              Gap.h4,
               BookingCard(
                 dateTime: '23 Feb 2025 at 10:00 AM',
                 fromLocation: 'Dublin Airport T1',

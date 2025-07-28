@@ -626,14 +626,13 @@ class _UserAvatar extends StatelessWidget {
   final Function(String userName, Set<String> baggage) onBaggageChange;
 
   const _UserAvatar({
-    Key? key,
     required this.name,
     required this.rating,
     required this.imageAsset,
     this.isCurrentUser = false,
     required this.baggage,
     required this.onBaggageChange,
-  }) : super(key: key);
+  });
 
   void _onLongPress(BuildContext context) {
     if (isCurrentUser) {
@@ -701,6 +700,7 @@ class _UserAvatar extends StatelessWidget {
                   }
                 },
               ),
+              SizedBox(height: 50),
             ],
           );
         },

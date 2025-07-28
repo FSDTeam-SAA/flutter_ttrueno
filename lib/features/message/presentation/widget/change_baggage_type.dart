@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
+import '../../../../core/theme/app_gap.dart';
+
 class BaggageChangeSheet extends StatefulWidget {
   final Set<String> initialSelectedBaggage;
 
@@ -67,20 +69,20 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildBaggageImage(
-                imagePath: 'assets/images/smallbaggage.png',
-                label: 'Small',
-                isSelected: selectedBaggageTypes.contains('Small'),
-                onTap: () => toggleBaggage('Small'),
-              ),
-              _buildBaggageImage(
                 imagePath: 'assets/images/largebaggage.png',
                 label: 'Large',
                 isSelected: selectedBaggageTypes.contains('Large'),
                 onTap: () => toggleBaggage('Large'),
               ),
               _buildBaggageImage(
+                imagePath: 'assets/images/smallbaggage.png',
+                label: 'Suitcase',
+                isSelected: selectedBaggageTypes.contains('Small'),
+                onTap: () => toggleBaggage('Small'),
+              ),
+              _buildBaggageImage(
                 imagePath: 'assets/images/empty.png',
-                label: 'Empty',
+                label: 'None',
                 isSelected: selectedBaggageTypes.contains('Empty'),
                 onTap: () => toggleBaggage('Empty'),
               ),
@@ -130,6 +132,31 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
   }
 }
 
+// Widget _buildBaggageImage({
+//   required String imagePath,
+//   required String label,
+//   required bool isSelected,
+//   required VoidCallback onTap,
+// }) {
+//   return GestureDetector(
+//     onTap: onTap,
+//     child: Column(
+//       children: [
+//         Container(
+//           padding: EdgeInsets.all(12),
+//           child: Image.asset(
+//             imagePath,
+//             width: 28,
+//             height: 28,
+//             color: isSelected ? AppColors.primarybutton : null,
+//           ),
+//         ),
+//         const SizedBox(height: 8),
+//         Text(label),
+//       ],
+//     ),
+//   );
+// }
 Widget _buildBaggageImage({
   required String imagePath,
   required String label,
@@ -140,18 +167,23 @@ Widget _buildBaggageImage({
     onTap: onTap,
     child: Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          child: Image.asset(
-            imagePath,
-            width: 32,
-            height: 32,
-            color: isSelected ? AppColors.primarybutton : null,
+        Image.asset(
+          imagePath,
+          width: 28,
+          height: 28,
+          color: isSelected ? AppColors.primarybutton : Colors.grey,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: isSelected ? AppColors.primarybutton : Colors.grey,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 8),
-        Text(label),
       ],
     ),
   );
 }
+
