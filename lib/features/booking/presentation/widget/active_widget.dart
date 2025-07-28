@@ -201,7 +201,15 @@ class _BookingCardState extends State<BookingCard> {
               color: isSelected ? AppColors.primarybutton : Colors.grey,
             ),
           ),
-          const SizedBox(height: 4),
+          //const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: AppColors.primaryTextblack,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -229,14 +237,14 @@ class _BookingCardState extends State<BookingCard> {
             ),
           ),
           const SizedBox(height: 6),
-          // Text(
-          //   'Join',
-          //   style: TextStyle(
-          //     fontSize: 12,
-          //     color: Colors.grey.shade600,
-          //     fontWeight: FontWeight.w500,
-          //   ),
-          // ),
+          Text(
+            'Join',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           const SizedBox(height: 2),
           // Empty space for rating
           const SizedBox(height: 16),

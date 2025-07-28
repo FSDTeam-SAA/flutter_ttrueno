@@ -56,7 +56,7 @@ class InboxScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Connell St 175',
+                          'Dhaka to Islamabad',
                           style: AppText.lgMedium_18_500.copyWith(
                             color: AppColors.primaryTextblack,
                           ),
