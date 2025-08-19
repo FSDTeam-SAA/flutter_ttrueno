@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     return 'Username is required';
                                   }
                                   return null;
-                                },
+                                }, obscureText: false,
                               ),
                               Gap.h16,
                               Text(
@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     return 'Enter a valid email address';
                                   }
                                   return null;
-                                },
+                                }, obscureText: false,
                               ),
                               Gap.h16,
                               Text(
@@ -294,7 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
+                                      builder: (context) => SigninScreen(),
                                     ),
                                   );
                                 },

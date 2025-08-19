@@ -1,6 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/controller/login_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/forget_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
@@ -8,11 +12,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 
   static Widget _socialIcon(String assetPath) {
     return Container(
@@ -26,11 +30,24 @@ class SigninScreen extends StatefulWidget {
   }
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+
+  final ButtonStatusNotifier buttonStatusNotifier = ButtonStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
+  final LoginController loginController = LoginController();
   bool _obscure = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +129,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   }
                                   return null;
                                 },
+                                obscureText: false,
                               ),
                               Gap.h16,
                               Text(
@@ -126,6 +144,15 @@ class _SigninScreenState extends State<SigninScreen> {
                                 prefix: Icons.lock_outline,
                                 obscureText: _obscure,
                                 controller: passwordController,
+                                onChanged: (value) {
+                                  loginController.password = value;
+
+                                  if (value.isNotEmpty) {
+                                    buttonStatusNotifier.setEnabled();
+                                  } else {
+                                    buttonStatusNotifier.setDisabled();
+                                  }
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Password is required';
@@ -169,21 +196,67 @@ class _SigninScreenState extends State<SigninScreen> {
                             ],
                           ),
                           Gap.h16,
-                          context.primaryButton(
-                            width: double.infinity,
-                            onPressed: () {
-                              //_formKey.currentState!.validate()
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.push(
+                          SizedBox(
+                            height: 52,
+                            child: RSaveButton(
+                              height: 50,
+                              borderRadius: BorderRadius.circular(20),
+                              key: UniqueKey(),
+                              buttonStatusNotifier: buttonStatusNotifier,
+                              saveText: "Log in".tr(),
+                              loadingText: "Logging in".tr(),
+                              onSaveTap: () async {
+                                await loginController.login(
+                                  buttonNotifier: buttonStatusNotifier,
+                                  snackbarNotifier: SnackbarNotifier(
+                                    context: context,
+                                  ),
+                                  needVerification: () {
+                                    // final otpController =
+                                    //     AccountVerificationOtpController();
+                                    // otpController.email = loginController.email;
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => VerifyCodeScreen(
+                                    //       otpController: otpController,
+                                    //       onSave: (btnNot) async {
+                                    //         dekhao2("Lets verrrr".tr());
+                                    //         await otpController.verifyOtp(
+                                    //           buttonNotifier: btnNot,
+                                    //           snackbarNotifier:
+                                    //               SnackbarNotifier(
+                                    //                 context: context,
+                                    //               ),
+                                    //         );
+                                    //       },
+                                    //       onDone: () {
+                                    //         Navigator.push(
+                                    //           context,
+                                    //           MaterialPageRoute(
+                                    //             builder: (context) =>
+                                    //                 BottomNabarScreen(),
+                                    //           ),
+                                    //         );
+                                    //       },
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                );
+                              },
+                              onDone: () {
+                                Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => BottomNabarScreen(),
                                   ),
+                                  (route) => false,
                                 );
-                              }
-                            },
-                            text: 'Login Account',
+                              },
+                            ),
                           ),
+
                           Gap.h40,
                           Row(
                             children: [
@@ -214,15 +287,15 @@ class _SigninScreenState extends State<SigninScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SigninScreen._socialIcon(
+                              LoginScreen._socialIcon(
                                 'assets/images/google.png',
                               ),
                               Gap.w32,
-                              SigninScreen._socialIcon(
+                              LoginScreen._socialIcon(
                                 'assets/images/apple.png',
                               ),
                               Gap.w32,
-                              SigninScreen._socialIcon(
+                              LoginScreen._socialIcon(
                                 'assets/images/facebook.png',
                               ),
                             ],

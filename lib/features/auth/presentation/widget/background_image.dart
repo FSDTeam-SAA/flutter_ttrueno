@@ -105,11 +105,9 @@ class BackgroundWidget extends StatelessWidget {
         if (customImage != null || backgroundColor == null)
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.5), // Adjust darkness here
+              color: Colors.black.withOpacity(0.5),
             ),
           ),
-
-        // Foreground content
         child,
       ],
     );

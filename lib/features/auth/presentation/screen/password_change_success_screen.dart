@@ -18,69 +18,79 @@ class _PasswordSuccessScreenState extends State<PasswordSuccessScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 100,
+      ),
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
 
-                SizedBox(
-                  height: 250,
-                  width: 250,
-                  child: Image.asset(
-                    "assets/images/Success.png",
-                    fit: BoxFit.contain,
-                  ),
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Image.asset(
+                        "assets/images/Success.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+
+                    // Title
+                    Text(
+                      "Password Changed",
+                      style: AppText.xxlSemiBold_24_600.copyWith(
+                        color: AppColors.primaryTextblack,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    Gap.h16,
+
+                    // Subtitle
+                    Text(
+                      "Password changed successfully, you can login again with a new password",
+                      style: AppText.smRegular_14_400.copyWith(
+                        color: AppColors.secondaryTextblack,
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    const Spacer(),
+
+                    context.primaryButton(
+                      width: double.infinity,
+                      onPressed: () {
+                      },
+                      text: 'Sign In Now',
+                    ),
+                    Gap.h32,
+                  ],
                 ),
-
-                // Title
-                Text(
-                  "Password Changed",
-                  style: AppText.xxlSemiBold_24_600.copyWith(
-                    color: AppColors.primaryTextblack,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                Gap.h16,
-
-                // Subtitle
-                Text(
-                  "Password changed successfully, you can login again with a new password",
-                  style: AppText.smRegular_14_400.copyWith(
-                    color: AppColors.secondaryTextblack,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                const Spacer(),
-
-                context.primaryButton(
-                  width: double.infinity,
-                  onPressed: () {
-                    _handleSignInNow();
-                  },
-                  text: 'Sign In Now',
-                ),
-                Gap.h32,
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  void _handleSignInNow() {
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  }
+  // void _handleSignInNow() {
+  //   Navigator.of(context).popUntil((route) => route.isFirst);
+  // }
 }

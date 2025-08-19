@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/post_ride/presentation/screen/post_ride_screen.dart';
@@ -70,18 +71,42 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Hi, Howard 👋',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors
-                            .primaryTextblack, // Make text white on image
-                      ),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  "Hi ".tr(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primaryTextblack,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Howard 👋',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primaryTextblack,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
+
                     Icon(
                       Icons.notifications_none,
                       size: 28,
@@ -90,9 +115,25 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
                 Gap.h4,
-                Text(
-                  'Welcome back to Hoplift',
-                  style: TextStyle(color: AppColors.primaryTextblack),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Welcome back to '.tr(),
+                          style: TextStyle(color: AppColors.primaryTextblack),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'Hoplift'.tr(),
+                          style: TextStyle(color: AppColors.primaryTextblack),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -134,7 +175,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       icon: Icon(Icons.calendar_today_outlined),
                                       onPressed: _selectDate,
                                     ),
-                                    hintText: 'Date',
+                                    hintText: 'Date'.tr(),
                                     contentPadding: const EdgeInsets.symmetric(
                                       vertical: 20,
                                     ),
@@ -178,8 +219,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       ),
                                       Gap.w12,
                                       // Label
-                                      const Text(
-                                        'Passengers',
+                                      Text(
+                                        'Passengers'.tr(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 16,
@@ -192,7 +233,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                           InkWell(
                                             onTap: () {
                                               setState(() {
-                                                passengers++;
+                                                if (passengers < 4) {
+                                                  passengers++;
+                                                }
                                                 _passengerController.text =
                                                     passengers.toString();
                                               });
@@ -209,8 +252,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                           InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (passengers > 1)
+                                                if (passengers > 1) {
                                                   passengers--;
+                                                }
                                                 _passengerController.text =
                                                     passengers.toString();
                                               });
@@ -243,8 +287,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                               );
                             },
-                            text: 'Search',
+                            text: 'Search'.tr(),
                           ),
+
                           Gap.h16,
                           OutlinedButton(
                             onPressed: () {
@@ -262,7 +307,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               side: BorderSide(color: AppColors.primarybutton),
                             ),
-                            child: const Text('Create Ride'),
+                            child: Text('Create Ride'.tr()),
                           ),
                           Gap.h24,
                         ],
@@ -303,9 +348,15 @@ class _LocationInputs extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              _buildLocationField(label: 'From', hint: 'Enter Location'),
+              _buildLocationField(
+                label: 'From'.tr(),
+                hint: 'Enter Location'.tr(),
+              ),
               Gap.h16,
-              _buildLocationField(label: 'Where to', hint: 'Enter Location'),
+              _buildLocationField(
+                label: 'Where to'.tr(),
+                hint: 'Enter Location'.tr(),
+              ),
             ],
           ),
         ),

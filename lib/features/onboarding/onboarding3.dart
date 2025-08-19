@@ -63,7 +63,7 @@ class OnboardingScreen3 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(builder: (context) => SigninScreen()),
                       );
                     },
                     child: Text(
@@ -116,7 +116,7 @@ class OnboardingScreen3 extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (context) => SigninScreen(),
                             ),
                           );
                         },

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../message/presentation/screen/message_screen.dart';
 
 class RideCard extends StatefulWidget {
   final String date;
@@ -56,8 +58,8 @@ class _RideCardState extends State<RideCard> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "Select Baggage Type",
+                  Text(
+                    "Select Baggage Type".tr(),
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Gap.h16,
@@ -66,7 +68,19 @@ class _RideCardState extends State<RideCard> {
                     children: [
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/largebaggage.png',
+                        isSelected: selectedBaggageType == 'Large',
+                        label: 'Large'.tr(),
+                        onTap: () {
+                          setModalState(() {
+                            toggleBaggage('Large');
+                          });
+                        },
+                      ),
+                      Gap.h16,
+                      _buildBaggageImageIcon(
+                        imagePath: 'assets/images/smallbaggage.png',
                         isSelected: selectedBaggageType == 'Small',
+                        label: 'Suitcase'.tr(),
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('Small');
@@ -75,18 +89,9 @@ class _RideCardState extends State<RideCard> {
                       ),
                       Gap.h16,
                       _buildBaggageImageIcon(
-                        imagePath: 'assets/images/smallbaggage.png',
-                        isSelected: selectedBaggageType == 'Medium',
-                        onTap: () {
-                          setModalState(() {
-                            toggleBaggage('Medium');
-                          });
-                        },
-                      ),
-                      Gap.h16,
-                      _buildBaggageImageIcon(
                         imagePath: 'assets/images/empty.png',
                         isSelected: selectedBaggageType == 'No Baggage',
+                        label: 'None'.tr(),
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('No Baggage');
@@ -107,7 +112,7 @@ class _RideCardState extends State<RideCard> {
                               width: 1.5,
                             ),
                           ),
-                          child: const Text("Not Now"),
+                          child: Text("Not Now".tr()),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -116,9 +121,9 @@ class _RideCardState extends State<RideCard> {
                           onPressed: () {
                             if (selectedBaggageType == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    "Please select a baggage type.",
+                                    "Please select a baggage type.".tr(),
                                   ),
                                 ),
                               );
@@ -133,13 +138,24 @@ class _RideCardState extends State<RideCard> {
                               });
                             });
                             selectedBaggageType = null;
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
+                            Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MessageScreen(),
+                                  ),
+                                );
+                              },
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          child: const Text(
-                            "Join Ride",
+                          child: Text(
+                            "Join Ride".tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -167,14 +183,30 @@ class _RideCardState extends State<RideCard> {
     required String imagePath,
     required bool isSelected,
     required VoidCallback onTap,
+    required String label,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Image.asset(
-        imagePath,
-        width: 24,
-        height: 24,
-        color: isSelected ? AppColors.primarybutton : Colors.grey,
+      child: Column(
+        children: [
+          Image.asset(
+            imagePath,
+            width: 28,
+            height: 28,
+            color: isSelected ? AppColors.primarybutton : Colors.grey,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: isSelected
+                  ? AppColors.primarybutton
+                  : AppColors.primaryTextblack,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -194,10 +226,7 @@ class _RideCardState extends State<RideCard> {
             child: Icon(Icons.add, color: Colors.grey.shade600, size: 20),
           ),
           Gap.h4,
-          const Text(
-            "Join",
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          ),
+          Text("Join", style: TextStyle(color: Colors.grey, fontSize: 12)),
         ],
       ),
     );
@@ -358,10 +387,10 @@ class _RideCardState extends State<RideCard> {
           children: baggageTypes.map((type) {
             String iconPath;
             switch (type) {
-              case 'Small':
+              case 'Large':
                 iconPath = 'assets/images/largebaggage.png';
                 break;
-              case 'Medium':
+              case 'Small':
                 iconPath = 'assets/images/smallbaggage.png';
                 break;
               default:

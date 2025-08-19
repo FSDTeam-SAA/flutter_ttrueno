@@ -1,13 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
+import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/message/presentation/widget/alart_message_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/screens/change_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/screens/faq_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/screens/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/screens/language_screen.dart';
-
-import '../../../core/theme/text_style.dart';
 import 'account_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,7 +20,29 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _notificationEnabled = true;
-  String selectedLanguage = 'English';
+  String selectedLanguage = '...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLanguage();
+  }
+
+  Future<void> _loadSavedLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final localeCode = prefs.getString('locale') ?? 'en';
+
+    final languageMap = {
+      'en': 'English',
+      'fr': 'Français (French)',
+      'es': 'Español (Spanish)',
+      'bn': 'বাংলা (Bangla)',
+    };
+
+    setState(() {
+      selectedLanguage = languageMap[localeCode] ?? 'English';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'My Profile',
+          'My Profile'.tr(),
           style: AppText.xl2Medium_22_500.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -40,19 +63,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Stack(
-                    children: [
+                    children: const [
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage: AssetImage(
-                          'assets/images/profilepic.png',
-                        ),
+                        backgroundImage:
+                            AssetImage('assets/images/profilepic.png'),
                       ),
                     ],
                   ),
@@ -66,14 +88,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: AppColors.primaryTextblack,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         '(480) 555-0103',
                         style: AppText.mdRegular_16_400.copyWith(
                           color: AppColors.secondaryText,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'howard@gmail.com',
                         style: AppText.mdRegular_16_400.copyWith(
@@ -90,37 +112,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildProfileOption(
                 context,
                 icon: Icons.person_2_outlined,
-                title: 'Account info',
+                title: 'Account info'.tr(),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AccountInfoScreen(),
+                      builder: (context) => const AccountInfoScreen(),
                     ),
                   );
                 },
               ),
-              // Language
+
+              // Language Option
               _buildProfileOption(
                 context,
                 icon: Icons.language,
-                title: 'Language',
-                trailingText: selectedLanguage, // now dynamic
+                title: 'Language'.tr(),
+                trailingText: selectedLanguage,
                 textColor: AppColors.primaryTextblack,
                 onTap: () async {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LanguageSelectionPage(),
+                      builder: (context) => const LanguageSelectionScreen(),
                     ),
                   );
 
                   if (result != null && result is String) {
                     setState(() {
-                      selectedLanguage = result; // update selected language
+                      selectedLanguage = result;
                     });
 
-                    // Optional: show confirmation here instead of inside LanguageSelectionPage
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -139,20 +161,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildProfileOption(
                 context,
                 icon: Icons.settings_outlined,
-                title: 'General Setting',
-                onTap: () {
-                  // Handle general settings
-                },
+                title: 'Genaral Setting'.tr(),
+                onTap: () {},
               ),
               _buildProfileOption(
                 context,
                 icon: Icons.lock_outline,
-                title: 'Change Password',
+                title: 'Change Password'.tr(),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangePasswordPage(),
+                      builder: (context) => const ChangePasswordPage(),
                     ),
                   );
                 },
@@ -160,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildProfileOption(
                 context,
                 icon: Icons.notifications_none,
-                title: 'Notification',
+                title: 'Notification'.tr(),
                 isToggle: true,
                 toggleValue: _notificationEnabled,
                 onToggleChanged: (value) {
@@ -169,42 +189,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   });
                 },
               ),
-              Divider(color: Colors.grey.shade300, thickness: 1),
 
-              const SizedBox(
-                height: 16,
-              ), // Add some spacing before next section
+              Divider(color: Colors.grey.shade300, thickness: 1),
+              const SizedBox(height: 16),
+
               _buildProfileOption(
                 context,
                 icon: Icons.help_outline,
-                title: 'FAQs',
+                title: 'FAQs'.tr(),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FaqScreen()),
+                    MaterialPageRoute(builder: (context) => const FaqScreen()),
                   );
                 },
               ),
               _buildProfileOption(
                 context,
                 icon: Icons.support_agent_outlined,
-                title: 'Help Center',
+                title: 'Help Center'.tr(),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HelpCenterPage()),
+                    MaterialPageRoute(builder: (context) => const HelpCenterPage()),
                   );
-                  // Handle help center
                 },
               ),
               _buildProfileOption(
                 context,
                 icon: Icons.star_border,
-                title: 'Rate Us',
-                onTap: () {
-                  // Handle rate us
-                },
+                title: 'Rate Us'.tr(),
+                onTap: () {},
               ),
+
               Gap.h32,
               SizedBox(
                 width: double.infinity,
@@ -214,33 +231,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(20),
                         ),
                       ),
                       builder: (context) => ConfirmActionBottomSheet(
-                        message: 'Are you sure you want to logout?',
+                        message: 'Are you sure you want to logout?'.tr(),
                         onConfirm: () {
                           Navigator.pop(context); // Close bottom sheet
                           // TODO: Add logout logic here
                         },
                         onCancel: () {},
-                        confirmButtonText: 'Logout',
-                        cancelButtonText: 'Not Now',
-                        height: 200, // You can customize height
+                        confirmButtonText: 'Logout'.tr(),
+                        cancelButtonText: 'Not Now'.tr(),
+                        height: 200,
                       ),
                     );
                   },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Colors.red),
+                    side: const BorderSide(color: Colors.red),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
-                    'Logout',
-                    style: TextStyle(
+                    'Logout'.tr(),
+                    style: const TextStyle(
                       color: Colors.red,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -255,7 +272,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Helper widget to build individual profile options
   Widget _buildProfileOption(
     BuildContext context, {
     required IconData icon,
@@ -283,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: textColor, // 👈 Apply custom text color
+                  color: textColor,
                 ),
               ),
             ),
@@ -299,11 +315,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 activeColor: AppColors.primarybutton,
               )
             else
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: AppColors.primaryTextblack,
-              ),
+              Icon(Icons.arrow_forward_ios, size: 18, color: arrowColor),
           ],
         ),
       ),

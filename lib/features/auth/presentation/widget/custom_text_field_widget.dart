@@ -37,28 +37,47 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
+// class ReusableTextField extends StatelessWidget {
+//   final String hintText;
+//   final IconData prefix;
+//   final TextEditingController controller;
+//   final bool obscureText;
+//   final Widget? suffixIcon;
+//   final String? Function(String?)? validator;
+
+//   const ReusableTextField({
+//     super.key,
+//     required this.hintText,
+//     required this.prefix,
+//     required this.controller,
+//     this.obscureText = false,
+//     this.suffixIcon,
+//     this.validator,
+//   });
 class ReusableTextField extends StatelessWidget {
   final String hintText;
   final IconData prefix;
-  final TextEditingController controller;
   final bool obscureText;
+  final TextEditingController controller;
+  final FormFieldValidator<String>? validator;
   final Widget? suffixIcon;
-  final String? Function(String?)? validator;
+  final ValueChanged<String>? onChanged; // ✅ Add this line
 
   const ReusableTextField({
     super.key,
     required this.hintText,
     required this.prefix,
+    required this.obscureText,
     required this.controller,
-    this.obscureText = false,
-    this.suffixIcon,
     this.validator,
+    this.suffixIcon,
+    this.onChanged, // ✅ Include in constructor
   });
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 53),
+      constraints: BoxConstraints(minHeight: 53),
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
@@ -67,7 +86,7 @@ class ReusableTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(color: AppColors.secondaryText, fontSize: 14),
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 8),
+            padding: EdgeInsets.only(left: 16, right: 8),
             child: Icon(prefix, color: AppColors.secondaryText),
           ),
           // prefixIconConstraints: const BoxConstraints(
@@ -75,7 +94,7 @@ class ReusableTextField extends StatelessWidget {
           //   minHeight: 0,
           // ),
           suffixIcon: suffixIcon,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             vertical: 16,
             horizontal: 0,
           ),

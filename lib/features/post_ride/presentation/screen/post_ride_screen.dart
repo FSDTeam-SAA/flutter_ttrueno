@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -15,6 +16,8 @@ class PostRideScreen extends StatefulWidget {
 class _PostRideScreenState extends State<PostRideScreen> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final List<String> baggageLabels = ['Large'.tr(), 'Small'.tr(), 'None'.tr()]; // or your actual labels
+
 
   int passengers = 1;
 
@@ -47,7 +50,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Post Ride',
+          'Post Ride'.tr(),
           style: AppText.mdSemiBold_16_600.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -62,7 +65,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
               const _LocationInputs(),
               Gap.h20,
               Text(
-                "Departure",
+                "Departure".tr(),
                 style: AppText.xlSemiBold_20_400.copyWith(
                   color: AppColors.primaryTextblack,
                 ),
@@ -79,7 +82,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                           icon: const Icon(Icons.calendar_today_outlined),
                           onPressed: _selectDate,
                         ),
-                        hintText: 'Date',
+                        hintText: 'Date'.tr(),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 20,
                         ),
@@ -116,7 +119,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                           },
                           child: const Icon(Icons.watch_later_outlined),
                         ),
-                        hintText: 'Time',
+                        hintText: 'Time'.tr(),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 20,
                         ),
@@ -142,7 +145,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                   const Icon(Icons.person_outline, size: 28),
                   Gap.w12,
                   Text(
-                    "Passengers Allowed",
+                    "Passengers Allowed".tr(),
                     style: AppText.mdRegular_16_400.copyWith(
                       color: AppColors.primaryTextblack,
                     ),
@@ -199,7 +202,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
           onPressed: () {
             // TODO: Your submit logic
           },
-          text: 'POST',
+          text: 'POST'.tr(),
         ),
       ),
     );
@@ -230,9 +233,9 @@ class _LocationInputs extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              _buildLocationField(label: 'From', hint: 'Enter Location'),
+              _buildLocationField(label: 'From'.tr(), hint: 'Enter Location'.tr()),
               Gap.h16,
-              _buildLocationField(label: 'Where to', hint: 'Enter Location'),
+              _buildLocationField(label: 'Where to'.tr(), hint: 'Enter Location'.tr()),
             ],
           ),
         ),
@@ -320,10 +323,16 @@ class _BaggageSelectorState extends State<BaggageSelector> {
   int? selectedIndex;
 
   final List<String> baggageImages = [
-    'assets/images/largebaggage.png', // normal baggage
-    'assets/images/smallbaggage.png', // small luggage
-    'assets/images/empty.png', // no baggage
+    'assets/images/largebaggage.png', // large baggage
+    'assets/images/smallbaggage.png', // small baggage
+    'assets/images/empty.png',        // no baggage
   ];
+
+  final List<String> baggageLabels = [
+    'Large'.tr(),
+    'Small'.tr(),
+    'None'.tr(),
+  ]; // ✅ Fix: Add this matching the image index
 
   @override
   Widget build(BuildContext context) {
@@ -332,19 +341,19 @@ class _BaggageSelectorState extends State<BaggageSelector> {
       children: [
         Gap.h40,
         Text(
-          "Please select your baggage type",
+          "Please select your baggage type".tr(),
           style: AppText.xlSemiBold_20_400.copyWith(
-                  color: AppColors.primaryTextblack,
-                ),
+            color: AppColors.primaryTextblack,
+          ),
         ),
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           decoration: BoxDecoration(
-            color: Colors.white, // or any background color you want
+            color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Colors.grey.shade300, // border color
+              color: Colors.grey.shade300,
               width: 2,
             ),
           ),
@@ -352,32 +361,44 @@ class _BaggageSelectorState extends State<BaggageSelector> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(baggageImages.length, (index) {
               final isSelected = selectedIndex == index;
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
                   });
                 },
-                child: ColorFiltered(
-                  colorFilter: isSelected
-                      ? const ColorFilter.mode(
-                          AppColors.primarybutton,
-                          BlendMode.srcIn,
-                        )
-                      : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
-                  child: Image.asset(
-                    baggageImages[index],
-                    width: 28,
-                    height: 28,
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ColorFiltered(
+                      colorFilter: isSelected
+                          ? const ColorFilter.mode(AppColors.primarybutton, BlendMode.srcIn)
+                          : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                      child: Image.asset(
+                        baggageImages[index],
+                        width: 28,
+                        height: 28,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      baggageLabels[index],
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isSelected ? AppColors.primarybutton : Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }),
           ),
         ),
-
-        const SizedBox(height: 40),
+        //const SizedBox(height: 40),
       ],
     );
   }
 }
+

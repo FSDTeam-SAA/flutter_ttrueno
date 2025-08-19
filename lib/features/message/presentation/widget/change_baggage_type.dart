@@ -67,20 +67,20 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildBaggageImage(
-                imagePath: 'assets/images/smallbaggage.png',
-                label: 'Small',
-                isSelected: selectedBaggageTypes.contains('Small'),
-                onTap: () => toggleBaggage('Small'),
-              ),
-              _buildBaggageImage(
                 imagePath: 'assets/images/largebaggage.png',
                 label: 'Large',
                 isSelected: selectedBaggageTypes.contains('Large'),
                 onTap: () => toggleBaggage('Large'),
               ),
               _buildBaggageImage(
+                imagePath: 'assets/images/smallbaggage.png',
+                label: 'Suitcase',
+                isSelected: selectedBaggageTypes.contains('Small'),
+                onTap: () => toggleBaggage('Small'),
+              ),
+              _buildBaggageImage(
                 imagePath: 'assets/images/empty.png',
-                label: 'Empty',
+                label: 'None',
                 isSelected: selectedBaggageTypes.contains('Empty'),
                 onTap: () => toggleBaggage('Empty'),
               ),
@@ -98,7 +98,7 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
                       width: 1.5,
                     ),
                   ),
-                  child: const Text("Not Now"),
+                  child: Text("Not Now"),
                 ),
               ),
 
@@ -140,17 +140,21 @@ Widget _buildBaggageImage({
     onTap: onTap,
     child: Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          child: Image.asset(
-            imagePath,
-            width: 32,
-            height: 32,
-            color: isSelected ? AppColors.primarybutton : null,
+        Image.asset(
+          imagePath,
+          width: 28,
+          height: 28,
+          color: isSelected ? AppColors.primarybutton : Colors.grey,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: isSelected ? AppColors.primarybutton : Colors.grey,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 8),
-        Text(label),
       ],
     ),
   );
