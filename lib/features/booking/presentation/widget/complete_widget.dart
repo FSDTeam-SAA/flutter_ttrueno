@@ -614,6 +614,7 @@
 //   }
 // }
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -901,18 +902,17 @@ class _BookingCardState extends State<BookingCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                const SizedBox(height: 12.0),
+                Gap.h32,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _locationColumn(
-                      'From',
+                      'From'.tr(),
                       widget.fromLocation,
                       CrossAxisAlignment.start,
                     ),
                     _locationColumn(
-                      'To',
+                      'To'.tr(),
                       widget.toLocation,
                       CrossAxisAlignment.start,
                     ),
@@ -1029,7 +1029,7 @@ class _BookingCardState extends State<BookingCard> {
                     imagePath,
                     width: 14,
                     height: 14,
-                    color: AppColors.primaryTextblack, 
+                    color: AppColors.primaryTextblack,
                   ),
                 );
               }).toList()
@@ -1057,14 +1057,14 @@ class _BookingCardState extends State<BookingCard> {
   }
 }
 
-class CancelledWidget extends StatefulWidget {
-  const CancelledWidget({super.key});
+class CompleteWidget extends StatefulWidget {
+  const CompleteWidget({super.key});
 
   @override
-  State<CancelledWidget> createState() => _CancelledWidgetState();
+  State<CompleteWidget> createState() => _CompleteWidgetState();
 }
 
-class _CancelledWidgetState extends State<CancelledWidget>
+class _CompleteWidgetState extends State<CompleteWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -1102,13 +1102,39 @@ class _CancelledWidgetState extends State<CancelledWidget>
         baggageTypes: {'No Baggage'},
       ),
       User(
-        name: 'Anna',
-        avatarAsset: 'assets/images/user4.png',
+        name: 'You',
+        avatarAsset: 'assets/images/user6.png',
         rating: 4.5,
         baggageTypes: {'No Baggage'},
       ),
     ];
 
+    final users2 = [
+      User(
+        name: 'John',
+        avatarAsset: 'assets/images/user1.png',
+        rating: 4.5,
+        baggageTypes: {'No Baggage'},
+      ),
+      User(
+        name: 'Smith',
+        avatarAsset: 'assets/images/user2.png',
+        rating: 4.5,
+        baggageTypes: {'Small'},
+      ),
+      User(
+        name: 'Alex',
+        avatarAsset: 'assets/images/user3.png',
+        rating: 4.5,
+        baggageTypes: {'Large'},
+      ),
+      User(
+        name: 'You',
+        avatarAsset: 'assets/images/user6.png',
+        rating: 4.5,
+        baggageTypes: {'Large'},
+      ),
+    ];
 
     return Scaffold(
       body: TabBarView(
@@ -1122,6 +1148,62 @@ class _CancelledWidgetState extends State<CancelledWidget>
                 toLocation: 'Connell St 175',
                 users: users1,
                 allowJoin: true, // Allow joining this ride
+                actionButtons: [
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShareExperienceScreen(),
+                        ), 
+                    );},
+                    icon: Image.asset(
+                      'assets/images/like.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  
+                    label: Text(
+                      'Rate your ride'.tr(),
+                      style: AppText.xl2Medium_22_300.copyWith(
+                        color: AppColors.primaryTextblack,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Gap.h4,
+              BookingCard(
+                dateTime: '23 Feb 2025 at 10:00 AM',
+                fromLocation: 'Dublin Airport T1',
+                toLocation: 'Connell St 175',
+                users: users2,
+                allowJoin: false, // Don't allow joining this ride
+                // actionButtons: [
+                //   Expanded(
+                //     child: OutlinedButton.icon(
+                //       onPressed: () => print('Finish Ride tapped'),
+                //       style: OutlinedButton.styleFrom(
+                //         side: BorderSide.none,
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(8.0),
+                //         ),
+                //         padding: const EdgeInsets.symmetric(vertical: 12.0),
+                //       ),
+                //       icon: const Icon(
+                //         Icons.check_box_outlined,
+                //         size: 24,
+                //         color: Colors.green,
+                //       ),
+                //       label: Text(
+                //         'Finish Ride',
+                //         style: AppText.xl2Medium_22_500.copyWith(
+                //           color: Colors.green,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ],
               ),
             ],
           ),

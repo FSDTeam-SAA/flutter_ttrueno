@@ -33,7 +33,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
         setState(() {
           _secondsRemaining--;
         });
-      } 
+      }
     });
   }
 
@@ -56,120 +56,130 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Align(
+      body: Stack(
+        children: [
+          Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Verify Code",
-                    style: AppText.xxxlSemiBold_32_600.copyWith(
-                      color: AppColors.primaryTextblack,
+            child: SingleChildScrollView(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32),
                     ),
                   ),
-                  Gap.h8,
-                  Align(
-                    //alignment: Alignment.start,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: AppText.smRegular_14_400.copyWith(
-                          color: AppColors.secondaryText,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Verify Code",
+                        style: AppText.xxxlSemiBold_32_600.copyWith(
+                          color: AppColors.primaryTextblack,
                         ),
-                        children: [
-                          TextSpan(
-                            text:
-                                "Please enter the code we just sent to Phone Number",
-                            style: AppText.mdRegular_16_400.copyWith(
-                              color: AppColors.secondaryTextblack,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "Alberxxx@gmail.com",
-                            style: AppText.mdSemiBold_16_600.copyWith(
-                              color: AppColors.primaryTextblack,
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                  ),
-                  Gap.h24,
-          
-                  PinCodeTextField(
-                    appContext: context,
-                    controller: _otpController,
-                    length: 4,
-                    obscureText: false,
-                    animationType: AnimationType.fade,
-                    keyboardType: TextInputType.none,
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(16),
-                      fieldHeight: 58,
-                      fieldWidth: 58,
-                      activeFillColor: Colors.grey.shade100,
-                      inactiveFillColor: Colors.grey.shade100,
-                      selectedFillColor: Colors.white,
-                      inactiveColor: Colors.grey.shade100,
-                      selectedColor: Colors.blue,
-                      activeColor: Colors.blue,
-                    ),
-                    animationDuration: const Duration(milliseconds: 300),
-                    enableActiveFill: true,
-                    onChanged: (_) {},
-                  ),
-          
-                  Gap.h8,
-                  Text(
-                    "Resend code in 00:${_secondsRemaining.toString().padLeft(2, '0')}",
-                    style: AppText.smRegular_14_400.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap.h24,
-          
-                  context.primaryButton(
-                    width: double.infinity,
-                    onPressed: () {
-                      if (_otpController.text.trim().length != 4) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please enter the 4-digit code'),
+                      Gap.h8,
+                      Align(
+                        //alignment: Alignment.start,
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: AppText.smRegular_14_400.copyWith(
+                              color: AppColors.secondaryText,
+                            ),
+                            children: [
+                              TextSpan(
+                                text:
+                                    "Please enter the code we just sent to Phone Number",
+                                style: AppText.mdRegular_16_400.copyWith(
+                                  color: AppColors.secondaryTextblack,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "Alberxxx@gmail.com",
+                                style: AppText.mdSemiBold_16_600.copyWith(
+                                  color: AppColors.primaryTextblack,
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                        return;
-                      }
-          
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateNewPasswordScreen(),
                         ),
-                      );
-                    },
-                    text: 'Continue',
+                      ),
+                      Gap.h24,
+
+                      PinCodeTextField(
+                        appContext: context,
+                        controller: _otpController,
+                        length: 4,
+                        obscureText: false,
+                        animationType: AnimationType.fade,
+                        keyboardType: TextInputType.none,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(16),
+                          fieldHeight: 58,
+                          fieldWidth: 58,
+                          activeFillColor: Colors.grey.shade100,
+                          inactiveFillColor: Colors.grey.shade100,
+                          selectedFillColor: Colors.white,
+                          inactiveColor: Colors.grey.shade100,
+                          selectedColor: Colors.blue,
+                          activeColor: Colors.blue,
+                        ),
+                        animationDuration: const Duration(milliseconds: 300),
+                        enableActiveFill: true,
+                        onChanged: (_) {},
+                      ),
+
+                      Gap.h8,
+                      Text(
+                        "Resend code in 00:${_secondsRemaining.toString().padLeft(2, '0')}",
+                        style: AppText.smRegular_14_400.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gap.h24,
+
+                      context.primaryButton(
+                        width: double.infinity,
+                        onPressed: () {
+                          if (_otpController.text.trim().length != 4) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please enter the 4-digit code'),
+                              ),
+                            );
+                            return;
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateNewPasswordScreen(),
+                            ),
+                          );
+                        },
+                        text: 'Continue',
+                      ),
+
+                      Gap.h24,
+
+                      // Number Pad (optional if using TextInputType.none)
+                      _buildNumberPad(),
+                    ],
                   ),
-          
-                  Gap.h24,
-          
-                  // Number Pad (optional if using TextInputType.none)
-                  _buildNumberPad(),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

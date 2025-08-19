@@ -67,7 +67,7 @@ class _RSaveButtonState extends State<RSaveButton> {
     });
     if (buttonStatusNotifier.status is SuccessStatus) {
       dekhao("Successful save");
-      Future.delayed(const Duration(milliseconds: 1000)).then((_) async {
+      Future.delayed(const Duration(milliseconds: 100)).then((_) async {
         if (mounted && context.mounted) {
           widget.onDone();
         }
@@ -81,7 +81,7 @@ class _RSaveButtonState extends State<RSaveButton> {
       builder: (context, constraints) {
         print(constraints);
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 350),
+          duration: const Duration(milliseconds: 100),
           height: widget.height ?? 52,
           width: widget.width ?? constraints.maxWidth,
           decoration: BoxDecoration(
@@ -118,7 +118,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                   TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.buttonTextColor,
+                    color: AppColors.primaryText,
                   ),
             );
 
@@ -147,7 +147,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                       TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.buttonTextColor,
+                        color: AppColors.primaryText,
                       ),
                 ),
                 SizedBox(width: 10),
@@ -166,7 +166,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                 Icon(
                   Icons.error,
                   size: AppSizes.iconSizeMedium,
-                  color: Colors.orange,
+                  color: AppColors.primaryText,
                 ),
                 SizedBox(width: 10),
                 Text(
@@ -176,7 +176,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                       TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.buttonTextColor,
+                        color: AppColors.primaryText,
                       ),
                 ),
               ],
@@ -189,7 +189,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                 Icon(
                   Icons.done,
                   size: AppSizes.iconSizeMedium,
-                  color: AppColors.buttonTextColor,
+                  color: AppColors.primaryText,
                 ),
                 SizedBox(width: 10),
                 Text(

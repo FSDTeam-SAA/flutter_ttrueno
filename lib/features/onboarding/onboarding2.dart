@@ -39,7 +39,7 @@ class OnboardingScreen2 extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                                            Gap.w4,
+                      Gap.w4,
 
                       Container(
                         width: 28,
@@ -66,9 +66,7 @@ class OnboardingScreen2 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => SigninScreen()),
                       );
                     },
                     child: Text(

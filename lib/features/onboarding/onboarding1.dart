@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -65,13 +66,11 @@ class OnboardingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => SigninScreen()),
                       );
                     },
                     child: Text(
-                      'Skip',
+                      'Skip'.tr(),
                       style: AppText.smRegular_14_400.copyWith(
                         color: Colors.white,
                       ),
@@ -99,7 +98,7 @@ class OnboardingScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Lorum Ipsum\nDummy Text',
+                        'Lorum Ipsum\nDummy Text'.tr(),
                         textAlign: TextAlign.center,
                         style: AppText.xxxlSemiBold_40_700.copyWith(
                           color: AppColors.primaryTextblack,
@@ -107,7 +106,8 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                       Gap.h16,
                       Text(
-                        'Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry',
+                        'Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry'
+                            .tr(),
                         textAlign: TextAlign.center,
                         style: AppText.smRegular_14_400.copyWith(
                           color: AppColors.secondaryText,
@@ -124,7 +124,7 @@ class OnboardingScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        text: "Next",
+                        text: "Next".tr(),
                       ),
                     ],
                   ),

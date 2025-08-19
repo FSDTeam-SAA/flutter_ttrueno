@@ -7,11 +7,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SigninScreen> createState() => _SigninScreenState();
 
   static Widget _socialIcon(String assetPath) {
     return Container(
@@ -25,7 +25,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,144 +38,137 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 24,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Lorum Ipsum",
-                            style: AppText.xxxlSemiBold_32_600.copyWith(
-                              color: AppColors.primaryText,
-                            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 24,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Lorum Ipsum",
+                          style: AppText.xxxlSemiBold_32_600.copyWith(
+                            color: AppColors.primaryText,
                           ),
-                          Gap.h8,
-                          Text(
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                            style: AppText.smRegular_14_400.copyWith(
-                              color: AppColors.secondaryText,
-                            ),
+                        ),
+                        Gap.h8,
+                        Text(
+                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                          style: AppText.smRegular_14_400.copyWith(
+                            color: AppColors.secondaryText,
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Gap.h60,
+
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(32),
                       ),
                     ),
-
-                    Gap.h60,
-
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 32,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        context.primaryButton(
+                          width: double.infinity,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                          text: 'Continue With Email',
                         ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          context.primaryButton(
-                            width: double.infinity,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SigninScreen(),
-                                ),
-                              );
-                            },
-                            text: 'Continue With Email',
-                          ),
-                          Gap.h40,
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  thickness: 1,
-                                  color: Colors.grey[300],
-                                ),
+                        Gap.h40,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.grey[300],
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  "OR",
-                                  style: AppText.mdRegular_16_400.copyWith(
-                                    color: AppColors.secondaryText,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  thickness: 1,
-                                  color: Colors.grey[300],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          Gap.h40,
-
-                          // Social Buttons
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              LoginScreen._socialIcon(
-                                'assets/images/google.png',
-                              ),
-                              Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/apple.png',
-                              ),
-                              Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/facebook.png',
-                              ),
-                            ],
-                          ),
-                          Gap.h120,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Don't have account? ",
-                                style: AppText.smRegular_14_400.copyWith(
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                "OR",
+                                style: AppText.mdRegular_16_400.copyWith(
                                   color: AppColors.secondaryText,
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RegisterScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "Register",
-                                  style: AppText.smRegular_14_400.copyWith(
-                                    color: Colors.black,
+                            ),
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Gap.h40,
+
+                        // Social Buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SigninScreen._socialIcon(
+                              'assets/images/google.png',
+                            ),
+                            Gap.w32,
+                            SigninScreen._socialIcon('assets/images/apple.png'),
+                            Gap.w32,
+                            SigninScreen._socialIcon(
+                              'assets/images/facebook.png',
+                            ),
+                          ],
+                        ),
+                        Gap.h120,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have account? ",
+                              style: AppText.smRegular_14_400.copyWith(
+                                color: AppColors.secondaryText,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(),
                                   ),
+                                );
+                              },
+                              child: Text(
+                                "Register",
+                                style: AppText.smRegular_14_400.copyWith(
+                                  color: Colors.black,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

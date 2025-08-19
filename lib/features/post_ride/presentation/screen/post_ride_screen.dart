@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -15,7 +16,7 @@ class PostRideScreen extends StatefulWidget {
 class _PostRideScreenState extends State<PostRideScreen> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
-  final List<String> baggageLabels = ['Large', 'Small', 'None']; // or your actual labels
+  final List<String> baggageLabels = ['Large'.tr(), 'Small'.tr(), 'None'.tr()]; // or your actual labels
 
 
   int passengers = 1;
@@ -49,7 +50,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Post Ride',
+          'Post Ride'.tr(),
           style: AppText.mdSemiBold_16_600.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -64,7 +65,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
               const _LocationInputs(),
               Gap.h20,
               Text(
-                "Departure",
+                "Departure".tr(),
                 style: AppText.xlSemiBold_20_400.copyWith(
                   color: AppColors.primaryTextblack,
                 ),
@@ -81,7 +82,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                           icon: const Icon(Icons.calendar_today_outlined),
                           onPressed: _selectDate,
                         ),
-                        hintText: 'Date',
+                        hintText: 'Date'.tr(),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 20,
                         ),
@@ -118,7 +119,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                           },
                           child: const Icon(Icons.watch_later_outlined),
                         ),
-                        hintText: 'Time',
+                        hintText: 'Time'.tr(),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 20,
                         ),
@@ -144,7 +145,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
                   const Icon(Icons.person_outline, size: 28),
                   Gap.w12,
                   Text(
-                    "Passengers Allowed",
+                    "Passengers Allowed".tr(),
                     style: AppText.mdRegular_16_400.copyWith(
                       color: AppColors.primaryTextblack,
                     ),
@@ -201,7 +202,7 @@ class _PostRideScreenState extends State<PostRideScreen> {
           onPressed: () {
             // TODO: Your submit logic
           },
-          text: 'POST',
+          text: 'POST'.tr(),
         ),
       ),
     );
@@ -232,9 +233,9 @@ class _LocationInputs extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              _buildLocationField(label: 'From', hint: 'Enter Location'),
+              _buildLocationField(label: 'From'.tr(), hint: 'Enter Location'.tr()),
               Gap.h16,
-              _buildLocationField(label: 'Where to', hint: 'Enter Location'),
+              _buildLocationField(label: 'Where to'.tr(), hint: 'Enter Location'.tr()),
             ],
           ),
         ),
@@ -328,9 +329,9 @@ class _BaggageSelectorState extends State<BaggageSelector> {
   ];
 
   final List<String> baggageLabels = [
-    'Large',
-    'Small',
-    'None',
+    'Large'.tr(),
+    'Small'.tr(),
+    'None'.tr(),
   ]; // ✅ Fix: Add this matching the image index
 
   @override
@@ -340,7 +341,7 @@ class _BaggageSelectorState extends State<BaggageSelector> {
       children: [
         Gap.h40,
         Text(
-          "Please select your baggage type",
+          "Please select your baggage type".tr(),
           style: AppText.xlSemiBold_20_400.copyWith(
             color: AppColors.primaryTextblack,
           ),

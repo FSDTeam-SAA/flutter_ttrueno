@@ -39,132 +39,265 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(top: 20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Gap.h16,
-                        Text(
-                          "New Password",
-                          style: AppText.xxxlSemiBold_40_700.copyWith(
-                            color: AppColors.primaryTextblack,
-                            fontSize: 28,
-                          ),
-                        ),
-                        Gap.h8,
-                        Text(
-                          "Create a new password that is safe and easy to remember",
-                          style: AppText.mdRegular_16_400.copyWith(
-                            color: AppColors.secondaryTextblack,
-                            height: 1.4,
-                          ),
-                        ),
-                        Gap.h32,
-                        Text(
-                          "New Password",
-                          style: AppText.xlSemiBold_20_600.copyWith(
-                            color: AppColors.primaryTextblack,
-                          ),
-                        ),
-                        Gap.h8,
-                        ReusableTextField(
-                          hintText: "New password",
-                          prefix: Icons.lock_outline,
-                          obscureText: _obscurenewpassword,
-                          controller: _newPasswordController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password is required';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters long';
-                            }
-                            return null;
-                          },
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurenewpassword
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: Colors.grey,
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(32),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Gap.h16,
+                            Text(
+                              "New Password",
+                              style: AppText.xxxlSemiBold_40_700.copyWith(
+                                color: AppColors.primaryTextblack,
+                                fontSize: 28,
+                              ),
                             ),
-                            onPressed: () {
-                              setState(
-                                () =>
-                                    _obscurenewpassword = !_obscurenewpassword,
-                              );
-                            },
-                          ),
-                        ),
-                        Gap.h24,
-                        Text(
-                          "Confirm New Password",
-                          style: AppText.xlSemiBold_20_600.copyWith(
-                            color: AppColors.primaryTextblack,
-                          ),
-                        ),
-                        Gap.h8,
-                        ReusableTextField(
-                          hintText: "Confirm new password",
-                          prefix: Icons.lock_outline,
-                          obscureText: _obscureconfirmnewpassword,
-                          controller: _confirmPasswordController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Confirm your password';
-                            }
-                            if (value != _newPasswordController.text) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureconfirmnewpassword
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: Colors.grey,
+                            Gap.h8,
+                            Text(
+                              "Create a new password that is safe and easy to remember",
+                              style: AppText.mdRegular_16_400.copyWith(
+                                color: AppColors.secondaryTextblack,
+                                height: 1.4,
+                              ),
                             ),
-                            onPressed: () {
-                              setState(
-                                () => _obscureconfirmnewpassword =
-                                    !_obscureconfirmnewpassword,
-                              );
-                            },
-                          ),
+                            Gap.h32,
+                            Text(
+                              "New Password",
+                              style: AppText.xlSemiBold_20_600.copyWith(
+                                color: AppColors.primaryTextblack,
+                              ),
+                            ),
+                            Gap.h8,
+                            ReusableTextField(
+                              hintText: "New password",
+                              prefix: Icons.lock_outline,
+                              obscureText: _obscurenewpassword,
+                              controller: _newPasswordController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password is required';
+                                }
+                                if (value.length < 6) {
+                                  return 'Password must be at least 6 characters long';
+                                }
+                                return null;
+                              },
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurenewpassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(
+                                    () => _obscurenewpassword =
+                                        !_obscurenewpassword,
+                                  );
+                                },
+                              ),
+                            ),
+                            Gap.h24,
+                            Text(
+                              "Confirm New Password",
+                              style: AppText.xlSemiBold_20_600.copyWith(
+                                color: AppColors.primaryTextblack,
+                              ),
+                            ),
+                            Gap.h8,
+                            ReusableTextField(
+                              hintText: "Confirm new password",
+                              prefix: Icons.lock_outline,
+                              obscureText: _obscureconfirmnewpassword,
+                              controller: _confirmPasswordController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Confirm your password';
+                                }
+                                if (value != _newPasswordController.text) {
+                                  return 'Passwords do not match';
+                                }
+                                return null;
+                              },
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureconfirmnewpassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(
+                                    () => _obscureconfirmnewpassword =
+                                        !_obscureconfirmnewpassword,
+                                  );
+                                },
+                              ),
+                            ),
+                            Gap.h24,
+                          ],
                         ),
-                        Gap.h24,
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                  child: context.primaryButton(
+                    width: double.infinity,
+                    onPressed: _handlePasswordUpdate,
+                    text: 'Update Password',
+                  ),
+                ),
+              ],
             ),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: context.primaryButton(
-                width: double.infinity,
-                onPressed: _handlePasswordUpdate,
-                text: 'Update Password',
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+      // body: SafeArea(
+      //   child: Column(
+      //     children: [
+      //       Expanded(
+      //         child: Container(
+      //           margin: const EdgeInsets.only(top: 20),
+      //           decoration: const BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      //           ),
+      //           child: SingleChildScrollView(
+      //             padding: const EdgeInsets.all(16),
+      //             child: Form(
+      //               key: _formKey,
+      //               child: Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: [
+      //                   Gap.h16,
+      //                   Text(
+      //                     "New Password",
+      //                     style: AppText.xxxlSemiBold_40_700.copyWith(
+      //                       color: AppColors.primaryTextblack,
+      //                       fontSize: 28,
+      //                     ),
+      //                   ),
+      //                   Gap.h8,
+      //                   Text(
+      //                     "Create a new password that is safe and easy to remember",
+      //                     style: AppText.mdRegular_16_400.copyWith(
+      //                       color: AppColors.secondaryTextblack,
+      //                       height: 1.4,
+      //                     ),
+      //                   ),
+      //                   Gap.h32,
+      //                   Text(
+      //                     "New Password",
+      //                     style: AppText.xlSemiBold_20_600.copyWith(
+      //                       color: AppColors.primaryTextblack,
+      //                     ),
+      //                   ),
+      //                   Gap.h8,
+      //                   ReusableTextField(
+      //                     hintText: "New password",
+      //                     prefix: Icons.lock_outline,
+      //                     obscureText: _obscurenewpassword,
+      //                     controller: _newPasswordController,
+      //                     validator: (value) {
+      //                       if (value == null || value.isEmpty) {
+      //                         return 'Password is required';
+      //                       }
+      //                       if (value.length < 6) {
+      //                         return 'Password must be at least 6 characters long';
+      //                       }
+      //                       return null;
+      //                     },
+      //                     suffixIcon: IconButton(
+      //                       icon: Icon(
+      //                         _obscurenewpassword
+      //                             ? Icons.visibility_off_outlined
+      //                             : Icons.visibility_outlined,
+      //                         color: Colors.grey,
+      //                       ),
+      //                       onPressed: () {
+      //                         setState(
+      //                           () =>
+      //                               _obscurenewpassword = !_obscurenewpassword,
+      //                         );
+      //                       },
+      //                     ),
+      //                   ),
+      //                   Gap.h24,
+      //                   Text(
+      //                     "Confirm New Password",
+      //                     style: AppText.xlSemiBold_20_600.copyWith(
+      //                       color: AppColors.primaryTextblack,
+      //                     ),
+      //                   ),
+      //                   Gap.h8,
+      //                   ReusableTextField(
+      //                     hintText: "Confirm new password",
+      //                     prefix: Icons.lock_outline,
+      //                     obscureText: _obscureconfirmnewpassword,
+      //                     controller: _confirmPasswordController,
+      //                     validator: (value) {
+      //                       if (value == null || value.isEmpty) {
+      //                         return 'Confirm your password';
+      //                       }
+      //                       if (value != _newPasswordController.text) {
+      //                         return 'Passwords do not match';
+      //                       }
+      //                       return null;
+      //                     },
+      //                     suffixIcon: IconButton(
+      //                       icon: Icon(
+      //                         _obscureconfirmnewpassword
+      //                             ? Icons.visibility_off_outlined
+      //                             : Icons.visibility_outlined,
+      //                         color: Colors.grey,
+      //                       ),
+      //                       onPressed: () {
+      //                         setState(
+      //                           () => _obscureconfirmnewpassword =
+      //                               !_obscureconfirmnewpassword,
+      //                         );
+      //                       },
+      //                     ),
+      //                   ),
+      //                   Gap.h24,
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //       Container(
+      //         color: Colors.white,
+      //         padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      //         child: context.primaryButton(
+      //           width: double.infinity,
+      //           onPressed: _handlePasswordUpdate,
+      //           text: 'Update Password',
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 

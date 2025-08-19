@@ -100,6 +100,7 @@
 //   }
 // }
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
@@ -142,6 +143,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
+            maxLines: 2,
             message,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
@@ -201,7 +203,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
                         Navigator.of(context).pop();
                         onConfirm();
                       },
-                      child: Text(confirmButtonText),
+                      child: Text(confirmButtonText.tr()),
 
                     ),
                   ),

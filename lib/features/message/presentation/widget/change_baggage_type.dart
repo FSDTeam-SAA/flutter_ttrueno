@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
-import '../../../../core/theme/app_gap.dart';
-
 class BaggageChangeSheet extends StatefulWidget {
   final Set<String> initialSelectedBaggage;
 
@@ -100,7 +98,7 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
                       width: 1.5,
                     ),
                   ),
-                  child: const Text("Not Now"),
+                  child: Text("Not Now"),
                 ),
               ),
 
@@ -132,31 +130,6 @@ class _BaggageChangeSheetState extends State<BaggageChangeSheet> {
   }
 }
 
-// Widget _buildBaggageImage({
-//   required String imagePath,
-//   required String label,
-//   required bool isSelected,
-//   required VoidCallback onTap,
-// }) {
-//   return GestureDetector(
-//     onTap: onTap,
-//     child: Column(
-//       children: [
-//         Container(
-//           padding: EdgeInsets.all(12),
-//           child: Image.asset(
-//             imagePath,
-//             width: 28,
-//             height: 28,
-//             color: isSelected ? AppColors.primarybutton : null,
-//           ),
-//         ),
-//         const SizedBox(height: 8),
-//         Text(label),
-//       ],
-//     ),
-//   );
-// }
 Widget _buildBaggageImage({
   required String imagePath,
   required String label,
@@ -186,4 +159,3 @@ Widget _buildBaggageImage({
     ),
   );
 }
-

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -68,16 +69,16 @@ class _BookingCardState extends State<BookingCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Select Baggage Type",
+                    "Select Baggage Type".tr(),
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  const SizedBox(height: 16),
+                  Gap.h16,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/largebaggage.png',
-                        label: 'Large',
+                        label: 'Large'.tr(),
                         isSelected: selectedBaggageTypes.contains('Large'),
                         onTap: () {
                           setModalState(() {
@@ -87,7 +88,7 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/smallbaggage.png',
-                        label: 'Small',
+                        label: 'Sutcase'.tr(),
                         isSelected: selectedBaggageTypes.contains('Small'),
                         onTap: () {
                           setModalState(() {
@@ -97,7 +98,7 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/empty.png',
-                        label: 'No Baggage',
+                        label: 'None'.tr(),
                         isSelected: selectedBaggageTypes.contains('No Baggage'),
                         onTap: () {
                           setModalState(() {
@@ -107,7 +108,7 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  Gap.h24,
                   Row(
                     children: [
                       Expanded(
@@ -122,7 +123,7 @@ class _BookingCardState extends State<BookingCard> {
                           child: const Text("Not Now"),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      Gap.w12,
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -139,7 +140,7 @@ class _BookingCardState extends State<BookingCard> {
                             setState(() {
                               joinedUsers.add(
                                 User(
-                                  name: "You",
+                                  name: "You".tr(),
                                   avatarAsset: "assets/images/user6.png",
                                   rating: 5.0,
                                   baggageTypes: Set<String>.from(
@@ -155,7 +156,7 @@ class _BookingCardState extends State<BookingCard> {
                             backgroundColor: Colors.green,
                           ),
                           child: Text(
-                            "Join Ride",
+                            "Join Ride".tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -236,20 +237,20 @@ class _BookingCardState extends State<BookingCard> {
               size: 24,
             ),
           ),
-          const SizedBox(height: 6),
+          Gap.h8,
           Text(
-            'Join',
+            'Join'.tr(),
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade600,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 2),
+          Gap.h4,
           // Empty space for rating
-          const SizedBox(height: 16),
+          Gap.h16,
           // Empty space for baggage icons
-          const SizedBox(height: 18),
+          Gap.h20,
         ],
       ),
     );
@@ -293,33 +294,32 @@ class _BookingCardState extends State<BookingCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                const SizedBox(height: 12.0),
+                Gap.h32,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _locationColumn(
-                      'From',
+                      'From'.tr(),
                       widget.fromLocation,
                       CrossAxisAlignment.start,
                     ),
                     _locationColumn(
-                      'To',
+                      'To'.tr(),
                       widget.toLocation,
                       CrossAxisAlignment.start,
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                Gap.h12,
                 CarDivider(),
-                const SizedBox(height: 16.0),
+                Gap.h16,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserSlots(),
                 ),
-                const SizedBox(height: 20.0),
+                Gap.h20,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: widget.actionButtons,
@@ -342,7 +342,7 @@ class _BookingCardState extends State<BookingCard> {
               ),
               child: Text(
                 widget.dateTime,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -364,7 +364,7 @@ class _BookingCardState extends State<BookingCard> {
       crossAxisAlignment: align,
       children: [
         Text(title, style: const TextStyle(fontSize: 16.0, color: Colors.grey)),
-        const SizedBox(height: 4.0),
+        Gap.h4,
         Text(
           location,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
@@ -381,23 +381,23 @@ class _BookingCardState extends State<BookingCard> {
           backgroundImage: AssetImage(user.avatarAsset),
           backgroundColor: Colors.white,
         ),
-        const SizedBox(height: 6.0),
+        Gap.h8,
         Text(
           user.name,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0),
         ),
-        const SizedBox(height: 2.0),
+        Gap.h4,
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.star, color: Colors.amber, size: 14.0),
+            Icon(Icons.star, color: Colors.amber, size: 14.0),
             Text(
               user.rating.toStringAsFixed(1),
               style: const TextStyle(fontSize: 12.0, color: Colors.grey),
             ),
           ],
         ),
-        const SizedBox(height: 4.0),
+        Gap.h4,
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -435,7 +435,7 @@ class _BookingCardState extends State<BookingCard> {
                   height: 14,
                   color: AppColors.primaryTextblack,
                 ),
-              const SizedBox(width: 4),
+              Gap.w4,
               if (user.icon2Asset != null)
                 Image.asset(
                   user.icon2Asset!,
@@ -570,27 +570,25 @@ class _ActiveWidgetState extends State<ActiveWidget>
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        isScrollControlled:
-                            true, // Optional: allows full height if needed
-                        backgroundColor: Colors
-                            .transparent, // Optional: if your widget has its own background
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(16),
                           ),
                         ),
                         builder: (context) => ConfirmActionBottomSheet(
-                          message: 'Are you sure?',
+                          message: 'Are you sure?'.tr(),
+                          confirmButtonText: 'Confirm'.tr(),
+                          cancelButtonText: 'Cancel'.tr(),
                           onConfirm: () {
                             // Add your confirm logic here
-                            print("Confirm");
                             Navigator.pop(
                               context,
                             ); // Close the bottom sheet if needed
                           },
                           onCancel: () {
                             // Add your cancel logic here
-                            print("Cancel");
                             Navigator.pop(
                               context,
                             ); // Close the bottom sheet if needed
@@ -604,7 +602,7 @@ class _ActiveWidgetState extends State<ActiveWidget>
                       height: 24,
                     ),
                     label: Text(
-                      'Leave',
+                      'Leave'.tr(),
                       style: AppText.xl2Medium_22_300.copyWith(
                         color: Colors.red,
                       ),
@@ -626,7 +624,7 @@ class _ActiveWidgetState extends State<ActiveWidget>
                       height: 24,
                     ),
                     label: Text(
-                      'Chat',
+                      'Chat'.tr(),
                       style: AppText.xl2Medium_22_300.copyWith(
                         color: AppColors.primaryTextblack,
                       ),
@@ -644,7 +642,7 @@ class _ActiveWidgetState extends State<ActiveWidget>
                 actionButtons: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () => print('Finish Ride tapped'),
+                      onPressed: () => print('Finish Ride tapped'.tr()),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide.none,
                         shape: RoundedRectangleBorder(
@@ -658,7 +656,7 @@ class _ActiveWidgetState extends State<ActiveWidget>
                         color: Colors.green,
                       ),
                       label: Text(
-                        'Finish Ride',
+                        'Finish Ride'.tr(),
                         style: AppText.xl2Medium_22_500.copyWith(
                           color: Colors.green,
                         ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -22,7 +23,7 @@ class InboxScreen extends StatelessWidget {
         centerTitle: false,
         automaticallyImplyLeading: false,
         title: Text(
-          'Inbox (8)',
+          'Inbox'.tr(),
           style: AppText.xl2Medium_22_500.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -55,11 +56,14 @@ class InboxScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Dhaka to Islamabad',
-                          style: AppText.lgMedium_18_500.copyWith(
-                            color: AppColors.primaryTextblack,
-                          ),
+                        Row(
+                          children: [
+                            Text("Dhaka",style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),),
+                            Gap.w12,
+                            Text("To ".tr(),style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),),
+                            Gap.w12,
+                            Text("Islamabad",style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),),
+                          ],
                         ),
                         Gap.h4,
                         Row(

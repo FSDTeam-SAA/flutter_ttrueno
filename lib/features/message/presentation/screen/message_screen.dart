@@ -436,6 +436,7 @@
 //   }
 // }
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -494,7 +495,7 @@ class _MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Chat', style: TextStyle(color: Colors.black)),
+        title: Text('Chat'.tr(), style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -508,7 +509,7 @@ class _MessageScreenState extends State<MessageScreen> {
               child: Row(
                 children: [
                   Text(
-                    'Leave',
+                    'Leave'.tr(),
                     style: TextStyle(
                       color: Colors.red,
                       fontSize: 18,
@@ -556,7 +557,7 @@ class _LocationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -564,7 +565,7 @@ class _LocationHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('From', style: TextStyle(color: Colors.grey, fontSize: 16)),
+              Text('From'.tr(), style: TextStyle(color: Colors.grey, fontSize: 16)),
               Text(
                 'Dublin Airport T1',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -574,7 +575,7 @@ class _LocationHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('To', style: TextStyle(color: Colors.grey, fontSize: 16)),
+              Text('To'.tr(), style: TextStyle(color: Colors.grey, fontSize: 16)),
               Text(
                 'Connell St 175',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -924,9 +925,9 @@ class _InputMessageBox extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(color: Colors.grey[300]!, width: 1.5),
                 ),
-                child: const TextField(
+                child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Type Message',
+                    hintText: 'Type Message'.tr(),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 10),
                   ),

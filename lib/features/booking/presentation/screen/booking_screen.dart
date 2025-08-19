@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/active_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/cancelled_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/complete_widget.dart';
 
-import '../widget/complete_widget.dart';
+import '../widget/cancelled1_widget.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -41,7 +42,7 @@ class _BookingScreenState extends State<BookingScreen>
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Booking',
+          'Booking'.tr(),
           style: AppText.xl2Medium_22_500.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -52,9 +53,9 @@ class _BookingScreenState extends State<BookingScreen>
           unselectedLabelColor: Colors.grey,
           indicatorColor: AppColors.primarybutton,
           tabs: [
-            Tab(text: 'Active (2)'),
-            Tab(text: 'Completed (3)'),
-            Tab(text: 'Cancelled (1)'),
+            Tab(text: 'Active'.tr()),
+            Tab(text: 'Completed'.tr()),
+            Tab(text: 'Cancelled'.tr()),
           ],
         ),
       ),

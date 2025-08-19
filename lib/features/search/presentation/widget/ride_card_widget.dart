@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divaider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -57,8 +58,8 @@ class _RideCardState extends State<RideCard> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "Select Baggage Type",
+                  Text(
+                    "Select Baggage Type".tr(),
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Gap.h16,
@@ -68,7 +69,7 @@ class _RideCardState extends State<RideCard> {
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/largebaggage.png',
                         isSelected: selectedBaggageType == 'Large',
-                        label: 'Large',
+                        label: 'Large'.tr(),
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('Large');
@@ -79,7 +80,7 @@ class _RideCardState extends State<RideCard> {
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/smallbaggage.png',
                         isSelected: selectedBaggageType == 'Small',
-                        label: 'Suitcase',
+                        label: 'Suitcase'.tr(),
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('Small');
@@ -90,7 +91,7 @@ class _RideCardState extends State<RideCard> {
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/empty.png',
                         isSelected: selectedBaggageType == 'No Baggage',
-                        label: 'None',
+                        label: 'None'.tr(),
                         onTap: () {
                           setModalState(() {
                             toggleBaggage('No Baggage');
@@ -111,7 +112,7 @@ class _RideCardState extends State<RideCard> {
                               width: 1.5,
                             ),
                           ),
-                          child: const Text("Not Now"),
+                          child: Text("Not Now".tr()),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -120,9 +121,9 @@ class _RideCardState extends State<RideCard> {
                           onPressed: () {
                             if (selectedBaggageType == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    "Please select a baggage type.",
+                                    "Please select a baggage type.".tr(),
                                   ),
                                 ),
                               );
@@ -153,8 +154,8 @@ class _RideCardState extends State<RideCard> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          child: const Text(
-                            "Join Ride",
+                          child: Text(
+                            "Join Ride".tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
