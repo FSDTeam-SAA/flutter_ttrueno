@@ -82,6 +82,11 @@ class ReusableTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         validator: validator,
+        onChanged: (value) {
+          if (onChanged != null) {
+            onChanged!(value);
+          }
+        },
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: AppColors.secondaryText, fontSize: 14),

@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/usecases/usecases.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/domains/usecases/auth_stream.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 
 import '../../../helpers/handle_fold.dart';
 import '../../../notifiers/button_status_notifier.dart';
@@ -52,7 +52,7 @@ class AuthController extends ChangeNotifier {
   Stream<AuthStatus?> getAuthStream({
     SnackbarNotifier? snackbarNotifier,
   }) {
-    return serviceLocator<AuthStream>().call(NoParams());
+    return serviceLocator<AuthInterface>().authStream();
   }
 
 }

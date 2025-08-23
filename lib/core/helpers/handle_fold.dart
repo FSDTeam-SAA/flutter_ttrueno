@@ -8,7 +8,7 @@ import 'dekhao.dart';
 
 T? handleFold<T>({
   required Either<DataCRUDFailure, Success<T>> either,
-  ButtonStatusNotifier? buttonStatusNotifier,
+  ProcessStatusNotifier? processStatusNotifier,
   SnackbarNotifier? snackbarNotifier,
   void Function(T? data)? onSuccess,
   void Function(DataCRUDFailure failure)? onError,
@@ -16,7 +16,7 @@ T? handleFold<T>({
   return either.fold(
     (failure) {
       dekhao2(failure.toString());
-      buttonStatusNotifier?.setEnabled(message: failure.message);
+      processStatusNotifier?.setError(message: failure.message);
       snackbarNotifier?.notifyError(message: failure.message);
       if(onError != null)onError(failure);
       return null;
@@ -24,7 +24,7 @@ T? handleFold<T>({
     (result) {
       if (onSuccess != null) onSuccess(result.data);
       dekhao("success result is ${(result as Success).message}");
-      buttonStatusNotifier?.setSuccess(message: (result as Success).message);
+      processStatusNotifier?.setSuccess(message: (result as Success).message);
       snackbarNotifier?.notifySuccess(message: (result as Success).message);
       return result.data;
     },

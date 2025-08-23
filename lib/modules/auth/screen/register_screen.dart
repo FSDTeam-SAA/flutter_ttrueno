@@ -1,12 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/login_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/verify_code_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/verify_code_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
-import '../../../../core/theme/text_style.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_gap.dart';
+import '../../../core/theme/text_style.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,6 +21,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  late final SignUpController signupController;
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -24,7 +30,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _agreedToTerms = false; // New state for the checkbox
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    signupController = SignUpController(SnackbarNotifier(context: context));
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+    debugPrint("build");
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -108,6 +123,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 hintText: "Type your username",
                                 prefix: Icons.person_2_outlined,
                                 controller: usernameController,
+                                onChanged: (value) {
+                                  debugPrint("Username: $value");
+                                  signupController.name = value.trim();
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Username is required';
@@ -127,6 +146,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 hintText: "Type your email",
                                 prefix: Icons.email_outlined,
                                 controller: emailController,
+                                onChanged: (value) {
+                                  signupController.email = value.trim();
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Email is required';
@@ -153,6 +175,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 prefix: Icons.lock_outline,
                                 obscureText: _obscure,
                                 controller: passwordController,
+                                onChanged: (value) {
+                                  signupController.password = value.trim();
+                                },
                                 validator: (value) {
                                   if (value == null || value.length < 6) {
                                     return 'Password must be at least 6 characters';
@@ -255,16 +280,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           Gap.h80,
-                          context.primaryButton(
+                          RSaveButton(
+                            key: UniqueKey(),
                             width: double.infinity,
-                            onPressed: () {
-                              if (_formKey.currentState!.validate() &&
-                                  _agreedToTerms) {
-                                Navigator.push(
+                            height: 52,
+                            buttonStatusNotifier: signupController.processNotifier,
+                            saveText: "Register",
+                            loadingText: "Registering...",
+                            doneText: "Done",
+                            onDone: () {
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => VerifyCodeScreen(),
+                                    builder: (context) => VerifyCodeScreen(
+                                      email: emailController.text.trim(),
+                                      onDone: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SelectSigninMethodScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
+                                );
+                            },
+                            onSaveTap: () async{
+                              if (_formKey.currentState!.validate() &&
+                                  _agreedToTerms) {
+                                await signupController.signup(
+                                  buttonNotifier: signupController.processNotifier,
+                                  snackbarNotifier: signupController.snackbarNotifier,
                                 );
                               } else if (!_agreedToTerms) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -276,7 +324,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 );
                               }
                             },
-                            text: 'Register',
                           ),
 
                           Gap.h40,
@@ -294,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SigninScreen(),
+                                      builder: (context) => SelectSigninMethodScreen(),
                                     ),
                                   );
                                 },

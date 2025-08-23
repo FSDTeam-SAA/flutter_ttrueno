@@ -4,13 +4,16 @@ import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/controller/login_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/forget_password_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/register_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/app_services.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/network/auth/auth_service.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/login_screen_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/forget_password_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
-import '../../../../core/theme/text_style.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_gap.dart';
+import '../../../core/theme/text_style.dart';
+import 'verify_code_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,15 +35,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final LoginsScreenController _loginsScreenController;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
 
-  final ButtonStatusNotifier buttonStatusNotifier = ButtonStatusNotifier(
-    initialStatus: EnabledStatus(),
-  );
-  final LoginController loginController = LoginController();
   bool _obscure = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loginsScreenController = LoginsScreenController(SnackbarNotifier(context: context));
+  }
 
   @override
   void dispose() {
@@ -117,6 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: "Type your email",
                                 prefix: Icons.email_outlined,
                                 controller: emailController,
+                                onChanged: (value) {
+                                  _loginsScreenController.email = value;
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Email is required';
@@ -145,13 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 obscureText: _obscure,
                                 controller: passwordController,
                                 onChanged: (value) {
-                                  loginController.password = value;
-
-                                  if (value.isNotEmpty) {
-                                    buttonStatusNotifier.setEnabled();
-                                  } else {
-                                    buttonStatusNotifier.setDisabled();
-                                  }
+                                  _loginsScreenController.password = value;
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -202,46 +206,36 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 50,
                               borderRadius: BorderRadius.circular(20),
                               key: UniqueKey(),
-                              buttonStatusNotifier: buttonStatusNotifier,
+                              buttonStatusNotifier: _loginsScreenController.processStatusNotifier,
                               saveText: "Log in".tr(),
                               loadingText: "Logging in".tr(),
                               onSaveTap: () async {
-                                await loginController.login(
-                                  buttonNotifier: buttonStatusNotifier,
-                                  snackbarNotifier: SnackbarNotifier(
-                                    context: context,
-                                  ),
+                                await _loginsScreenController.login(
                                   needVerification: () {
-                                    // final otpController =
-                                    //     AccountVerificationOtpController();
-                                    // otpController.email = loginController.email;
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => VerifyCodeScreen(
-                                    //       otpController: otpController,
-                                    //       onSave: (btnNot) async {
-                                    //         dekhao2("Lets verrrr".tr());
-                                    //         await otpController.verifyOtp(
-                                    //           buttonNotifier: btnNot,
-                                    //           snackbarNotifier:
-                                    //               SnackbarNotifier(
-                                    //                 context: context,
-                                    //               ),
-                                    //         );
-                                    //       },
-                                    //       onDone: () {
-                                    //         Navigator.push(
-                                    //           context,
-                                    //           MaterialPageRoute(
-                                    //             builder: (context) =>
-                                    //                 BottomNabarScreen(),
-                                    //           ),
-                                    //         );
-                                    //       },
-                                    //     ),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => VerifyCodeScreen(
+                                          email: emailController.text,
+                                          onDone: () {
+                                            
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  if(AppServices.authController.authStatus is Authenticated){
+                                                    return BottomNabarScreen();
+                                                  } else {
+                                                    return LoginScreen();
+                                                  }
+                                                }
+                                              ),
+                                              (route) => false,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
                                   },
                                 );
                               },

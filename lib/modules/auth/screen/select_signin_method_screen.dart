@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/register_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/signin_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
-import '../../../../core/theme/text_style.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_gap.dart';
+import '../../../core/theme/text_style.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SelectSigninMethodScreen extends StatefulWidget {
+  const SelectSigninMethodScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<SelectSigninMethodScreen> createState() => _SelectSigninMethodScreenState();
 
   static Widget _socialIcon(String assetPath) {
     return Container(
@@ -25,7 +25,7 @@ class SigninScreen extends StatefulWidget {
   }
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,13 +126,13 @@ class _SigninScreenState extends State<SigninScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SigninScreen._socialIcon(
+                            SelectSigninMethodScreen._socialIcon(
                               'assets/images/google.png',
                             ),
                             Gap.w32,
-                            SigninScreen._socialIcon('assets/images/apple.png'),
+                            SelectSigninMethodScreen._socialIcon('assets/images/apple.png'),
                             Gap.w32,
-                            SigninScreen._socialIcon(
+                            SelectSigninMethodScreen._socialIcon(
                               'assets/images/facebook.png',
                             ),
                           ],
