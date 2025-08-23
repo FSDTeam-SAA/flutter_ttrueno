@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _RemoteServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _RemoteServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -61,15 +61,15 @@ base class ApiEndpoints {
   static const String removeFromPlaylist = _LibraryPlaylist.removeFromPlaylist;
 
 }
+//arrow360degree@gmail.com
 
 class _RemoteServer {
   static const String socketUrl =
-      'https:///';
+      'https://ttrueno-backend.onrender.com';
 
   static const String baseUrl =
-      'https:///api/v1';
+      'https://ttrueno-backend.onrender.com/api/v1';
 }
-
 
 class _LocalHostWifi {
   static const String socketUrl = 'http://10.10.5.46:5006';

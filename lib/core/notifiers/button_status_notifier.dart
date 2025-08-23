@@ -30,11 +30,11 @@ class SuccessStatus extends ButtonStatus {
       : super(message: message ?? "Success");
 }
 
-class ButtonStatusNotifier extends ChangeNotifier{
+class ProcessStatusNotifier extends ChangeNotifier{
 
   /// By default the button status is set to DisabledStatus
   /// If you want to set the initial button status to a different status, pass it in the constructor
-  ButtonStatusNotifier({ButtonStatus? initialStatus}) {
+  ProcessStatusNotifier({ButtonStatus? initialStatus}) {
     _status = initialStatus ?? DisabledStatus();
   }
   ButtonStatus _status = DisabledStatus();

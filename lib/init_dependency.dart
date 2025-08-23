@@ -1,5 +1,9 @@
 
 import 'package:get_it/get_it.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
+
+import 'core/services/app_services.dart';
+import 'modules/auth/interface/auth_inerface.dart';
 
 
 
@@ -7,15 +11,15 @@ final serviceLocator = GetIt.instance;
 
 
 
-// Future<void> initDependencies() async {
-//   // Dependencies
-//   serviceLocator.registerLazySingleton(() => AudioBookDataService.instanceFor(AppServices.apiClient));
-//   _authServiceDI();
-//   _audioBookServiceDI();
-//   //
-//   // Call essential service initialization
-//   await AppServices.init();
-// }
+Future<void> initDependencies() async {
+  // Dependencies
+  serviceLocator.registerFactory<AuthInterface>(
+    () => AuthInterfaceImpl(AppServices.apiClient, AppServices.authService),
+  );
+  //
+  // Call essential service initialization
+  await AppServices.coreInit();
+}
 
 
 // void _audioBookServiceDI() {

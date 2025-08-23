@@ -10,7 +10,7 @@ class RSaveButton extends StatefulWidget {
   final double? width;
   final BorderRadius? borderRadius;
   final TextStyle? style;
-  final ButtonStatusNotifier buttonStatusNotifier;
+  final ProcessStatusNotifier buttonStatusNotifier;
   final String saveText;
   final String loadingText;
   final String errorText;
@@ -37,7 +37,7 @@ class RSaveButton extends StatefulWidget {
 }
 
 class _RSaveButtonState extends State<RSaveButton> {
-  late ButtonStatusNotifier buttonStatusNotifier;
+  late ProcessStatusNotifier buttonStatusNotifier;
 
   @override
   void didChangeDependencies() {
@@ -85,11 +85,17 @@ class _RSaveButtonState extends State<RSaveButton> {
           height: widget.height ?? 52,
           width: widget.width ?? constraints.maxWidth,
           decoration: BoxDecoration(
-            color: AppColors.primarybutton,
-            borderRadius: widget.borderRadius ?? AppSizes.borderRadiusSmall,
+            color: switch (buttonStatusNotifier.status) {
+              EnabledStatus _=> AppColors.primarybutton,
+              DisabledStatus _=> AppColors.buttonInactiveTextColor,
+              LoadingStatus _=> AppColors.buttonInactiveTextColor,
+              ErrorStatus _=> AppColors.buttonInactiveTextColor,
+              SuccessStatus _=> AppColors.buttonInactiveTextColor,
+            },
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
           ),
           child: RInkwellButton(
-            borderRadius: widget.borderRadius ?? AppSizes.borderRadiusSmall,
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
             onTap: () async {
               if (buttonStatusNotifier.status is EnabledStatus) {
                 widget.onSaveTap();
@@ -131,7 +137,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                   TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.buttonInactiveTextColor,
+                    color: AppColors.secondaryText,
                   ),
             );
 
@@ -154,7 +160,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                 SizedBox(
                   height: 16,
                   width: 16,
-                  child: CircularProgressIndicator(strokeWidth: 4, color: Colors.black,),
+                  child: CircularProgressIndicator(strokeWidth: 4, color: Colors.white,),
                 ),
               ],
             );
@@ -199,7 +205,7 @@ class _RSaveButtonState extends State<RSaveButton> {
                       TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.buttonTextColor,
+                        color: AppColors.primaryText,
                       ),
                 ),
               ],

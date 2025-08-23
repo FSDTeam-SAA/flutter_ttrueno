@@ -2,13 +2,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/screen/create_new_password_screen.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
-import '../../../../core/theme/text_style.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/verify_account_view_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/create_new_password_screen.dart';
+import '../../../core/common/widgets/reactive_buttons/save_button.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_gap.dart';
+import '../../../core/theme/text_style.dart';
+import 'signin_screen.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
-  const VerifyCodeScreen({super.key});
+  final String email;
+  final VoidCallback onDone;
+  const VerifyCodeScreen({
+    super.key,
+    required this.email,
+    required this.onDone,
+  });
 
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
@@ -16,12 +26,17 @@ class VerifyCodeScreen extends StatefulWidget {
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   final TextEditingController _otpController = TextEditingController();
+  late final VerifyAccountViewController _verifyAccountViewController;
   int _secondsRemaining = 59;
   late final Timer _timer;
 
   @override
   void initState() {
     super.initState();
+    _verifyAccountViewController = VerifyAccountViewController(
+      email: widget.email,
+      snackbarNotifier: SnackbarNotifier(context: context)
+    );
     _startTimer();
   }
 
@@ -116,7 +131,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       PinCodeTextField(
                         appContext: context,
                         controller: _otpController,
-                        length: 4,
+                        length: 6,
                         obscureText: false,
                         animationType: AnimationType.fade,
                         keyboardType: TextInputType.none,
@@ -134,7 +149,9 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         ),
                         animationDuration: const Duration(milliseconds: 300),
                         enableActiveFill: true,
-                        onChanged: (_) {},
+                        onChanged: (value) {
+                          _verifyAccountViewController.otp = value;
+                        },
                       ),
 
                       Gap.h8,
@@ -146,28 +163,36 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         ),
                       ),
                       Gap.h24,
-
-                      context.primaryButton(
-                        width: double.infinity,
-                        onPressed: () {
-                          if (_otpController.text.trim().length != 4) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Please enter the 4-digit code'),
-                              ),
-                            );
-                            return;
-                          }
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateNewPasswordScreen(),
-                            ),
-                          );
-                        },
-                        text: 'Continue',
-                      ),
+                      RSaveButton(
+                          key: UniqueKey(),
+                          width: double.infinity,
+                          height: 52,
+                          buttonStatusNotifier: _verifyAccountViewController.prcessNotifier,
+                          saveText: "Verify",
+                          loadingText: "Verifying",
+                          doneText: "Done",
+                          onDone: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const LoginScreen();
+                                  },
+                                ),
+                              );
+                          },
+                          onSaveTap: () async{
+                            if (_otpController.text.trim().length != 6) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please enter the 4-digit code'),
+                                  ),
+                                );
+                                return;
+                              }
+                            _verifyAccountViewController.verify();
+                          },
+                        ),
 
                       Gap.h24,
 
@@ -222,7 +247,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   _otpController.text.length - 1,
                 );
               }
-            } else if (_otpController.text.length < 4) {
+            } else if (_otpController.text.length < _verifyAccountViewController.otpLength) {
               _otpController.text += key;
             }
             setState(() {});
