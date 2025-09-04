@@ -68,6 +68,18 @@ class InboxScreen extends StatelessWidget {
                         Gap.h4,
                         Row(
                           children: [
+                            Text(
+                              "01/09/2025",style: TextStyle(fontSize: 16, color: AppColors.primaryTextblack),
+                            ),
+                            Gap.w12,
+                            Text(
+                              "06:10 am",style: TextStyle(fontSize: 16, color: AppColors.primaryTextblack),
+                            ),
+                          ],
+                        ),
+                        Gap.h4,
+                        Row(
+                          children: [
                             Icon(
                               Icons.done_all,
                               size: 16,

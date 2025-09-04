@@ -24,6 +24,7 @@ class AppServices {
 
   // UI services/controllers
   static final AuthController authController = AuthController();
+  static final AuthController profileController = AuthController();
 
   // static Future<void> init() async {
   //   DebugService.instance(

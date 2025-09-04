@@ -1,8 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/password_change_success_screen.dart';
+import '../../../core/common/widgets/reactive_buttons/save_button.dart';
+import '../../../core/services/app_services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../controller/change_password_controller.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -12,15 +19,35 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final _formKey = GlobalKey<FormState>();
+  late final ChangePasswordController _changePasswordController;
   final TextEditingController _currentPasswordController =
       TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmNewPasswordController =
       TextEditingController();
+  final bool _agreedToTerms = false;
+  ///////////////////
+  // final _formKey = GlobalKey<FormState>();
+  // late final LoginsScreenController _changePasswordController;
+  // final TextEditingController emailController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
+  // final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+  ///////////////////
 
   bool _obscureCurrent = true;
   bool _obscureNew = true;
   bool _obscureConfirm = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _changePasswordController = ChangePasswordController(
+      SnackbarNotifier(context: context),
+    );
+  }
 
   @override
   void dispose() {
@@ -70,6 +97,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               prefix: Icons.lock_outline,
               obscureText: _obscureCurrent,
               controller: _currentPasswordController,
+              onChanged: (value) {
+                _changePasswordController.currentPassword = value;
+              },
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscureCurrent
@@ -102,6 +132,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               prefix: Icons.lock_outline,
               obscureText: _obscureNew,
               controller: _newPasswordController,
+              onChanged: (value) {
+                _changePasswordController.newPassword = value;
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Enter your new password';
@@ -142,6 +175,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               prefix: Icons.lock_outline,
               obscureText: _obscureConfirm,
               controller: _confirmNewPasswordController,
+              onChanged: (value) {
+                _changePasswordController.confirmPassword = value;
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Confirm your password';
@@ -163,81 +199,81 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 },
               ),
             ),
+            Spacer(),
+            SizedBox(
+              height: 52,
+              child: RSaveButton(
+                key: UniqueKey(),
+                width: double.infinity,
+                height: 52,
+                buttonStatusNotifier: _changePasswordController.processNotifier,
+                saveText: "Change Password",
+                loadingText: "Changing password...",
+                doneText: "Done",
+                onDone: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PasswordSuccessScreen(),
+                    ),
+                  );
+                },
+                onSaveTap: () {
+                  debugPrint("Save tapped");
+                  if (true) {
+                    _changePasswordController.changePassword(
+                      snackbarNotifier:
+                          _changePasswordController.snackbarNotifier,
+                    );
+                  }
+                },
+              ),
+            ),
+            Gap.h40,
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          height: 52,
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              final currentPassword = _currentPasswordController.text.trim();
-              final newPassword = _newPasswordController.text.trim();
-              final confirmPassword = _confirmNewPasswordController.text.trim();
 
-              if (currentPassword.isEmpty ||
-                  newPassword.isEmpty ||
-                  confirmPassword.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('All fields are required!'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-
-              if (newPassword.length < 6) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Password must be at least 6 characters long!',
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-
-              if (newPassword != confirmPassword) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'New password and confirmation do not match!',
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-
-              // Success feedback
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Password changed successfully!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primarybutton,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: const Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.all(16.0),
+      //   child: SizedBox(
+      //     height: 52,
+      //     child: RSaveButton(
+      //       key: UniqueKey(),
+      //       width: double.infinity,
+      //       height: 52,
+      //       buttonStatusNotifier: _changePasswordController.processNotifier,
+      //       saveText: "Change Password",
+      //       loadingText: "Changing password...",
+      //       doneText: "Done",
+      //       onDone: () {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //             builder: (context) => Scaffold(
+      //               body: Center(
+      //                 child: Text(
+      //                   'Password changed successfully!',
+      //                   style: AppText.lgMedium_18_500.copyWith(
+      //                     color: AppColors.primaryTextblack,
+      //                   ),
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         );
+      //       },
+      //       onSaveTap: () {
+      //         debugPrint("Save tapped");
+      //         if (true) {
+      //           _changePasswordController.changePassword(
+      //             snackbarNotifier: _changePasswordController.snackbarNotifier,
+      //           );
+      //         }
+      //       },
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

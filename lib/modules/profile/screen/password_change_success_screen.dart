@@ -4,6 +4,7 @@ import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 
 class PasswordSuccessScreen extends StatefulWidget {
   const PasswordSuccessScreen({super.key});
@@ -76,6 +77,9 @@ class _PasswordSuccessScreenState extends State<PasswordSuccessScreen>
                     context.primaryButton(
                       width: double.infinity,
                       onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          LoginScreen()
+                        ));
                       },
                       text: 'Sign In Now',
                     ),

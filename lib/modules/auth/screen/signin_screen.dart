@@ -46,7 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loginsScreenController = LoginsScreenController(SnackbarNotifier(context: context));
+    _loginsScreenController = LoginsScreenController(
+      SnackbarNotifier(context: context),
+    );
   }
 
   @override
@@ -206,7 +208,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 50,
                               borderRadius: BorderRadius.circular(20),
                               key: UniqueKey(),
-                              buttonStatusNotifier: _loginsScreenController.processStatusNotifier,
+                              buttonStatusNotifier:
+                                  _loginsScreenController.processStatusNotifier,
                               saveText: "Log in".tr(),
                               loadingText: "Logging in".tr(),
                               onSaveTap: () async {
@@ -218,17 +221,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                         builder: (context) => VerifyCodeScreen(
                                           email: emailController.text,
                                           onDone: () {
-                                            
                                             Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) {
-                                                  if(AppServices.authController.authStatus is Authenticated){
+                                                  if (AppServices
+                                                          .authController
+                                                          .authStatus
+                                                      is Authenticated) {
                                                     return BottomNabarScreen();
                                                   } else {
                                                     return LoginScreen();
                                                   }
-                                                }
+                                                },
                                               ),
                                               (route) => false,
                                             );
@@ -323,6 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
+                          Gap.h40,
                         ],
                       ),
                     ),

@@ -33,9 +33,9 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
 
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset('assets/images/LogIn.png', fit: BoxFit.cover),
-          ),
+          // Positioned.fill(
+          //   child: Image.asset('assets/images/background.jpg', fit: BoxFit.cover),
+          // ),
           Align(
             alignment: Alignment.bottomCenter,
             child: SingleChildScrollView(
@@ -60,7 +60,7 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                         Text(
                           "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                           style: AppText.smRegular_14_400.copyWith(
-                            color: AppColors.secondaryText,
+                            color: AppColors.primaryText,
                           ),
                         ),
                       ],
@@ -165,6 +165,7 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                             ),
                           ],
                         ),
+                        Gap.h40
                       ],
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
@@ -107,6 +108,7 @@ class AuthService extends Interceptor {
   /// Handle errors like 401 and retry with new access token if refreshed
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    debugPrint(err.toString());
     if(err.requestOptions.cancelToken != null) {
       return handler.reject(err);
     }
@@ -135,12 +137,13 @@ class AuthService extends Interceptor {
             );
             return handler.resolve(cloneReq);
           } catch (e) {
+            debugPrint(e.toString());
             return handler.reject(e as DioException);
           }
         });
       });
     }
-
+    debugPrint(err.toString());
     return handler.next(err);
   }
 

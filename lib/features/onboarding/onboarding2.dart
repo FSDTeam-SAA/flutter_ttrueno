@@ -19,7 +19,7 @@ class OnboardingScreen2 extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/Onboarding 2.png',
+              'assets/images/2.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -71,8 +71,8 @@ class OnboardingScreen2 extends StatelessWidget {
                     },
                     child: Text(
                       'Skip',
-                      style: AppText.smRegular_14_400.copyWith(
-                        color: Colors.white,
+                      style: AppText.mdSemiBold_16_700.copyWith(
+                        color: AppColors.primarybutton,
                       ),
                     ),
                   ),
@@ -81,7 +81,19 @@ class OnboardingScreen2 extends StatelessWidget {
             ),
           ),
           SafeArea(
-            child: Align(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  //height: 580,
+                  child: Image.asset(
+                    'assets/images/Slide 2.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -93,23 +105,29 @@ class OnboardingScreen2 extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(32.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                    )]
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Lorum Ipsum\nDummy Text',
+                        'Share the Ride\nSplit the Cost',
                         textAlign: TextAlign.center,
-                        style: AppText.xxxlSemiBold_40_700.copyWith(
+                        // style: AppText.xxxlSemiBold_40_700.copyWith(
+                        //   color: AppColors.primaryTextblack,
+                        //   height: 1
+                        // ),
+                        style: TextStyle(
                           color: AppColors.primaryTextblack,
-                        ),
-                      ),
-                      Gap.h16,
-                      Text(
-                        'Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry',
-                        textAlign: TextAlign.center,
-                        style: AppText.smRegular_14_400.copyWith(
-                          color: AppColors.secondaryText,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                          letterSpacing:-2
                         ),
                       ),
                       Gap.h32,
@@ -130,6 +148,12 @@ class OnboardingScreen2 extends StatelessWidget {
                 ),
               ),
             ),
+
+              ],
+
+            )
+            
+            
           ),
         ],
       ),

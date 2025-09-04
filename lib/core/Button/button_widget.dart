@@ -41,7 +41,9 @@ extension ButtonStyleExtensions on BuildContext {
                 children: [
                   Text(
                     text,
-                    style: AppText.lgMedium_18_500.copyWith(color: Colors.white),
+                    style: AppText.lgMedium_18_500.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   if (icon != null) ...[
                     SizedBox(width: 8),

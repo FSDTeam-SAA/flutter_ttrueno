@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
@@ -7,12 +5,6 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding2.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
-
-import '../../bottom_nabar_page.dart';
-import '../../core/services/app_services.dart';
-import '../../core/services/debug/debug_service.dart';
-import '../../core/services/network/auth/auth_service.dart';
 import '../../core/theme/app_gap.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -23,65 +15,6 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final Debugger debugger = UIDebugger();
-  late Timer timer;
-  bool _isLoadingAuth = false;
-
-  _route() async{
-    Future.delayed(Duration(seconds: 1)).then((_){
-      
-    });
-    if (mounted && context.mounted) {
-        final authStatus = AppServices.authController.authStatus;
-        /// Auth status ->>>>
-        debugger.dekhao("New auth status >>> ${authStatus.runtimeType}");
-        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TermsAndConditionView()));
-        if(authStatus is AuthLoading) {
-          if(!_isLoadingAuth) {
-            _isLoadingAuth = true;
-            setState(() {
-            });
-          }
-          return _route();
-        }
-        else if(authStatus is Authenticated) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNabarScreen()),
-        );
-        } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        ); // Auth is null
-        }
-      }
-  }
-
-  @override
-  void didChangeDependencies() {
-    timer = Timer.periodic(Duration(seconds: 2), (timer) {
-      debugger.dekhao("calling route");
-      timer.cancel();
-      _route();
-    });
-    AppServices.authController.getAuthStream();
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    AppServices.authController.getAuthStream();
-  }
-
-  @override
-  void dispose() {
-    if(timer.isActive) {
-      timer.cancel();
-    }
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/Onboarding 1.png',
+              'assets/images/1.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -137,13 +70,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SelectSigninMethodScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => SelectSigninMethodScreen(),
+                        ),
                       );
                     },
                     child: Text(
                       'Skip'.tr(),
-                      style: AppText.smRegular_14_400.copyWith(
-                        color: Colors.white,
+                      style: AppText.mdSemiBold_16_700.copyWith(
+                        color: AppColors.primarybutton,
                       ),
                     ),
                   ),
@@ -152,55 +87,76 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           SafeArea(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 0,
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(18.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32.0),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 220,
+                  left: 0,
+                  right: 0,
+                  //height: 250,
+                  child: Image.asset(
+                    'assets/images/Slide 1.jpeg',
+                    fit: BoxFit.cover,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Lorum Ipsum\nDummy Text'.tr(),
-                        textAlign: TextAlign.center,
-                        style: AppText.xxxlSemiBold_40_700.copyWith(
-                          color: AppColors.primaryTextblack,
-                        ),
+                ),
+
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 16,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(32.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      Gap.h16,
-                      Text(
-                        'Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry'
-                            .tr(),
-                        textAlign: TextAlign.center,
-                        style: AppText.smRegular_14_400.copyWith(
-                          color: AppColors.secondaryText,
-                        ),
-                      ),
-                      Gap.h32,
-                      context.primaryButton(
-                        width: double.infinity,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OnboardingScreen2(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'High Fares\nLong Queues'.tr(),
+                            textAlign: TextAlign.center,
+                            // style: AppText.xxxlSemiBold_40_700.copyWith(
+                            //   color: AppColors.primaryTextblack,
+                            //   height: 1
+                            // ),
+                            style: TextStyle(
+                              color: AppColors.primaryTextblack,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              height: 1,
+                              letterSpacing: -2,
                             ),
-                          );
-                        },
-                        text: "Next".tr(),
+                          ),
+                          Gap.h32,
+                          context.primaryButton(
+                            width: double.infinity,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OnboardingScreen2(),
+                                ),
+                              );
+                            },
+                            text: "Next".tr(),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],

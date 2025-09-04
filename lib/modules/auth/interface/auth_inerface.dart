@@ -16,8 +16,11 @@ import '../model/login_entity.dart';
   /// Verify account
   FutureRequest<Success> verifyAccount(VerifyAccountParam params);
   Stream<AuthStatus?> authStream();
+
   FutureRequest<Success> forgetPassword(String email);
+
   FutureRequest<Success> resetPassword(ResetPasswordParam params);
+  
   Future<Either<DataCRUDFailure, Success>> logout();
   bool isFirstTimeInstall();
   void setFirstTimeInstall();

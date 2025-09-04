@@ -4,7 +4,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/screen/booking_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/message/presentation/screen/inbox_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/search_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/screens/profile_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/profile_screen.dart';
 
 
 class BottomNabarScreen extends StatefulWidget {

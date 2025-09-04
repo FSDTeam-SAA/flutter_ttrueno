@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -17,6 +17,8 @@ base class ApiEndpoints {
   static const String resetPassword = _Auth.resetPassword;
 
   static const String forgetPassword = _Auth.forgetPassword;
+
+  static const String changePassword = _Auth.changePassword;
 
   /// ### post
   static const String refreshToken = _Auth.refreshToken;
@@ -38,8 +40,6 @@ base class ApiEndpoints {
   /// ### put
   static const String editProfile = _User.editProfile;
 
-  /// ### get
-  static const String changePassword = _User.changePassword;
 
   /// ### get
   static const String history = _User.history;
@@ -88,6 +88,7 @@ class _Auth {
   static const String verifyCode = '$_authRoute/verify-code';
   static const String registerVerify = '$_authRoute/register/verify';
   static const String resetPassword = '$_authRoute/reset-password';
+  static const String changePassword = '$_authRoute/change-password';
 }
 
 class _Notification {
@@ -103,7 +104,6 @@ class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
   static const String getCurrentProfile = '$_userRoute/profile';
   static const String editProfile = '$_userRoute/edit-profile';
-  static const String changePassword = '$_userRoute/change-password';
   static const String history = '$_userRoute/history';
 }
 

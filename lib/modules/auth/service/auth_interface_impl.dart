@@ -14,7 +14,7 @@ import '../../../core/helpers/format_response_data.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
 
-final class AuthInterfaceImpl extends AuthInterface{
+final class AuthInterfaceImpl extends AuthInterface {
   final ApiClient apiClient;
   final AuthService authService;
 
@@ -32,29 +32,33 @@ final class AuthInterfaceImpl extends AuthInterface{
   }
 
   @override
-  FutureRequest<Success> login(LoginRequestParams params) async{
-    return await asyncTryCatch(tryFunc: () async{
-      final response = await apiClient.post(
-        ApiEndpoints.login,
-        data: params.toJson(),
-      );
-      final body = extractBodyData(response);
-      debugPrint(body.toString());
-      await authService.saveNewAuth(
-        userId: body["user"]["_id"] as String,
-        accessToken: body["accessToken"] as String,
-        refreshToken: body["user"]["refreshToken"] as String
-      );
-      return Success(message: extractSuccessMessage(response));
-    });
+  FutureRequest<Success> login(LoginRequestParams params) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await apiClient.post(
+          ApiEndpoints.login,
+          data: params.toJson(),
+        );
+        final body = extractBodyData(response);
+        debugPrint(body.toString());
+        await authService.saveNewAuth(
+          userId: body["user"]["_id"] as String,
+          accessToken: body["accessToken"] as String,
+          refreshToken: body["user"]["refreshToken"] as String,
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
   }
 
   @override
-  Future<Either<DataCRUDFailure, Success>> logout() async{
-    return asyncTryCatch(tryFunc: () async{
-      await authService.clearCurrentAuthRecord();
-      return Success(message: "Successful logout.");
-    });
+  Future<Either<DataCRUDFailure, Success>> logout() async {
+    return asyncTryCatch(
+      tryFunc: () async {
+        await authService.clearCurrentAuthRecord();
+        return Success(message: "Successful logout.");
+      },
+    );
   }
 
   @override
@@ -63,21 +67,29 @@ final class AuthInterfaceImpl extends AuthInterface{
   }
 
   @override
-  FutureRequest<Success> signup(SignupParam params) async{
-    return await asyncTryCatch(tryFunc: () async{
-      debugPrint(params.toJson().toString());
-      final response = await apiClient.post(
-        ApiEndpoints.signup,
-        data: params.toJson(),
-      );
-      return Success(message: extractSuccessMessage(response));
-    });
+  FutureRequest<Success> signup(SignupParam params) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        debugPrint(params.toJson().toString());
+        final response = await apiClient.post(
+          ApiEndpoints.signup,
+          data: params.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
   }
-
   @override
-  FutureRequest<Success> forgetPassword(String email) {
-    // TODO: implement forgetPassword
-    throw UnimplementedError();
+  FutureRequest<Success> forgetPassword(String email) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await apiClient.post(
+          ApiEndpoints.forgetPassword,
+          data: {"email": email},
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
   }
 
   @override
@@ -87,16 +99,16 @@ final class AuthInterfaceImpl extends AuthInterface{
   }
 
   @override
-  FutureRequest<Success> verifyAccount(VerifyAccountParam params) async{
-    
+  FutureRequest<Success> verifyAccount(VerifyAccountParam params) async {
     debugPrint(params.toMap().toString());
-    return await asyncTryCatch(tryFunc: () async{
-      final response = await apiClient.post(
-        ApiEndpoints.registerVerify,
-        data: params.toMap(),
-      );
-      return Success(message: extractSuccessMessage(response));
-    });
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await apiClient.post(
+          ApiEndpoints.registerVerify,
+          data: params.toMap(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
   }
-
 }

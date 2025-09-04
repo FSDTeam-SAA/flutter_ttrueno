@@ -4,12 +4,13 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
-
 import '../../../core/helpers/handle_fold.dart';
 
-class VerifyAccountViewController extends ChangeNotifier{
+class VerifyAccountViewController extends ChangeNotifier {
   final AuthInterface authInterface = serviceLocator<AuthInterface>();
-  final ProcessStatusNotifier prcessNotifier = ProcessStatusNotifier(initialStatus: DisabledStatus());
+  final ProcessStatusNotifier prcessNotifier = ProcessStatusNotifier(
+    initialStatus: DisabledStatus(),
+  );
   final SnackbarNotifier snackbarNotifier;
   final String email;
 
@@ -26,21 +27,20 @@ class VerifyAccountViewController extends ChangeNotifier{
   set otp(String value) {
     _otp = value;
     debugPrint(_otp);
-    if(_otp.length == 6){
+    if (_otp.length == 6) {
       prcessNotifier.setEnabled();
     } else {
       prcessNotifier.setDisabled();
     }
   }
-  
 
-  void verify() async{
-
-    if(prcessNotifier.status is LoadingStatus) return;
+  void verify() async {
+    if (prcessNotifier.status is LoadingStatus) return;
     debugPrint("verifying...");
     prcessNotifier.setLoading();
-    await authInterface.verifyAccount(VerifyAccountParam(email: email, code: otp))
-      .then((lr) {
+    await authInterface
+        .verifyAccount(VerifyAccountParam(email: email, code: otp))
+        .then((lr) {
           handleFold(
             either: lr,
             processStatusNotifier: prcessNotifier,

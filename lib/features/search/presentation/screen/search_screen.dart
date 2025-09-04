@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/post_ride/presentation/screen/post_ride_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/create_ride_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
+import '../../../../core/theme/text_style.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -14,38 +17,98 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController fromController = TextEditingController();
+  final TextEditingController toController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
   final TextEditingController _passengerController = TextEditingController();
   int passengers = 1;
 
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+
   @override
-  void didChangeDependencies() {
-    precacheImage(
-      const AssetImage('assets/images/searchbackgrounddelete.png'),
-      context,
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final now = DateTime.now();
+      _selectedDate = now;
+      _dateController.text =
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+      _selectedTime = TimeOfDay.fromDateTime(now);
+      _timeController.text = _selectedTime!.format(context);
+
+      _setCurrentLocation();
+    });
+  }
+
+  Future<void> _setCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    if (permission == LocationPermission.deniedForever) return;
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
     );
-    super.didChangeDependencies();
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      final place = placemarks.first;
+      String address =
+          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}";
+      fromController.text = address;
+    }
+  }
+
+  Future<void> _selectDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? now,
+      firstDate: now,
+      lastDate: DateTime(now.year + 2),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text =
+            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    final initialTime = _selectedTime ?? TimeOfDay.now();
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+        _timeController.text = picked.format(context);
+      });
+    }
   }
 
   @override
   void dispose() {
+    fromController.dispose();
+    toController.dispose();
     _dateController.dispose();
+    _timeController.dispose();
     _passengerController.dispose();
     super.dispose();
-  }
-
-  Future<void> _selectDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate != null) {
-      _dateController.text =
-          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-    }
   }
 
   @override
@@ -57,13 +120,12 @@ class _SearchScreenState extends State<SearchScreen> {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/searchbackgrounddelete.png',
+              'assets/images/1111111.png',
               fit: BoxFit.cover,
               gaplessPlayback: true,
             ),
           ),
-
-          // Greeting on image (top of screen)
+          // Greeting section
           Positioned(
             top: 60,
             left: 24,
@@ -74,39 +136,28 @@ class _SearchScreenState extends State<SearchScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  "Hi ".tr(),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primaryTextblack,
-                                  ),
-                                ),
-                              ],
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Hi ".tr(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryTextblack,
                             ),
-                            Column(
-                              children: [
-                                Text(
-                                  'Howard 👋',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primaryTextblack,
-                                  ),
-                                ),
-                              ],
+                          ),
+                          TextSpan(
+                            text: 'Howard 👋',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryTextblack,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
-
                     Icon(
                       Icons.notifications_none,
                       size: 28,
@@ -115,31 +166,23 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
                 Gap.h4,
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          'Welcome back to '.tr(),
-                          style: TextStyle(color: AppColors.primaryTextblack),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'Hoplift'.tr(),
-                          style: TextStyle(color: AppColors.primaryTextblack),
-                        ),
-                      ],
-                    ),
-                  ],
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Welcome back to '.tr(),
+                        style: TextStyle(color: AppColors.primaryTextblack),
+                      ),
+                      TextSpan(
+                        text: 'Hoplift'.tr(),
+                        style: TextStyle(color: AppColors.primaryTextblack),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-
-          // White content container
           Align(
             alignment: Alignment.bottomCenter,
             child: SafeArea(
@@ -147,10 +190,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Column(
                   children: [
                     Container(
+                      height: MediaQuery.of(context).size.height * 0.62,
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
-                        vertical: 32,
+                        vertical: 0,
                       ),
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -162,17 +206,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Gap.h32,
-                          _LocationInputs(),
-                          Gap.h40,
+                          _LocationInputs(
+                            fromController: fromController,
+                            toController: toController,
+                          ),
+                          Gap.h24,
                           Row(
                             children: [
                               Expanded(
                                 child: TextField(
                                   controller: _dateController,
-                                  readOnly: false,
+                                  readOnly: true,
+                                  onTap: _selectDate,
                                   decoration: InputDecoration(
                                     prefixIcon: IconButton(
-                                      icon: Icon(Icons.calendar_today_outlined),
+                                      icon: const Icon(
+                                        Icons.calendar_today_outlined,
+                                      ),
                                       onPressed: _selectDate,
                                     ),
                                     hintText: 'Date'.tr(),
@@ -188,7 +238,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
                                       borderSide: BorderSide(
-                                        color: Colors.grey.shade300,
+                                        color: AppColors.primarybutton,
                                         width: 2,
                                       ),
                                     ),
@@ -197,86 +247,85 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               Gap.w8,
                               Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
+                                child: TextField(
+                                  controller: _timeController,
+                                  readOnly: true,
+                                  onTap: _selectTime,
+                                  decoration: InputDecoration(
+                                    prefixIcon: IconButton(
+                                      icon: const Icon(
+                                        Icons.watch_later_outlined,
+                                      ),
+                                      onPressed: _selectTime,
                                     ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '$passengers',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
+                                    hintText: 'Time'.tr(),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 20,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
                                       ),
-                                      Gap.w12,
-                                      // Label
-                                      Text(
-                                        'Passengers'.tr(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                        color: AppColors.primarybutton,
+                                        width: 2,
                                       ),
-                                      Gap.w12,
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                if (passengers < 4) {
-                                                  passengers++;
-                                                }
-                                                _passengerController.text =
-                                                    passengers.toString();
-                                              });
-                                            },
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              size: 24,
-                                              color: AppColors.primaryTextblack,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                if (passengers > 1) {
-                                                  passengers--;
-                                                }
-                                                _passengerController.text =
-                                                    passengers.toString();
-                                              });
-                                            },
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                            child: const Icon(
-                                              Icons.remove,
-                                              size: 24,
-                                              color: AppColors.primaryTextblack,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
+                          Gap.h16,
+                          Row(
+                            children: [
+                              const Icon(Icons.person_outline, size: 28),
+                              Gap.w12,
+                              Text(
+                                "Passengers".tr(),
+                                style: AppText.mdRegular_16_400.copyWith(
+                                  color: AppColors.primaryTextblack,
+                                ),
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () {
+                                  if (passengers > 1)
+                                    setState(() => passengers--);
+                                },
+                                icon: const Icon(Icons.remove_circle_outline),
+                              ),
+                              Container(
+                                height: 35,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey[200]!,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '$passengers',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => setState(() => passengers++),
+                                icon: const Icon(Icons.add_circle_outline),
+                              ),
+                            ],
+                          ),
                           Gap.h24,
+                          ///////////
                           context.primaryButton(
                             width: double.infinity,
                             onPressed: () {
@@ -289,7 +338,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                             text: 'Search'.tr(),
                           ),
-
                           Gap.h16,
                           OutlinedButton(
                             onPressed: () {
@@ -307,7 +355,12 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               side: BorderSide(color: AppColors.primarybutton),
                             ),
-                            child: Text('Create Ride'.tr()),
+                            child: Text(
+                              'Create Ride'.tr(),
+                              style: AppText.lgMedium_18_500.copyWith(
+                                color: AppColors.primarybutton,
+                              ),
+                            ),
                           ),
                           Gap.h24,
                         ],
@@ -325,7 +378,13 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 class _LocationInputs extends StatelessWidget {
-  const _LocationInputs();
+  final TextEditingController fromController;
+  final TextEditingController toController;
+
+  const _LocationInputs({
+    required this.fromController,
+    required this.toController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -349,13 +408,15 @@ class _LocationInputs extends StatelessWidget {
           child: Column(
             children: [
               _buildLocationField(
-                label: 'From'.tr(),
-                hint: 'Enter Location'.tr(),
+                controller: fromController,
+                label: 'From',
+                hint: 'Enter your current Location',
               ),
-              Gap.h16,
+              const SizedBox(height: 15),
               _buildLocationField(
-                label: 'Where to'.tr(),
-                hint: 'Enter Location'.tr(),
+                controller: toController,
+                label: 'Where to',
+                hint: 'Enter Location',
               ),
             ],
           ),
@@ -364,7 +425,7 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildCircleIcon(Image image) {
+  static Widget _buildCircleIcon(Image image) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -375,24 +436,24 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildDashedLine({required double height}) {
+  static Widget _buildDashedLine({required double height}) {
     return SizedBox(
       height: height,
       width: 1,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final boxHeight = constraints.constrainHeight();
-          final dashHeight = 4.0;
+          const dashHeight = 4.0;
           final dashCount = (boxHeight / (2 * dashHeight)).floor();
           return Flex(
             direction: Axis.vertical,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(dashCount, (_) {
-              return SizedBox(
+              return const SizedBox(
                 height: dashHeight,
                 width: 1,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.grey.shade400),
+                  decoration: BoxDecoration(color: Colors.grey),
                 ),
               );
             }),
@@ -402,7 +463,11 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationField({required String label, required String hint}) {
+  static Widget _buildLocationField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -418,6 +483,7 @@ class _LocationInputs extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           TextField(
+            controller: controller,
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey.shade500),

@@ -5,10 +5,15 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/message/presentation/widget/alart_message_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/screens/change_password_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/screens/faq_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/screens/help_center_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/screens/language_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding1.dart';
+import 'package:ttrueno_fo827e642a0c4/features/onboarding/splash_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/change_password_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/faq_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/help_center_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/language_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
+import '../../auth/interface/auth_inerface.dart';
 import 'account_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -73,8 +78,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: const [
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage:
-                            AssetImage('assets/images/profilepic.png'),
+                        backgroundImage: AssetImage(
+                          'assets/images/profilepic.png',
+                        ),
                       ),
                     ],
                   ),
@@ -122,6 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
+              Gap.h8,
 
               // Language Option
               _buildProfileOption(
@@ -164,6 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Genaral Setting'.tr(),
                 onTap: () {},
               ),
+              Gap.h8,
               _buildProfileOption(
                 context,
                 icon: Icons.lock_outline,
@@ -204,6 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
+              Gap.h8,
               _buildProfileOption(
                 context,
                 icon: Icons.support_agent_outlined,
@@ -211,10 +220,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HelpCenterPage()),
+                    MaterialPageRoute(
+                      builder: (context) => const HelpCenterPage(),
+                    ),
                   );
                 },
               ),
+              Gap.h8,
               _buildProfileOption(
                 context,
                 icon: Icons.star_border,
@@ -238,9 +250,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       builder: (context) => ConfirmActionBottomSheet(
                         message: 'Are you sure you want to logout?'.tr(),
-                        onConfirm: () {
-                          Navigator.pop(context); // Close bottom sheet
-                          // TODO: Add logout logic here
+                        onConfirm: () async {
+                          serviceLocator<AuthInterface>().logout();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SplashScreen(),
+                            ),
+                            (r) => false,
+                          ); // Close bottom sheet
                         },
                         onCancel: () {},
                         confirmButtonText: 'Logout'.tr(),
@@ -315,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 activeColor: AppColors.primarybutton,
               )
             else
-              Icon(Icons.arrow_forward_ios, size: 18, color: arrowColor),
+              Icon(Icons.arrow_forward_ios, size: 20, color: arrowColor),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -19,11 +20,12 @@ class SearchResultsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Top Bar',
-          style: AppText.mdSemiBold_16_600.copyWith(
+          'Rides List'.tr(),
+          style: AppText.xlSemiBold_20_600.copyWith(
             color: AppColors.primaryTextblack,
           ),
         ),
+        centerTitle: false,
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
@@ -178,7 +180,9 @@ class SearchResultsScreen extends StatelessWidget {
                   ),
                   child: Text(
                     'Create Ride',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: AppText.lgMedium_18_500.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ),
