@@ -16,8 +16,8 @@ T? handleFold<T>({
   return either.fold(
     (failure) {
       dekhao2(failure.toString());
-      processStatusNotifier?.setError(message: failure.message);
-      snackbarNotifier?.notifyError(message: failure.message);
+      processStatusNotifier?.setEnabled();
+      snackbarNotifier?.notifyError(message: failure.uiMessage);
       if(onError != null)onError(failure);
       return null;
     },
@@ -25,7 +25,7 @@ T? handleFold<T>({
       if (onSuccess != null) onSuccess(result.data);
       dekhao("success result is ${(result as Success).message}");
       processStatusNotifier?.setSuccess(message: (result as Success).message);
-      snackbarNotifier?.notifySuccess(message: (result as Success).message);
+      //snackbarNotifier?.notifySuccess(message: (result as Success).message);
       return result.data;
     },
   );

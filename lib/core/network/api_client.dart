@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-
 import '../services/network/auth/auth_service.dart';
 import 'api_endpoints.dart';
 

@@ -5,8 +5,9 @@ import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
 import '../../../core/helpers/handle_fold.dart';
+import '../model/verify_otp_param.dart';
 
-class VerifyAccountViewController extends ChangeNotifier {
+abstract class VerifyOtpController extends ChangeNotifier {
   final AuthInterface authInterface = serviceLocator<AuthInterface>();
   final ProcessStatusNotifier prcessNotifier = ProcessStatusNotifier(
     initialStatus: DisabledStatus(),
@@ -14,10 +15,7 @@ class VerifyAccountViewController extends ChangeNotifier {
   final SnackbarNotifier snackbarNotifier;
   final String email;
 
-  VerifyAccountViewController({
-    required this.email,
-    required this.snackbarNotifier,
-  });
+  VerifyOtpController({required this.email, required this.snackbarNotifier});
 
   int otpLength = 6;
   String _otp = "";
@@ -34,12 +32,40 @@ class VerifyAccountViewController extends ChangeNotifier {
     }
   }
 
-  void verify() async {
+  void verify();
+}
+
+
+class VerifyAccountViewController extends VerifyOtpController{
+  VerifyAccountViewController({required super.email, required super.snackbarNotifier});
+
+  @override
+  void verify() async{
     if (prcessNotifier.status is LoadingStatus) return;
     debugPrint("verifying...");
     prcessNotifier.setLoading();
     await authInterface
         .verifyAccount(VerifyAccountParam(email: email, code: otp))
+        .then((lr) {
+          handleFold(
+            either: lr,
+            processStatusNotifier: prcessNotifier,
+            snackbarNotifier: snackbarNotifier,
+          );
+        });
+  }
+}
+
+class VerifyForgetPasswordOtpController extends VerifyOtpController{
+  VerifyForgetPasswordOtpController({required super.email, required super.snackbarNotifier});
+
+  @override
+  void verify() async{
+    if (prcessNotifier.status is LoadingStatus) return;
+    debugPrint("verifying...");
+    prcessNotifier.setLoading();
+    await authInterface
+        .verifyCode(VerifyOtpParam(email: email, otp: otp))
         .then((lr) {
           handleFold(
             either: lr,

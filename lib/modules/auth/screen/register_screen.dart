@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscure = true;
-  bool _agreedToTerms = false; // New state for the checkbox
+  bool _agreedToTerms = false;
 
   @override
   void initState() {
@@ -291,7 +291,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => VerifyCodeScreen(
+                                    builder: (context) => VerifyCodeScreen.verifyAccount(
                                       email: emailController.text.trim(),
                                       onDone: () {
                                         Navigator.push(

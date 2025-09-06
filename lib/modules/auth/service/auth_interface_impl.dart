@@ -5,14 +5,17 @@ import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/network/auth/auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/login_entity.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/reset_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_otp_param.dart';
 
 import '../../../core/helpers/format_response_data.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
+import '../model/forget_password_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {
   final ApiClient apiClient;
@@ -79,23 +82,19 @@ final class AuthInterfaceImpl extends AuthInterface {
       },
     );
   }
+  
+  
   @override
-  FutureRequest<Success> forgetPassword(String email) async {
+  FutureRequest<Success> forgetPassword(ForgetPasswordParam param) async {
     return await asyncTryCatch(
       tryFunc: () async {
         final response = await apiClient.post(
           ApiEndpoints.forgetPassword,
-          data: {"email": email},
+          data: param.toJson(),
         );
         return Success(message: extractSuccessMessage(response));
       },
     );
-  }
-
-  @override
-  FutureRequest<Success> resetPassword(ResetPasswordParam params) {
-    // TODO: implement resetPassword
-    throw UnimplementedError();
   }
 
   @override
@@ -106,6 +105,33 @@ final class AuthInterfaceImpl extends AuthInterface {
         final response = await apiClient.post(
           ApiEndpoints.registerVerify,
           data: params.toMap(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> verifyCode(VerifyOtpParam param) async{
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await apiClient.post(
+          ApiEndpoints.verifyCode,
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+  
+  @override
+  FutureRequest<Success> createNewPassword(CreateNewPasswordParam params) async{
+    return await asyncTryCatch(
+      tryFunc: () async {
+        debugPrint(params.toJson().toString());
+        final response = await apiClient.post(
+          ApiEndpoints.createNewPassword,
+          data: params.toJson(),
         );
         return Success(message: extractSuccessMessage(response));
       },

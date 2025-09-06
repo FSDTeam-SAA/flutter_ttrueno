@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _RemoteServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _RemoteServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -19,6 +19,7 @@ base class ApiEndpoints {
   static const String forgetPassword = _Auth.forgetPassword;
 
   static const String changePassword = _Auth.changePassword;
+  static const String createNewPassword = _Auth.createNewPassword;
 
   /// ### post
   static const String refreshToken = _Auth.refreshToken;
@@ -43,14 +44,6 @@ base class ApiEndpoints {
 
   /// ### get
   static const String history = _User.history;
-
-
-  // ---------------------- Audio -----------------------------
-    static const String audioRoute = _Audio._audioRoute;
-  /// ### get
-  static const String getAllAudio = _Audio.getAudios;
-
-  static const String singleAudio = _Audio.singleAudio;
 
   // ---------------------- Library -----------------------------
   /// ### get
@@ -89,6 +82,7 @@ class _Auth {
   static const String registerVerify = '$_authRoute/register/verify';
   static const String resetPassword = '$_authRoute/reset-password';
   static const String changePassword = '$_authRoute/change-password';
+  static const String createNewPassword = '$_authRoute/reset-password';
 }
 
 class _Notification {
@@ -107,11 +101,6 @@ class _User {
   static const String history = '$_userRoute/history';
 }
 
-class _Audio {
-  static const String _audioRoute = '${ApiEndpoints.baseUrl}/audio';
-  static const String getAudios = '$_audioRoute/all-audio';
-  static const String singleAudio = '$_audioRoute/single-audio';
-}
 
 class _LibraryPlaylist {
   static const String _libraryRoute = '${ApiEndpoints.baseUrl}/playlist';

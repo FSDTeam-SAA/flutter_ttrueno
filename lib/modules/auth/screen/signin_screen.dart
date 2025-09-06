@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => VerifyCodeScreen(
+                                        builder: (context) => VerifyCodeScreen.verifyAccount(
                                           email: emailController.text,
                                           onDone: () {
                                             Navigator.pushAndRemoveUntil(
