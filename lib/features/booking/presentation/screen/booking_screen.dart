@@ -55,7 +55,7 @@ class _BookingScreenState extends State<BookingScreen>
           tabs: [
             Tab(text: 'Active'.tr()),
             Tab(text: 'Completed'.tr()),
-            Tab(text: 'Cancelled'.tr()),
+            //Tab(text: 'Cancelled'.tr()),
           ],
         ),
       ),
@@ -65,7 +65,7 @@ class _BookingScreenState extends State<BookingScreen>
         children: [
           ActiveWidget(),
           CompleteWidget(),
-          CancelledWidget(),
+          //CancelledWidget(),
         ],
       ),
     );

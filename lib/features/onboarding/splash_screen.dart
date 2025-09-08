@@ -1,20 +1,12 @@
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
-import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding1.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding2.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 
 import '../../bottom_nabar_page.dart';
 import '../../core/services/app_services.dart';
 import '../../core/services/debug/debug_service.dart';
 import '../../core/services/network/auth/auth_service.dart';
-import '../../core/theme/app_gap.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

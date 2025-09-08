@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/text_style.dart';
+import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class PostRideScreen extends StatefulWidget {
   const PostRideScreen({super.key});
@@ -14,195 +14,269 @@ class PostRideScreen extends StatefulWidget {
 }
 
 class _PostRideScreenState extends State<PostRideScreen> {
+  final TextEditingController fromController = TextEditingController();
+  final TextEditingController toController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
-  final List<String> baggageLabels = ['Large'.tr(), 'Small'.tr(), 'None'.tr()]; // or your actual labels
 
-
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
   int passengers = 1;
 
+  double departureDistanceFlex = 0;
+  double arrivalDistanceFlex = 0;
+  double departureTimeFlex = 1;
+  double arrivalTimeFlex = 1;
+
   @override
-  void dispose() {
-    _dateController.dispose();
-    _timeController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+
+    passengers = 1;
+    departureTimeFlex = 1;
+    arrivalTimeFlex = 1;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final now = DateTime.now();
+      _selectedDate = now;
+      _dateController.text =
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+      _selectedTime = TimeOfDay.fromDateTime(now);
+      _timeController.text = _selectedTime!.format(context);
+
+      await _setCurrentLocation();
+    });
+  }
+
+  Future<void> _setCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    if (permission == LocationPermission.deniedForever) return;
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      final place = placemarks.first;
+      String address =
+          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}";
+      fromController.text = address;
+    }
   }
 
   Future<void> _selectDate() async {
-    DateTime? pickedDate = await showDatePicker(
+    final now = DateTime.now();
+    final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      initialDate: _selectedDate ?? now,
+      firstDate: now,
+      lastDate: DateTime(now.year + 2),
     );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text =
+            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+      });
+    }
+  }
 
-    if (pickedDate != null) {
-      _dateController.text =
-          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+  Future<void> _selectTime() async {
+    final initialTime = _selectedTime ?? TimeOfDay.now();
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+        _timeController.text = picked.format(context);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         title: Text(
-          'Post Ride'.tr(),
-          style: AppText.mdSemiBold_16_600.copyWith(
+          "Post Ride".tr(),
+          style: AppText.xlSemiBold_20_600.copyWith(
             color: AppColors.primaryTextblack,
           ),
         ),
+        centerTitle: false,
+        actions: [
+          TextButton(
+            onPressed: () async {
+              final now = DateTime.now();
+              _selectedDate = now;
+              _dateController.text =
+                  "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+              _selectedTime = TimeOfDay.fromDateTime(now);
+              _timeController.text = _selectedTime!.format(context);
+
+              setState(() {
+                passengers = 1;
+                departureTimeFlex = 1;
+                arrivalTimeFlex = 1;
+              });
+
+              await _setCurrentLocation();
+            },
+            child: Text(
+              "Reset".tr(),
+              style: AppText.lgMedium_18_400.copyWith(
+                color: AppColors.primarybutton,
+              ),
+            ),
+          ),
+        ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _LocationInputs(),
-              Gap.h20,
-              Text(
-                "Departure".tr(),
-                style: AppText.xlSemiBold_20_400.copyWith(
-                  color: AppColors.primaryTextblack,
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            _LocationInputs(
+              fromController: fromController,
+              toController: toController,
+            ),
+            Gap.h40,
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _dateController,
+                    readOnly: true,
+                    onTap: _selectDate,
+                    decoration: InputDecoration(
+                      prefixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today_outlined),
+                        onPressed: _selectDate,
+                      ),
+                      hintText: 'Date'.tr(),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: AppColors.primarybutton,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Gap.w12,
+                Expanded(
+                  child: TextField(
+                    controller: _timeController,
+                    readOnly: true,
+                    onTap: _selectTime,
+                    decoration: InputDecoration(
+                      prefixIcon: IconButton(
+                        icon: const Icon(Icons.watch_later_outlined),
+                        onPressed: _selectTime,
+                      ),
+                      hintText: 'Time'.tr(),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: AppColors.primarybutton,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Gap.h40,
+            Row(
+              children: [
+                const Icon(Icons.person_outline, size: 28),
+                Gap.w12,
+                Text(
+                  "seats available".tr(),
+                  style: AppText.lgMedium_18_500.copyWith(
+                    color: AppColors.primaryTextblack,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    if (passengers > 1) setState(() => passengers--);
+                  },
+                  icon: const Icon(Icons.remove_circle_outline),
+                ),
+                Container(
+                  height: 35,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[200]!, width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '$passengers',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => setState(() => passengers++),
+                  icon: const Icon(Icons.add_circle_outline),
+                ),
+              ],
+            ),
+            BaggageSelector(),
+            Gap.h24,
+            //buildDepartureFlexibility(),
+            Gap.h40,
+            //buildArrivalFlexibility(),
+            Gap.h80,
+            SizedBox(
+              width: double.infinity,
+              height: 51,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primarybutton,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  'Create'.tr(),
+                  style: AppText.lgMedium_18_500.copyWith(
+                                color: AppColors.white,
+                              ),
                 ),
               ),
-              Gap.h12,
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _dateController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today_outlined),
-                          onPressed: _selectDate,
-                        ),
-                        hintText: 'Date'.tr(),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            color: AppColors.primarybutton,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gap.w8,
-                  Expanded(
-                    child: TextField(
-                      controller: _timeController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        prefixIcon: GestureDetector(
-                          onTap: () async {
-                            final TimeOfDay? pickedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
-                            if (pickedTime != null) {
-                              final formattedTime = pickedTime.format(context);
-                              _timeController.text = formattedTime;
-                            }
-                          },
-                          child: const Icon(Icons.watch_later_outlined),
-                        ),
-                        hintText: 'Time'.tr(),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            color: AppColors.primarybutton,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Gap.h20,
-              Row(
-                children: [
-                  const Icon(Icons.person_outline, size: 28),
-                  Gap.w12,
-                  Text(
-                    "Passengers Allowed".tr(),
-                    style: AppText.mdRegular_16_400.copyWith(
-                      color: AppColors.primaryTextblack,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      if (passengers > 1) {
-                        setState(() => passengers--);
-                      }
-                    },
-                    icon: const Icon(Icons.remove_circle_outline),
-                  ),
-                  Container(
-                    height: 35,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.grey[200]!, width: 2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '$passengers',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() => passengers++);
-                    },
-                    icon: const Icon(Icons.add_circle_outline),
-                  ),
-                ],
-              ),
-              Gap.h20,
-
-              // Add baggage selector here
-              BaggageSelector(),
-
-              // Bottom padding to avoid overlap with button
-              const SizedBox(height: 40),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-        child: context.primaryButton(
-          width: double.infinity,
-          onPressed: () {
-            // TODO: Your submit logic
-          },
-          text: 'POST'.tr(),
+            ),
+          ],
         ),
       ),
     );
@@ -210,7 +284,13 @@ class _PostRideScreenState extends State<PostRideScreen> {
 }
 
 class _LocationInputs extends StatelessWidget {
-  const _LocationInputs();
+  final TextEditingController fromController;
+  final TextEditingController toController;
+
+  const _LocationInputs({
+    required this.fromController,
+    required this.toController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -229,13 +309,21 @@ class _LocationInputs extends StatelessWidget {
             ),
           ],
         ),
-        Gap.w12,
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             children: [
-              _buildLocationField(label: 'From'.tr(), hint: 'Enter Location'.tr()),
-              Gap.h16,
-              _buildLocationField(label: 'Where to'.tr(), hint: 'Enter Location'.tr()),
+              _buildLocationField(
+                controller: fromController,
+                label: 'From',
+                hint: 'Enter your current Location',
+              ),
+              const SizedBox(height: 15),
+              _buildLocationField(
+                controller: toController,
+                label: 'Where to',
+                hint: 'Enter Location',
+              ),
             ],
           ),
         ),
@@ -243,7 +331,7 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildCircleIcon(Image image) {
+  static Widget _buildCircleIcon(Image image) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -254,24 +342,24 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildDashedLine({required double height}) {
+  static Widget _buildDashedLine({required double height}) {
     return SizedBox(
       height: height,
       width: 1,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final boxHeight = constraints.constrainHeight();
-          final dashHeight = 4.0;
+          const dashHeight = 4.0;
           final dashCount = (boxHeight / (2 * dashHeight)).floor();
           return Flex(
             direction: Axis.vertical,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(dashCount, (_) {
-              return SizedBox(
+              return const SizedBox(
                 height: dashHeight,
                 width: 1,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.grey.shade400),
+                  decoration: BoxDecoration(color: Colors.grey),
                 ),
               );
             }),
@@ -281,7 +369,11 @@ class _LocationInputs extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationField({required String label, required String hint}) {
+  static Widget _buildLocationField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -297,6 +389,7 @@ class _LocationInputs extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           TextField(
+            controller: controller,
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey.shade500),
@@ -323,16 +416,12 @@ class _BaggageSelectorState extends State<BaggageSelector> {
   int? selectedIndex;
 
   final List<String> baggageImages = [
-    'assets/images/largebaggage.png', // large baggage
-    'assets/images/smallbaggage.png', // small baggage
-    'assets/images/empty.png',        // no baggage
+    'assets/images/largebaggage.png',
+    'assets/images/smallbaggage.png',
+    'assets/images/empty.png',
   ];
 
-  final List<String> baggageLabels = [
-    'Large'.tr(),
-    'Small'.tr(),
-    'None'.tr(),
-  ]; // ✅ Fix: Add this matching the image index
+  final List<String> baggageLabels = ['Large'.tr(), 'Small'.tr(), 'None'.tr()];
 
   @override
   Widget build(BuildContext context) {
@@ -352,10 +441,7 @@ class _BaggageSelectorState extends State<BaggageSelector> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.grey.shade300,
-              width: 2,
-            ),
+            border: Border.all(color: Colors.grey.shade300, width: 2),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -373,8 +459,14 @@ class _BaggageSelectorState extends State<BaggageSelector> {
                   children: [
                     ColorFiltered(
                       colorFilter: isSelected
-                          ? const ColorFilter.mode(AppColors.primarybutton, BlendMode.srcIn)
-                          : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                          ? const ColorFilter.mode(
+                              AppColors.primarybutton,
+                              BlendMode.srcIn,
+                            )
+                          : const ColorFilter.mode(
+                              Colors.grey,
+                              BlendMode.srcIn,
+                            ),
                       child: Image.asset(
                         baggageImages[index],
                         width: 28,
@@ -386,7 +478,9 @@ class _BaggageSelectorState extends State<BaggageSelector> {
                       baggageLabels[index],
                       style: TextStyle(
                         fontSize: 12,
-                        color: isSelected ? AppColors.primarybutton : Colors.grey,
+                        color: isSelected
+                            ? AppColors.primarybutton
+                            : Colors.grey,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -396,9 +490,7 @@ class _BaggageSelectorState extends State<BaggageSelector> {
             }),
           ),
         ),
-        //const SizedBox(height: 40),
       ],
     );
   }
 }
-

@@ -9,7 +9,11 @@ import 'ui/auth/auth_controller.dart';
 
 class AppServices {
   // Getters
-  static final Dio _dio = Dio();
+  static final Dio _dio = Dio(BaseOptions(
+    connectTimeout: const Duration(seconds: 50),
+    receiveTimeout: const Duration(seconds: 50),
+    sendTimeout: const Duration(seconds: 50),
+  ));
   static final ApiClient apiClient = ApiClient(
     _dio,
     authService
@@ -24,6 +28,7 @@ class AppServices {
 
   // UI services/controllers
   static final AuthController authController = AuthController();
+  static final AuthController profileController = AuthController();
 
   // static Future<void> init() async {
   //   DebugService.instance(
