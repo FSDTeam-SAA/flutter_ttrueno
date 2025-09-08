@@ -18,7 +18,7 @@ import '../model/login_entity.dart';
   Stream<AuthStatus?> authStream();
   FutureRequest<Success> forgetPassword(String email);
   FutureRequest<Success> resetPassword(ResetPasswordParam params);
-  Future<Either<DataCRUDFailure, Success>> logout();
+  FutureRequest<Success> logout();
   bool isFirstTimeInstall();
   void setFirstTimeInstall();
 }

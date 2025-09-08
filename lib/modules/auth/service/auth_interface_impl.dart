@@ -34,18 +34,8 @@ final class AuthInterfaceImpl extends AuthInterface{
   @override
   FutureRequest<Success> login(LoginRequestParams params) async{
     return await asyncTryCatch(tryFunc: () async{
-      final response = await apiClient.post(
-        ApiEndpoints.login,
-        data: params.toJson(),
-      );
-      final body = extractBodyData(response);
-      debugPrint(body.toString());
-      await authService.saveNewAuth(
-        userId: body["user"]["_id"] as String,
-        accessToken: body["accessToken"] as String,
-        refreshToken: body["user"]["refreshToken"] as String
-      );
-      return Success(message: extractSuccessMessage(response));
+      final response = await apiClient.get(ApiEndpoints.getCurrentProfile);
+      
     });
   }
 
