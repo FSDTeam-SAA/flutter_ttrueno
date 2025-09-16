@@ -91,9 +91,7 @@ base class _AuthStorage {
         refreshToken: updateAuthParams.refreshToken,
         data: updateAuthParams.data ?? currentAuth.data,
       );
-    // save the uid of the current auth
-    await _currentAuthUidManager.saveCurrentAuthRef(uidOfCurrentAuth);
-    // also save the auth instance.
+    // Save the new auth instance.
     await _authManager.write(uId: uidOfCurrentAuth, auth: auth);
   }
 

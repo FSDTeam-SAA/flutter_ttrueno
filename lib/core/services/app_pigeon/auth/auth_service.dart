@@ -43,7 +43,6 @@ class AuthService extends Interceptor {
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
-    debugPrint("Request headers: ${options.headers}");
     handler.next(options);
   }
   

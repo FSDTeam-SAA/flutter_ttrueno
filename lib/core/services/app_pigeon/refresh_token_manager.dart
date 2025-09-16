@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../helpers/format_response_data.dart';
+import '../../utils/helpers/format_response_data.dart';
 import '../debug/debug_service.dart';
 
 base class RefreshTokenResponse {
