@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/post_ride/presentation/screen/post_ride_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/notification/screen/notification_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride/screen/create_ride_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/create_ride_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -158,10 +159,18 @@ class _SearchScreenState extends State<SearchScreen> {
                         ],
                       ),
                     ),
-                    Icon(
-                      Icons.notifications_none,
-                      size: 28,
-                      color: AppColors.primaryTextblack,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NotificationScreen()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.notifications_none,
+                        size: 28,
+                        color: AppColors.primaryTextblack,
+                      ),
                     ),
                   ],
                 ),

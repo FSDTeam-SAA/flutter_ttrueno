@@ -6,7 +6,7 @@ import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 
 import '../../../notifiers/snackbar_notifier.dart';
-import '../../network/auth/auth_service.dart';
+import '../../app_pigeon/app_pigeon.dart';
 
 
 class AuthController extends ChangeNotifier {
