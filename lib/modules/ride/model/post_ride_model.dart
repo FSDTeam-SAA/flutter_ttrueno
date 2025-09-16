@@ -1,4 +1,4 @@
-import 'package:ttrueno_fo827e642a0c4/modules/search/model/location_address.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride/model/location_address.dart';
 
 class PostRideModel {
   LocationAdress? startLocation;

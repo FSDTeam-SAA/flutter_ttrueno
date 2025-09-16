@@ -3,29 +3,26 @@ import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/api_handler/failure.dart';
 import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
-import 'package:ttrueno_fo827e642a0c4/core/services/network/auth/auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/login_entity.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/model/reset_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_otp_param.dart';
 
 import '../../../core/helpers/format_response_data.dart';
-import '../../../core/network/api_client.dart';
-import '../../../core/network/api_endpoints.dart';
+import '../../../core/constants/api_endpoints.dart';
+import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../model/forget_password_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {
-  final ApiClient apiClient;
-  final AuthService authService;
+  final AppPigeon appPigeon;
 
-  AuthInterfaceImpl(this.apiClient, this.authService);
+  AuthInterfaceImpl(this.appPigeon,);
 
   @override
-  Stream<AuthStatus?> authStream() {
-    return authService.authStream;
+  Stream<AuthStatus> authStream() {
+    return appPigeon.authStream;
   }
 
   @override
@@ -38,16 +35,21 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> login(LoginRequestParams params) async {
     return await asyncTryCatch(
       tryFunc: () async {
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.login,
           data: params.toJson(),
         );
         final body = extractBodyData(response);
         debugPrint(body.toString());
-        await authService.saveNewAuth(
-          userId: body["user"]["_id"] as String,
-          accessToken: body["accessToken"] as String,
-          refreshToken: body["user"]["refreshToken"] as String,
+        await appPigeon.saveNewAuth(
+          saveAuthParams: SaveNewAuthParams(
+            uid: body["user"]["_id"] as String,
+            accessToken: body["accessToken"] as String,
+            refreshToken: body["user"]["refreshToken"] as String,
+            data: {
+              "userId": body["user"]["_id"] as String? ?? "",
+            }
+          ),
         );
         return Success(message: extractSuccessMessage(response));
       },
@@ -58,7 +60,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   Future<Either<DataCRUDFailure, Success>> logout() async {
     return asyncTryCatch(
       tryFunc: () async {
-        await authService.clearCurrentAuthRecord();
+        await appPigeon.clearAllAuth();
         return Success(message: "Successful logout.");
       },
     );
@@ -74,7 +76,7 @@ final class AuthInterfaceImpl extends AuthInterface {
     return await asyncTryCatch(
       tryFunc: () async {
         debugPrint(params.toJson().toString());
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.signup,
           data: params.toJson(),
         );
@@ -88,7 +90,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> forgetPassword(ForgetPasswordParam param) async {
     return await asyncTryCatch(
       tryFunc: () async {
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.forgetPassword,
           data: param.toJson(),
         );
@@ -102,7 +104,7 @@ final class AuthInterfaceImpl extends AuthInterface {
     debugPrint(params.toMap().toString());
     return await asyncTryCatch(
       tryFunc: () async {
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.registerVerify,
           data: params.toMap(),
         );
@@ -115,7 +117,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> verifyCode(VerifyOtpParam param) async{
     return await asyncTryCatch(
       tryFunc: () async {
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.verifyCode,
           data: param.toJson(),
         );
@@ -129,7 +131,7 @@ final class AuthInterfaceImpl extends AuthInterface {
     return await asyncTryCatch(
       tryFunc: () async {
         debugPrint(params.toJson().toString());
-        final response = await apiClient.post(
+        final response = await appPigeon.post(
           ApiEndpoints.createNewPassword,
           data: params.toJson(),
         );

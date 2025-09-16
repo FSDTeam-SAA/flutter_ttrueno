@@ -7,7 +7,7 @@ import 'package:ttrueno_fo827e642a0c4/features/search/presentation/widget/filter
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/widget/ride_card_widget.dart';
 
 import '../../../../core/theme/text_style.dart';
-import '../../../post_ride/presentation/screen/post_ride_screen.dart';
+import '../../../../modules/ride/screen/create_ride_screen.dart';
 
 class SearchResultsScreen extends StatelessWidget {
   const SearchResultsScreen({super.key});

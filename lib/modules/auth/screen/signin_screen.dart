@@ -2,10 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/core/services/app_services.dart';
-import 'package:ttrueno_fo827e642a0c4/core/services/network/auth/auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/login_screen_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/forget_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
@@ -221,22 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         builder: (context) => VerifyCodeScreen.verifyAccount(
                                           email: emailController.text,
                                           onDone: () {
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  if (AppServices
-                                                          .authController
-                                                          .authStatus
-                                                      is Authenticated) {
-                                                    return BottomNabarScreen();
-                                                  } else {
-                                                    return LoginScreen();
-                                                  }
-                                                },
-                                              ),
-                                              (route) => false,
-                                            );
+                                            
                                           },
                                         ),
                                       ),

@@ -53,7 +53,18 @@ base class ApiEndpoints {
   /// ### delete
   static const String removeFromPlaylist = _LibraryPlaylist.removeFromPlaylist;
 
+
+  // ---------------------- RIDE -----------------------------
+  /// ### post
+  static const String createRide = _Ride.createRide;
+
+
 }
+
+
+
+
+
 //arrow360degree@gmail.com
 
 class _RemoteServer {
@@ -85,13 +96,16 @@ class _Auth {
   static const String createNewPassword = '$_authRoute/reset-password';
 }
 
+
+
+// ---------------------- Notification -----------------------------
 class _Notification {
   static const String _notificationRoute =
-      '${ApiEndpoints.baseUrl}/notifications';
-  static const String getUserNotifications = '$_notificationRoute/';
+      '${ApiEndpoints.baseUrl}/user';
   static String markNotificationAsRead(String notificationId) =>
       '$_notificationRoute/:$notificationId/read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
+  static const String getUserNotifications = '$_notificationRoute/notifications';
 }
 
 class _User {
@@ -109,4 +123,10 @@ class _LibraryPlaylist {
   static const String removeFromPlaylist = '$_libraryRoute/remove';
 }
 
+// ---------------------- RIDE -----------------------------
+// post
+class _Ride {
+  static const String _rideRoute = '${ApiEndpoints.baseUrl}/ride';
+  static const String createRide = _rideRoute;
+}
 

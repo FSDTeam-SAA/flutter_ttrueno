@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride/controller/create_ride_controller.dart';
 
 class PostRideScreen extends StatefulWidget {
   const PostRideScreen({super.key});
@@ -18,6 +21,9 @@ class _PostRideScreenState extends State<PostRideScreen> {
   final TextEditingController toController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+
+  late final PostRideController _createRideScreenController;
+  
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
@@ -256,24 +262,46 @@ class _PostRideScreenState extends State<PostRideScreen> {
             Gap.h40,
             //buildArrivalFlexibility(),
             Gap.h80,
+            // SizedBox(
+            //   width: double.infinity,
+            //   height: 51,
+            //   child: ElevatedButton(
+            //     onPressed: () {},
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: AppColors.primarybutton,
+            //       foregroundColor: Colors.white,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(20),
+            //       ),
+            //     ),
+            //     child: Text(
+            //       'Create'.tr(),
+            //       style: AppText.lgMedium_18_500.copyWith(
+            //                     color: AppColors.white,
+            //                   ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
-              width: double.infinity,
-              height: 51,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primarybutton,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  'Create'.tr(),
-                  style: AppText.lgMedium_18_500.copyWith(
-                                color: AppColors.white,
-                              ),
-                ),
+              height: 52,
+              child: RSaveButton(
+                height: 50,
+                borderRadius: BorderRadius.circular(20),
+                key: UniqueKey(),
+                buttonStatusNotifier:
+                    _createRideScreenController.processStatusNotifier,
+                saveText: 'Create'.tr(),
+                loadingText: "Creating.....".tr(),
+                onSaveTap: () async {
+                  _createRideScreenController.createRideModel();
+                },
+                onDone: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Scaffold()),
+                    (route) => false,
+                  );
+                },
               ),
             ),
           ],

@@ -1,6 +1,6 @@
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/search/model/chat_room.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/search/model/filter_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride/model/chat_room.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride/model/filter_model.dart';
 
 import 'location_address.dart';
 
