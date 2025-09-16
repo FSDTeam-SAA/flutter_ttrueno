@@ -10,15 +10,15 @@ import 'package:ttrueno_fo827e642a0c4/modules/notification/model/notification_mo
 import '../../../core/services/app_pigeon/app_pigeon.dart';
 
 final class NotificationInterfaceImpl extends NotificationInterface {
-  final AppPigeon apiClient;
+  final AppPigeon appPigeon;
 
-  NotificationInterfaceImpl(this.apiClient);
+  NotificationInterfaceImpl(this.appPigeon);
 
   @override
   FutureRequest<Success<List<NotificationModel>>> getAllNotification() async {
     return await asyncTryCatch(
       tryFunc: () async {
-        final Response response = await apiClient.get(
+        final Response response = await appPigeon.get(
           ApiEndpoints.getUserNotifications,
         );
         debugPrint("response >> ${response.data}");
@@ -34,6 +34,24 @@ final class NotificationInterfaceImpl extends NotificationInterface {
           message: extractSuccessMessage(response),
           data: notifications,
         );
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> singleNotificationRead(String id) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        // call api
+        final response = await appPigeon.put(
+          ApiEndpoints.markNotificationAsRead(notificationId: id),
+        );
+
+        //parse
+        final message = response.data['message'] as String;
+
+        //return
+        return Success(message: message);
       },
     );
   }
