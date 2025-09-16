@@ -4,12 +4,10 @@ import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/api_handler/trycatch.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/model/reset_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_otp_param.dart';
-
-import '../../../../core/services/network/auth/auth_service.dart';
+import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../model/forget_password_param.dart';
 import '../model/login_entity.dart';
 

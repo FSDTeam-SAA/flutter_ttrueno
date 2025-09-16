@@ -209,14 +209,4 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     );
   }
 
-  void _handlePasswordUpdate() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    // All validation is done by the Form validators, so just navigate:
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const PasswordSuccessScreen()),
-    );
-  }
 }

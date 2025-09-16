@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/notification/interface/notification_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/notification/service/notification_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/service/profile_interface_impl.dart';
 
@@ -11,11 +13,15 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   // Dependencies
   serviceLocator.registerFactory<AuthInterface>(
-    () => AuthInterfaceImpl(AppServices.apiClient, AppServices.authService),
+    () => AuthInterfaceImpl(AppServices.appPigeon,),
   );
 
   serviceLocator.registerFactory<ProfileInterface>(
-    ()=> ProfileInterfaceImpl(AppServices.apiClient),
+    ()=> ProfileInterfaceImpl(AppServices.appPigeon),
+  );
+
+  serviceLocator.registerFactory<NotificationInterface>(
+    ()=> NotificationInterfaceImpl(AppServices.appPigeon),
   );
   //
   // Call essential service initialization
