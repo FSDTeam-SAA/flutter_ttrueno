@@ -69,10 +69,10 @@ base class ApiEndpoints {
 
 class _RemoteServer {
   static const String socketUrl =
-      'https://ttrueno-backend.onrender.com';
+      'https://ttrueno-backend-5nhs.onrender.com';
 
   static const String baseUrl =
-      'https://ttrueno-backend.onrender.com/api/v1';
+      'https://ttrueno-backend-5nhs.onrender.com/api/v1';
 }
 
 class _LocalHostWifi {
@@ -101,11 +101,11 @@ class _Auth {
 // ---------------------- Notification -----------------------------
 class _Notification {
   static const String _notificationRoute =
-      '${ApiEndpoints.baseUrl}/user';
+      '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
       '$_notificationRoute/:$notificationId/read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
-  static const String getUserNotifications = '$_notificationRoute/notifications';
+  static const String getUserNotifications = '$_notificationRoute/user';
 }
 
 class _User {
