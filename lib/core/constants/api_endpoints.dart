@@ -35,6 +35,10 @@ base class ApiEndpoints {
   static const String markAllAsRead = _Notification.markAllAsRead;
 
   // ---------------------- USER -----------------------------
+  
+  /// ### get
+  static String getuserbyId(String id) => _User.getuserbyId(id);
+
   /// ### get
   static const String getCurrentProfile = _User.getCurrentProfile;
 
@@ -103,13 +107,14 @@ class _Notification {
   static const String _notificationRoute =
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
-      '$_notificationRoute/:$notificationId/read';
+      '$_notificationRoute/$notificationId/read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
   static const String getUserNotifications = '$_notificationRoute/user';
 }
 
 class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
+  static String getuserbyId(String id) => '$_userRoute/$id';
   static const String getCurrentProfile = '$_userRoute/profile';
   static const String editProfile = '$_userRoute/edit-profile';
   static const String history = '$_userRoute/history';

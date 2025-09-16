@@ -55,28 +55,6 @@ class ChangePasswordController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> changePassword() async {
-  //   processNotifier.setLoading();
-  //   await Future.delayed(const Duration(seconds: 1));
-
-  //   await serviceLocator<ProfileInterface>()
-  //       .changePassword(
-  //         ChangePassowrdParam(
-  //           password: _currentPassword,
-  //           newPassword: _newPassword,
-  //           confirmPassword: _confirmPassword,
-  //         ),
-  //       )
-  //       .then((lr) {
-  //     handleFold(
-  //       either: lr,
-  //       processStatusNotifier: processNotifier,
-  //       snackbarNotifier: snackbarNotifier,
-  //     );
-  //   });
-  // }
-
-
   ///////////////////
   Future<void> changePassword({required SnackbarNotifier? snackbarNotifier}) async {
     processNotifier.setLoading();
@@ -93,4 +71,6 @@ class ChangePasswordController extends ChangeNotifier {
     });
   }
   ///////////////////
+  
+  
 }
