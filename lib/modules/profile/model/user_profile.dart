@@ -5,8 +5,7 @@ class UserProfile {
   final String number;
   final String imageUrl;
 
-  UserProfile(
-     {
+  const UserProfile({
     required this.id,
     required this.name,
     required this.email,
@@ -16,11 +15,11 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      number: json['number'],
-      imageUrl: json['imageUrl'],
+      id: (json['id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      email: (json['email'] ?? '').toString(),
+      number: (json['number'] ?? '').toString(),
+      imageUrl: (json['imageUrl'] ?? '').toString(),
     );
   }
 
@@ -31,4 +30,20 @@ class UserProfile {
         'number': number,
         'imageUrl': imageUrl,
       };
+
+  UserProfile copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? number,
+    String? imageUrl,
+  }) {
+    return UserProfile(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      number: number ?? this.number,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }
