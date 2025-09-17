@@ -61,8 +61,7 @@ class SmartNetworkImage extends StatefulWidget {
     Key? key,
     String? imageUrl,
     BoxFit fit = BoxFit.cover,
-    double height = 50,
-    double width = 50,
+    double radius = 50,
     BorderRadius? borderRadius,
     Widget? placeholder,
     Widget? errorWidget,
@@ -74,9 +73,9 @@ class SmartNetworkImage extends StatefulWidget {
     key: key,
     imageUrl: imageUrl,
     fit: fit,
-    height: height,
-    width: width,
-    borderRadius: borderRadius ?? BorderRadius.circular(height / 2),
+    height: radius,
+    width: radius,
+    borderRadius: borderRadius ?? BorderRadius.circular(radius),
     placeholder: placeholder,
     errorWidget: errorWidget,
     keepAlive: keepAlive,
@@ -134,23 +133,24 @@ class _SmartNetworkImageState extends State<SmartNetworkImage> with AutomaticKee
   Widget build(BuildContext context) {
     super.build(context);
     if (_imageBytes != null) {
+      // For Circle
       if(widget.shape == _Shape.circle) {
         return Container(
+          clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: widget.backgroundColor,
             border: Border.all(color: widget.borderColor ?? Colors.transparent, width: widget.borderWidth ?? 0)
           ),
-          child: CircleShape(
-            child: Image.memory(
-              _imageBytes!,
-              fit: widget.fit,
-              height: widget.height,
-              width: widget.width,
-            ),
+          child: Image.memory(
+            _imageBytes!,
+            fit: widget.fit,
+            height: widget.height,
+            width: widget.width,
           ),
         );
       }
+      // For other
       return ClipRRect(
         borderRadius: widget.borderRadius ?? BorderRadius.zero,
         child: Image.memory(

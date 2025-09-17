@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,13 +11,14 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/message/presentation/widget/alart_message_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/onboarding/splash_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/change_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/faq_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/language_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import '../../auth/interface/auth_inerface.dart';
-import 'account_info_screen.dart';
+import 'edit_profile_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -77,58 +79,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Stack(
-                    children: [
-                      SmartNetworkImage.circle(
-                        height: 96,
-                        width: 96,
-                        fit: BoxFit.contain,
-
-                        imageUrl:
-                            profileDataController.userProfile.value?.imageUrl,
-
-                        placeholder: Icon(
-                          Icons.person_2_outlined,
-                          size: 100,
-                          color: AppColors.secondaryText,
+              ObxValue(
+                (data)=> Row(
+                  children: [
+                    Stack(
+                      children: [
+                        SmartNetworkImage.circle(
+                          key: UniqueKey(),
+                          radius: 96,
+                          imageUrl:
+                              profileDataController.userProfile.value?.imageUrl,
+                          placeholder: Icon(
+                            Icons.person_2_outlined,
+                            size: 100,
+                            color: AppColors.secondaryText,
+                          ),
+                          errorWidget: Icon(
+                            Icons.person_2_outlined,
+                            size: 100,
+                            color: AppColors.secondaryText,
+                          ),
                         ),
-                        errorWidget: Icon(
-                          Icons.person_2_outlined,
-                          size: 100,
-                          color: AppColors.secondaryText,
+                      ],
+                    ),
+                    Gap.w16,
+                    Column(
+                      spacing: 4,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if((profileDataController.userProfile.value?.name ?? "").isNotEmpty) Text(
+                          profileDataController.userProfile.value?.name ?? "",
+                          style: AppText.xxlSemiBold_24_600.copyWith(
+                            color: AppColors.primaryTextblack,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Gap.w16,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        profileDataController.userProfile.value?.name ?? "",
-                        style: AppText.xxlSemiBold_24_600.copyWith(
-                          color: AppColors.primaryTextblack,
+                        
+                        if((profileDataController.userProfile.value?.number ?? "").isNotEmpty) Text(
+                          profileDataController.userProfile.value?.number ?? "",
+                          style: AppText.mdRegular_16_400.copyWith(
+                            color: AppColors.secondaryText,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        profileDataController.userProfile.value?.number ?? "",
-                        style: AppText.mdRegular_16_400.copyWith(
-                          color: AppColors.secondaryText,
+                        
+                        if((profileDataController.userProfile.value?.email ?? "").isNotEmpty) Text(
+                          profileDataController.userProfile.value?.email ?? "",
+                          style: AppText.mdRegular_16_400.copyWith(
+                            color: AppColors.secondaryText,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        profileDataController.userProfile.value?.email ?? "",
-                        style: AppText.mdRegular_16_400.copyWith(
-                          color: AppColors.secondaryText,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
+                profileDataController.userProfile
               ),
               const SizedBox(height: 32),
 
@@ -141,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AccountInfoScreen(),
+                      builder: (context) => const EditProfileInfoScreen(),
                     ),
                   );
                 },
@@ -269,14 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       builder: (context) => ConfirmActionBottomSheet(
                         message: 'Are you sure you want to logout?'.tr(),
                         onConfirm: () async {
-                          serviceLocator<AuthInterface>().logout();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SplashScreen(),
-                            ),
-                            (r) => false,
-                          ); // Close bottom sheet
+                          serviceLocator<ProfileInterface>().logout();
                         },
                         onCancel: () {},
                         confirmButtonText: 'Logout'.tr(),

@@ -1,23 +1,42 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/circle_shape.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/widget/text_field.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/user_profile_data_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/edit_profile_info_controller.dart';
 
-class AccountInfoScreen extends StatelessWidget {
-  const AccountInfoScreen({super.key});
+class EditProfileInfoScreen extends StatefulWidget {
+  const EditProfileInfoScreen({super.key});
+
+  @override
+  State<EditProfileInfoScreen> createState() => _EditProfileInfoScreenState();
+}
+
+class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
+  final controller = Get.put(EditProfileInfoController());
+  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus(),);
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Get.delete<EditProfileInfoController>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AccountInfoController());
-    final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
-      initialStatus: EnabledStatus(),
-    );
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -41,27 +60,37 @@ class AccountInfoScreen extends StatelessWidget {
             children: [
               Center(
                 child: Obx(() {
-                  ImageProvider avatar;
+                  Widget avatar;
 
-                  if (controller.profileImage.value != null) {
-                    avatar = FileImage(controller.profileImage.value!);
-                  } else if (controller.userProfile.value.imageUrl.isNotEmpty) {
-                    final img = controller.userProfile.value.imageUrl;
-                    if (img.startsWith('http')) {
-                      avatar = NetworkImage(img);
-                    } else {
-                      final file = File(img);
-                      avatar = file.existsSync()
-                          ? FileImage(file)
-                          : const AssetImage('assets/images/profilepic.png');
-                    }
+                  if (controller.profileImage.value?.path != null) {
+                    avatar = CircleShape(
+                      backgroundColor: Colors.black,
+                      borderColor: Colors.black,
+                      child: Image.file(
+                        controller.profileImage.value!,
+                        height: 96,
+                        width: 96,
+                        fit: BoxFit.contain,
+                      )
+                    );
+                  } else if (controller.beforeUserProfile?.imageUrl != null) {
+                    avatar = SmartNetworkImage.circle(
+                      imageUrl: controller.beforeUserProfile!.imageUrl,
+                      radius: 96,
+                    );
                   } else {
-                    avatar = const AssetImage('assets/images/profilepic.png');
+                    avatar = CircleShape(
+                      child: SizedBox(
+                        height: 96,
+                        width: 96,
+                        child: Icon(Icons.person, color: AppColors.secondaryText, size: 48),
+                      ),
+                    );
                   }
 
                   return Stack(
                     children: [
-                      CircleAvatar(radius: 50, backgroundImage: avatar),
+                      avatar,
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -118,13 +147,14 @@ class AccountInfoScreen extends StatelessWidget {
                   saveText: "Save",
                   loadingText: "Saving...",
                   doneText: "Done",
-                  onSaveTap: () {},
-                  onDone: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Scaffold()),
-                      (route) => false,
+                  onSaveTap: () {
+                    controller.saveProfile(
+                      buttonNotifier: processNotifier,
+                      snackbarNotifier: SnackbarNotifier(context: context),
                     );
+                  },
+                  onDone: () {
+                    
                   },
                   buttonStatusNotifier: processNotifier,
                 ),

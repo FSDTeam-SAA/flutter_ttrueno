@@ -19,7 +19,7 @@ class UserProfile {
       name: (json['name'] ?? '').toString(),
       email: (json['email'] ?? '').toString(),
       number: (json['number'] ?? '').toString(),
-      imageUrl: (json['imageUrl'] ?? '').toString(),
+      imageUrl: (json['profileImage'] ?? '').toString(),
     );
   }
 
@@ -28,7 +28,7 @@ class UserProfile {
         'name': name,
         'email': email,
         'number': number,
-        'imageUrl': imageUrl,
+        'profileImage': imageUrl,
       };
 
   UserProfile copyWith({

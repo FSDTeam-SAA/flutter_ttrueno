@@ -45,6 +45,8 @@ base class ApiEndpoints {
   /// ### put
   static const String editProfile = _User.editProfile;
 
+  /// ### put
+  static const String uploadProfileAvatar = _User.uploadProfileAvatar;
 
   /// ### get
   static const String history = _User.history;
@@ -116,7 +118,8 @@ class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
   static String getuserbyId(String id) => '$_userRoute/$id';
   static const String getCurrentProfile = '$_userRoute/profile';
-  static const String editProfile = '$_userRoute/edit-profile';
+  static const String editProfile = '$_userRoute/';
+  static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
 }
 

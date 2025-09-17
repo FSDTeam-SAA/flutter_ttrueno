@@ -111,6 +111,6 @@ class AuthService extends Interceptor {
 
   Future<void> updateCurrentAuth({required UpdateAuthParams updateAuthParams}) async => _authStorage.updateCurrentAuth(updateAuthParams);
 
-  Future<void> clearCurrentAuthRecord() async=> _authStorage.clearCurrentAuthRecord();
+  Future<void> clearCurrentAuthRecord() async => await _authStorage.clearCurrentAuthRecord();
 
 }
