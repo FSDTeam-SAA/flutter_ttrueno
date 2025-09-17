@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/auth_role.dart';
 import 'core/constants/api_endpoints.dart';
 import 'core/notifiers/snackbar_notifier.dart';
@@ -10,7 +11,7 @@ import 'main.dart';
 import 'modules/auth/interface/auth_inerface.dart';
 import 'routing/route_names.dart';
 
-class AuthRoutingController extends ChangeNotifier {
+class AuthRoutingController extends GetxController {
   StreamSubscription? _authStreamSubscription;
 
   AuthRoutingController() {
@@ -35,7 +36,7 @@ class AuthRoutingController extends ChangeNotifier {
             );
             navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.home, (route) => false);
           }
-          notifyListeners();
+          update();
         }
     });
   }
