@@ -1,18 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/message/presentation/widget/alart_message_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding1.dart';
 import 'package:ttrueno_fo827e642a0c4/features/onboarding/splash_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/change_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/faq_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/language_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import '../../auth/interface/auth_inerface.dart';
 import 'account_info_screen.dart';
 
@@ -24,12 +26,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final ProfileDataController profileDataController;
+
   bool _notificationEnabled = true;
   String selectedLanguage = '...';
 
   @override
   void initState() {
     super.initState();
+    profileDataController = Get.find<ProfileDataController>();
     _loadSavedLanguage();
   }
 
@@ -75,11 +80,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 children: [
                   Stack(
-                    children: const [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: AssetImage(
-                          'assets/images/profilepic.png',
+                    children: [
+                      SmartNetworkImage.circle(
+                        height: 96,
+                        width: 96,
+                        fit: BoxFit.contain,
+
+                        imageUrl:
+                            profileDataController.userProfile.value?.imageUrl,
+
+                        placeholder: Icon(
+                          Icons.person_2_outlined,
+                          size: 100,
+                          color: AppColors.secondaryText,
+                        ),
+                        errorWidget: Icon(
+                          Icons.person_2_outlined,
+                          size: 100,
+                          color: AppColors.secondaryText,
                         ),
                       ),
                     ],
@@ -89,21 +107,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Howard Stevan',
+                        profileDataController.userProfile.value?.name ?? "",
                         style: AppText.xxlSemiBold_24_600.copyWith(
                           color: AppColors.primaryTextblack,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '(480) 555-0103',
+                        profileDataController.userProfile.value?.number ?? "",
                         style: AppText.mdRegular_16_400.copyWith(
                           color: AppColors.secondaryText,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'howard@gmail.com',
+                        profileDataController.userProfile.value?.email ?? "",
                         style: AppText.mdRegular_16_400.copyWith(
                           color: AppColors.secondaryText,
                         ),

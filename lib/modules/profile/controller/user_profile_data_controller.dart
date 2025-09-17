@@ -67,3 +67,5 @@ class AccountInfoController extends GetxController {
     super.onClose();
   }
 }
+
+

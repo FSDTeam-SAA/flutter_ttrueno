@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/screen/notification_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride/screen/create_ride_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/create_ride_screen.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -31,6 +33,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+
+    final controller = Get.put(ProfileDataController());
+    controller.getCurrentUserProfile();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final now = DateTime.now();
@@ -163,7 +168,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => NotificationScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => NotificationScreen(),
+                          ),
                         );
                       },
                       icon: Icon(
