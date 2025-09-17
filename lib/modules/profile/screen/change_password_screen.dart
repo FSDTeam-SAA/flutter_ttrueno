@@ -16,21 +16,12 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  final _formKey = GlobalKey<FormState>();
   late final ChangePasswordController _changePasswordController;
   final TextEditingController _currentPasswordController =
       TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmNewPasswordController =
       TextEditingController();
-  final bool _agreedToTerms = false;
-  ///////////////////
-  // final _formKey = GlobalKey<FormState>();
-  // late final LoginsScreenController _changePasswordController;
-  // final TextEditingController emailController = TextEditingController();
-  // final TextEditingController passwordController = TextEditingController();
-  // final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
-  ///////////////////
 
   bool _obscureCurrent = true;
   bool _obscureNew = true;
@@ -38,7 +29,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _changePasswordController = ChangePasswordController(
@@ -59,6 +49,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        centerTitle: false,
         title: Text(
           'Change Password',
           style: AppText.lgMedium_18_500.copyWith(
