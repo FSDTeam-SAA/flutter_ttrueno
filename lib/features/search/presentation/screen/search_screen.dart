@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/screen/notification_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride/screen/create_ride_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/create_ride_screen.dart';

@@ -2,14 +2,16 @@ part of '../app_pigeon.dart';
 
 class SocketConnectParam {
   final String _token;
-  final String _userId;
+  final String _joinId;
+  final String url;
 
   SocketConnectParam({
     required String token,
-    required String userId,
+    required String joinId,
+    required this.url
   }) : 
        _token = token,
-       _userId = userId;
+       _joinId = joinId;
 }
 
 sealed class NetworkStatus {
@@ -27,26 +29,20 @@ final class NetworkDisconnected extends NetworkStatus {
 class SocketService {
   final Map<String, StreamController<dynamic>> _channels = {};
   io.Socket? _socket;
-  final AuthService authService;
-  final String socketUrl;
   final Debugger _debugger = AuthDebugger();
 
-  SocketService(this.authService, this.socketUrl) {
-    _listenToAuthChange();
-  }
-
+  SocketService();
+  /// Socket connect param
+  /// Pass this param to the `init()` method to initialize the socket
   SocketConnectParam? _param;
 
-  void _listenToAuthChange() {
-    // Listen's to auth changes
-    authService.authStream.listen((status) {
-      if (status is! Authenticated) {
-        _debugger.dekhao("Status is! Authenticated.");
-        _disposeSocket();
-      } else {
-        _param = status.auth.socketConnectParam;
-      }
-    });
+  bool get isConnected => _socket?.connected ?? false;
+
+  void init(SocketConnectParam socketConnectParam) {
+    _param = socketConnectParam;
+    // Dispose previous socket, if exists
+    _disposeSocket();
+    _init();
   }
 
   Future<void> _init() async {
@@ -54,23 +50,21 @@ class SocketService {
       debugPrint("Socket already initialized. Not initializing again.");
       return;
     }
-
     if(_param == null) {
       return;
     }
-
+    final token = _param!._token; 
     _socket = io.io(
-      socketUrl,
+      _param!.url,
       io.OptionBuilder()
           .setTransports(['websocket'])
-          .setExtraHeaders({'Authorization': 'Bearer ${_param!._token}'})
+          .setExtraHeaders({'Authorization': 'Bearer $token'})
           .build(),
     );
-    debugPrint("Socket connecting");
     _socket?.connect();
     _socket?.onConnect((data) {
       debugPrint("Socket connected");
-      _socket?.emit("join", _param!._userId);
+      _socket?.emit("join", _param!._joinId);
     });
   }
 

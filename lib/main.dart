@@ -28,6 +28,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
@@ -113,6 +114,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     authRoutingController = AuthRoutingController();
+    Get.put(authRoutingController);
   }
 
   @override
