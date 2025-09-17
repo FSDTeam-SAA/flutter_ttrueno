@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
@@ -80,7 +81,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Stack(
                     children: [
-                      
+                      SmartNetworkImage.circle(
+                        height: 96,
+                        width: 96,
+                        fit: BoxFit.contain,
+
+                        imageUrl:
+                            profileDataController.userProfile.value?.imageUrl,
+
+                        placeholder: Icon(
+                          Icons.person_2_outlined,
+                          size: 100,
+                          color: AppColors.secondaryText,
+                        ),
+                        errorWidget: Icon(
+                          Icons.person_2_outlined,
+                          size: 100,
+                          color: AppColors.secondaryText,
+                        ),
+                      ),
                     ],
                   ),
                   Gap.w16,
@@ -88,21 +107,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Howard Stevan',
+                        profileDataController.userProfile.value?.name ?? "",
                         style: AppText.xxlSemiBold_24_600.copyWith(
                           color: AppColors.primaryTextblack,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '(480) 555-0103',
+                        profileDataController.userProfile.value?.number ?? "",
                         style: AppText.mdRegular_16_400.copyWith(
                           color: AppColors.secondaryText,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'howard@gmail.com',
+                        profileDataController.userProfile.value?.email ?? "",
                         style: AppText.mdRegular_16_400.copyWith(
                           color: AppColors.secondaryText,
                         ),
