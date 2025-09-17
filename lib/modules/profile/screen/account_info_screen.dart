@@ -1,51 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/profile/widget/text_field.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/user_profile_data_controller.dart';
 
-class AccountInfoScreen extends StatefulWidget {
+class AccountInfoScreen extends StatelessWidget {
   const AccountInfoScreen({super.key});
 
   @override
-  State<AccountInfoScreen> createState() => _AccountInfoScreenState();
-}
-
-class _AccountInfoScreenState extends State<AccountInfoScreen> {
-  final TextEditingController _fullNameController = TextEditingController(text: 'Howard Steven');
-  final TextEditingController _emailController = TextEditingController(text: 'howard@gmail.com');
-  final TextEditingController _phoneController = TextEditingController(text: '(480) 555-0103');
-
-  File? _profileImage;
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _profileImage = File(pickedFile.path);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AccountInfoController());
+    final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
+      initialStatus: EnabledStatus(),
+    );
+
     return Scaffold(
-      backgroundColor: Colors.white, // Set scaffold background color
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text(
           'Account Info',
           style: AppText.lgMedium_18_500.copyWith(
@@ -65,48 +40,63 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : const AssetImage('assets/images/profilepic.png') as ImageProvider,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: AppColors.primarybutton,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 14,
+                child: Obx(() {
+                  ImageProvider avatar;
+
+                  if (controller.profileImage.value != null) {
+                    avatar = FileImage(controller.profileImage.value!);
+                  } else if (controller.userProfile.value.imageUrl.isNotEmpty) {
+                    final img = controller.userProfile.value.imageUrl;
+                    if (img.startsWith('http')) {
+                      avatar = NetworkImage(img);
+                    } else {
+                      final file = File(img);
+                      avatar = file.existsSync()
+                          ? FileImage(file)
+                          : const AssetImage('assets/images/profilepic.png');
+                    }
+                  } else {
+                    avatar = const AssetImage('assets/images/profilepic.png');
+                  }
+
+                  return Stack(
+                    children: [
+                      CircleAvatar(radius: 50, backgroundImage: avatar),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: controller.pickImage,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.primarybutton,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
               const SizedBox(height: 32),
 
               BuildTextField(
-                controller: _fullNameController,
+                controller: controller.fullNameController,
                 labelText: 'Full Name',
                 textColor: AppColors.primaryTextblack,
               ),
               const SizedBox(height: 16),
 
               BuildTextField(
-                controller: _emailController,
+                controller: controller.emailController,
                 labelText: 'Email',
                 textColor: AppColors.primaryTextblack,
                 keyboardType: TextInputType.emailAddress,
@@ -114,41 +104,32 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
               const SizedBox(height: 16),
 
               BuildTextField(
-                controller: _phoneController,
+                controller: controller.phoneController,
                 labelText: 'Phone',
                 textColor: AppColors.primaryTextblack,
                 keyboardType: TextInputType.phone,
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 300),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: RSaveButton(
+                  key: UniqueKey(),
+                  saveText: "Save",
+                  loadingText: "Saving...",
+                  doneText: "Done",
+                  onSaveTap: () {},
+                  onDone: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Scaffold()),
+                      (route) => false,
+                    );
+                  },
+                  buttonStatusNotifier: processNotifier,
+                ),
+              ),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Profile information saved!')),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primarybutton,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: const Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ),
         ),
       ),
