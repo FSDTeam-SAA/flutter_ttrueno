@@ -4,9 +4,9 @@ import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/model/notification_model.dart';
 
 abstract base class NotificationInterface extends Repository {
-  FutureRequest<Success<List<NotificationModel>>> getAllNotification(
-  );
+  FutureRequest<Success<List<NotificationModel>>> getAllNotification();
 
-  FutureRequest<Success> singleNotificationRead( String id
-  );
+  FutureRequest<Success> singleNotificationRead(String id);
+
+  FutureRequest<Success> allNotificationRead();
 }

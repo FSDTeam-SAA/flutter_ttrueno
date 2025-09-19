@@ -30,7 +30,7 @@ class NotificationScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: TextButton(
-                onPressed: controller.markAllAsRead,
+                onPressed: controller.readAllNotification,
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   padding: EdgeInsets.zero,
@@ -107,7 +107,7 @@ class _NotificationItemState extends State<NotificationItem> {
     final data = widget.data;
 
     return GestureDetector(
-      onTap: _handleTap, // 🔹 whole card clickable
+      onTap: _handleTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
