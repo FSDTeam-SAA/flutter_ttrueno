@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/screen/booking_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/message/presentation/screen/inbox_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/search/presentation/screen/search_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/inbox_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/search_ride_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/profile_screen.dart';
 
 
@@ -19,7 +19,7 @@ class _BottomNabarScreenState extends State<BottomNabarScreen> {
   late int _selectedIndex;
 
   final List<Widget> _pages = [
-    const SearchScreen(),
+    const SearchScreenView(),
     const InboxScreen(),
     const BookingScreen(),
     const ProfileScreen(),

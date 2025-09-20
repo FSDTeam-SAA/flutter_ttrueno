@@ -65,7 +65,7 @@ class ChangePasswordController extends ChangeNotifier {
           handleFold(
             either: lr,
             processStatusNotifier: processNotifier,
-            snackbarNotifier: snackbarNotifier,
+            successSnackbarNotifier: snackbarNotifier,
           );
       });
     });

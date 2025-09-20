@@ -620,7 +620,7 @@ import 'package:ttrueno_fo827e642a0c4/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/features/message/presentation/screen/message_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
 
 import '../screen/share_experience_screen.dart';
 

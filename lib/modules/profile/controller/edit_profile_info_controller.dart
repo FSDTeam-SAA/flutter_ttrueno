@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ttrueno_fo827e642a0c4/auth_routing_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/app_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
@@ -53,7 +53,7 @@ class EditProfileInfoController extends GetxController {
     buttonNotifier?.setLoading();
     return await serviceLocator<ProfileInterface>().updateProfile(
       UpdateProfileParam(
-        id: (Get.find<AuthRoutingController>().authStatus as Authenticated).auth.userId,
+        id: (Get.find<AppManager>().authStatus as Authenticated).auth.userId,
         name: fullNameController.text.trim(),
         email: emailController.text.trim(),
         number: phoneController.text.trim()
@@ -63,13 +63,13 @@ class EditProfileInfoController extends GetxController {
       handleFold(
         either: lr,
         processStatusNotifier: buttonNotifier,
-        snackbarNotifier: snackbarNotifier,
+        successSnackbarNotifier: snackbarNotifier,
         onSuccess: (data) async{
           if(profileImage.value != null) {
             
             await serviceLocator<ProfileInterface>().uploadProfileAvatar(
               UploadProfileAvatarParam(
-                userId: (Get.find<AuthRoutingController>().authStatus as Authenticated).auth.userId,
+                userId: (Get.find<AppManager>().authStatus as Authenticated).auth.userId,
                 bytes: await profileImage.value!.readAsBytes(),
                 fileName: profileImage.value?.path ?? ""
               )

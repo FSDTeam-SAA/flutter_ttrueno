@@ -11,7 +11,7 @@ import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../model/forget_password_param.dart';
 import '../model/login_entity.dart';
 
- abstract base class AuthInterface extends Repository{
+ abstract base class AuthInterface extends ErrorCatcher{
   FutureRequest<Success> login(LoginRequestParams params);
   FutureRequest<Success> signup(SignupParam params);
   /// Verify account

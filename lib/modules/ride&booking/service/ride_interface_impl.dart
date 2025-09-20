@@ -1,0 +1,165 @@
+// import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
+// import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+// import 'package:ttrueno_fo827e642a0c4/modules/ride/interface/ride_interface.dart';
+// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/post_ride_model.dart';
+// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/ride_model.dart';
+
+// final class RideInterfaceImpl extends RideInterface {
+//   @override
+//   FutureRequest<Success<RideModel>> createRide(PostRideModel params) {
+//     throw UnimplementedError();
+//   }
+// }
+
+import 'package:flutter/foundation.dart';
+import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_stream_state.dart';
+import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
+import 'package:ttrueno_fo827e642a0c4/core/helpers/format_response_data.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/update_ride_req_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_req_param.dart';
+
+import '../../../core/services/app_pigeon/app_pigeon.dart';
+
+final class RideInterfaceImpl extends RideInterface {
+  final AppPigeon appPigeon;
+
+  RideInterfaceImpl(this.appPigeon);
+
+  @override
+  FutureRequest<Success<RideModel>> createRide(CreateRideReq params) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        debugPrint("Sending ride data: ${params.toJson()}");
+
+        final response = await appPigeon.post(
+          ApiEndpoints.createRide,
+          data: params.toJson(),
+        );
+
+        final body = extractBodyData(response)["ride"];
+        debugPrint("Ride created response: $body");
+
+        final ride = RideModel.fromJson(body);
+
+        return Success<RideModel>(
+          message: extractSuccessMessage(response),
+          data: ride,
+        );
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<List<RideModel>>> filterRide({required FilterRideReqParam params}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.get(
+          ApiEndpoints.filterRide,
+          query: params.toJson(),
+        );
+        return Success<List<RideModel>>(
+          message: extractSuccessMessage(response),
+          data: (extractBodyData(response)["rides"] as List<dynamic>).map((e) => RideModel.fromJson(e)).toList(),
+        );
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> finishRide({required String rideId}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          "${ApiEndpoints.finishRide}/$rideId",
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<RideModel>> getRideById({required String rideId}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.getRideById(rideId)
+        );
+        return Success(message: extractSuccessMessage(response), data: RideModel.fromJson(extractBodyData(response)));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<RideModel>> joinRide({required JoinRideReqParam param}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.joinRide(param.id),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response), data: RideModel.fromJson(extractBodyData(response)));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> leaveRide({required String rideId}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.leaveRide(rideId)
+        );
+        return Success(message: extractSuccessMessage(response),);
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<RideModel>> updateRide(UpdateRideReqParam params) async{
+    return await asyncTryCatch(tryFunc: ()async{
+      final response = await appPigeon.put(
+        ApiEndpoints.updateRide(params.rideId),
+        data: params.toJson(),
+      );
+      return Success(message: extractSuccessMessage(response), data: RideModel.fromJson(extractBodyData(response)));
+    });
+  }
+
+  @override
+  FutureRequest<Success<RideModel>> voteForKick({required VoteForKickReqParam param}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.voteForKick(param.rideId),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response), data: RideModel.fromJson(extractBodyData(response)));
+      },
+    );
+  }
+  
+  @override
+  FutureRequest<Success> deleteRide({required String rideId}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.delete(
+          ApiEndpoints.deleteRide(rideId),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  Stream<RiderStreamState> riderStream() {
+    return appPigeon.listen("rider_state").map((e) => RiderStreamState.fromJson(e));
+  }
+}
+

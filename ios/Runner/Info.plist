@@ -95,7 +95,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
+	
 	<!-- ✅ Location Permission Keys for Geolocator -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to your location while using the app.</string>

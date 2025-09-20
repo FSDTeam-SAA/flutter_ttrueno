@@ -50,7 +50,7 @@ class VerifyAccountViewController extends VerifyOtpController{
           handleFold(
             either: lr,
             processStatusNotifier: prcessNotifier,
-            snackbarNotifier: snackbarNotifier,
+            successSnackbarNotifier: snackbarNotifier,
           );
         });
   }
@@ -70,7 +70,7 @@ class VerifyForgetPasswordOtpController extends VerifyOtpController{
           handleFold(
             either: lr,
             processStatusNotifier: prcessNotifier,
-            snackbarNotifier: snackbarNotifier,
+            successSnackbarNotifier: snackbarNotifier,
           );
         });
   }

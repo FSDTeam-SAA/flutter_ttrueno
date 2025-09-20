@@ -6,7 +6,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_avata
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
 
- abstract base class ProfileInterface extends Repository{
+ abstract base class ProfileInterface extends ErrorCatcher{
   
   FutureRequest<Success> changePassword(ChangePassowrdParam params);
 
