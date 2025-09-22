@@ -6,8 +6,8 @@ class PlacePrediction {
 
   factory PlacePrediction.fromJson(Map<String, dynamic> json) {
     return PlacePrediction(
-      placeId: json['place_id'] as String,
-      description: json['description'] as String,
+      placeId: json["placePrediction"]['placeId'] as String,
+      description: json["placePrediction"]['text']['text'] as String,
     );
   }
 }

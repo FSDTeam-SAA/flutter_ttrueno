@@ -27,7 +27,7 @@ final class NetworkDisconnected extends NetworkStatus {
 }
 
 class SocketService {
-  final Map<String, StreamController<dynamic>> _channels = {};
+  final Map<String, StreamController<dynamic>> _events = {};
   io.Socket? _socket;
   final Debugger _debugger = AuthDebugger();
 
@@ -63,23 +63,28 @@ class SocketService {
     );
     _socket?.connect();
     _socket?.onConnect((data) {
-      debugPrint("Socket connected");
-      _socket?.emit("join", _param!._joinId);
+      debugPrint("Socket connected ${"\n\n"}");
     });
   }
 
-  Stream<dynamic> listen(String channelName,) {
-    debugPrint("Listening to $channelName");
-    if (_channels.containsKey(channelName)) {
-      debugPrint("Already listening to $channelName");
-      return _channels[channelName]!.stream;
+  void emit(String eventName, dynamic data) {
+    _init().then((_) {
+      _socket?.emit(eventName, data);
+    });
+  }
+
+  Stream<dynamic> listen(String eventName,) {
+    debugPrint("Listening to $eventName");
+    if (_events.containsKey(eventName)) {
+      debugPrint("Already listening to $eventName");
+      return _events[eventName]!.stream;
     }
     
     final controller = StreamController<dynamic>.broadcast();
-    _channels[channelName] = controller;
+    _events[eventName] = controller;
 
     _init().then((_) {
-      _socket?.on(channelName, (data) {
+      _socket?.on(eventName, (data) {
         //debugPrint("Socket data: $data");
         controller.add(data);
       });
@@ -88,18 +93,18 @@ class SocketService {
     return controller.stream;
   }
 
-  void stopListening(String channelName) {
-    _socket?.off(channelName);
-    _channels[channelName]?.close();
-    _channels.remove(channelName);
+  void stopListeningForEvent(String eventName) {
+    _socket?.off(eventName);
+    _events[eventName]?.close();
+    _events.remove(eventName);
   }
 
   void _disposeSocket() {
     _debugger.dekhao("Closing controllers and diposing socket...");
-    for (var controller in _channels.values) {
+    for (var controller in _events.values) {
       controller.close();
     }
-    _channels.clear();
+    _events.clear();
     _socket?.disconnect();
     _socket?.destroy();
     _socket = null;

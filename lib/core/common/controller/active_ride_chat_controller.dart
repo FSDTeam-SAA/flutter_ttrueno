@@ -88,7 +88,10 @@ class ActiveRideChatController extends GetxController{
     }
   }
 
-  getMessages() async{
+  getMessages({bool fetchNext = false}) async{
+    if(messages.isNotEmpty && !fetchNext) {
+      return;
+    }
     await serviceLocator<MessageInterface>().getMessages(chat.id).then((lr) {
       handleFold(
         either: lr,

@@ -49,30 +49,41 @@ final class LocationService extends LocationInterface{
   FutureRequest<Success<PlaceDetails>> getPlaceDetails(String placeId) async{
     return await asyncTryCatch(tryFunc: () async{
       final res = await _dio.get(
-        'https://maps.googleapis.com/maps/api/place/details/json',
+        'https://places.googleapis.com/v1/places/$placeId',
         queryParameters: {
-          "place_id": placeId,
-          "key": _apiKey,
+          'fields': 'id,displayName,formattedAddress,location,rating,photos',
         },
+
+        options: Options(
+        headers: {
+          'X-Goog-Api-Key': _apiKey,
+        },
+      ),
       );
       debugPrint("Place details $res");
-      return Success(data: PlaceDetails.fromJson(res.data["result"]));
+      return Success(data: PlaceDetails.fromJson(res.data));
     });
   }
 
   @override
   FutureRequest<Success<List<PlacePrediction>>> searchPlaces({required String query}) async{
+    debugPrint("Search places $query, api key $_apiKey");
     return await asyncTryCatch(tryFunc: () async{
-      final autocompleteRes = await _dio.get(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-        queryParameters: {
-          "input": query,
-          "key": _apiKey,
+      final autocompleteRes = await _dio.post(
+        'https://places.googleapis.com/v1/places:autocomplete',
+        data: {
+          'input': query,
         },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': _apiKey,
+          },
+        ),
       );
-
+      debugPrint("Search places $autocompleteRes");
       final predictions = List<Map<String, dynamic>>.from(
-        autocompleteRes.data["predictions"],
+        autocompleteRes.data["suggestions"],
       );
       return Success(data: predictions.map((e) => PlacePrediction.fromJson(e)).toList());
     });

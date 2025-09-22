@@ -13,13 +13,13 @@ class PlaceDetails {
   });
 
   factory PlaceDetails.fromJson(Map<String, dynamic> json) {
-    final loc = json["geometry"]["location"];
+    final loc = json["location"];
     return PlaceDetails(
-      placeId: json["place_id"] ,
-      description: json["formatted_address"] ?? "No data",
+      placeId: json["id"] ,
+      description: json["formattedAddress"] ?? "No data",
       coordinate: Coordinate(
-        latitude: loc["lat"],
-        longitude: loc["lng"],
+        latitude: loc["latitude"],
+        longitude: loc["longitude"],
       ),
     );
   }
