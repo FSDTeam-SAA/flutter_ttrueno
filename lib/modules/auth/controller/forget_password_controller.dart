@@ -33,7 +33,7 @@ class ForgetPasswordController extends ChangeNotifier {
           handleFold(
             either: lr,
             processStatusNotifier: buttonNotifier,
-            snackbarNotifier: snackbarNotifier,
+            successSnackbarNotifier: snackbarNotifier,
           );
       });
     }); // Simulate a delay for loading state

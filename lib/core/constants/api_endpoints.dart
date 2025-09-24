@@ -19,6 +19,7 @@ base class ApiEndpoints {
   static const String forgetPassword = _Auth.forgetPassword;
 
   static const String changePassword = _Auth.changePassword;
+
   static const String createNewPassword = _Auth.createNewPassword;
 
   /// ### post
@@ -48,29 +49,45 @@ base class ApiEndpoints {
   /// ### put
   static const String editProfile = _User.editProfile;
 
+  /// ### put
+  static const String uploadProfileAvatar = _User.uploadProfileAvatar;
 
   /// ### get
   static const String history = _User.history;
-
-  // ---------------------- Library -----------------------------
-  /// ### get
-  static const String getPlaylist = _LibraryPlaylist.getPlaylist;
-  /// ### post
-  static const String addToPlaylist = _LibraryPlaylist.addToPlaylist;
-  /// ### delete
-  static const String removeFromPlaylist = _LibraryPlaylist.removeFromPlaylist;
 
 
   // ---------------------- RIDE -----------------------------
   /// ### post
   static const String createRide = _Ride.createRide;
+  static String updateRide(String id) => _Ride.updateRide(id);
+  static String leaveRide(String id) => _Ride.leaveRide(id);
+  static String finishRide(String id) => _Ride.finishRide(id);
+  static String getRideById(String id) => _Ride.getRideById(id);
+  static String joinRide(String id) => _Ride.joinRide(id);
+  static String voteForKick(String id) => _Ride.voteForKick(id);
+  static String deleteRide(String id) => _Ride.deleteRide(id);
+  static const String filterRide = _Ride.filterRide;
 
+  // ---------------------- Booking -----------------------------
+  static String getAllBookingsForARide(String rideId) => _Booking.getAllBookingsForARide(rideId);
+  static const String getMyBookings = _Booking.getMyBookings;
+
+
+  // ---------------------- Message -----------------------------
+  /// ### Get
+  static const String getAllChat = _Message.getAllChat;
+  /// ### Get
+  static String getMessages(String chatId) => _Message.getMessages(chatId);
+  /// ### Post
+  static String sendMessage(String chatId) => _Message.sendMessage(chatId);
+  /// ### Put
+  static String messageRead(String messageId) => _Message.messageRead(messageId);
+  /// ### Put
+  static String editMessage(String messageId) => _Message.editMessage(messageId);
+  /// ### Delete
+  static String deleteMessage(String messageId) => _Message.deleteMessage(messageId);
 
 }
-
-
-
-
 
 //arrow360degree@gmail.com
 
@@ -122,22 +139,46 @@ class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
   static String getuserbyId(String id) => '$_userRoute/$id';
   static const String getCurrentProfile = '$_userRoute/profile';
-  static const String editProfile = '$_userRoute/edit-profile';
+  static const String editProfile = '$_userRoute/';
+  static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
 }
 
 
-class _LibraryPlaylist {
-  static const String _libraryRoute = '${ApiEndpoints.baseUrl}/playlist';
-  static const String getPlaylist = '$_libraryRoute/';
-  static const String addToPlaylist = '$_libraryRoute/add';
-  static const String removeFromPlaylist = '$_libraryRoute/remove';
-}
-
 // ---------------------- RIDE -----------------------------
-// post
 class _Ride {
   static const String _rideRoute = '${ApiEndpoints.baseUrl}/ride';
   static const String createRide = _rideRoute;
+  static String updateRide(String id) => "$_rideRoute/$id";
+  static String leaveRide(String id) => "$_rideRoute/$id/leave";
+  static String finishRide(String id) => "$_rideRoute/$id/filter";
+  static const String filterRide = _rideRoute;
+  static String getRideById(String id) => "$_rideRoute/$id";
+  static String joinRide(String id) => "$_rideRoute/$id/join";
+  static String voteForKick(String id) => "$_rideRoute/$id/kick";
+  static String deleteRide(String id) => "$_rideRoute/$id";
+}
+
+class _Booking {
+  static const String _bookingRoute = '${ApiEndpoints.baseUrl}/booking';
+  static const String getMyBookings = "$_bookingRoute/my";
+  static String getAllBookingsForARide(String rideId) => "$_bookingRoute/ride/$rideId";
+}
+
+// ---------------------- MESSAGE -----------------------------
+class _Message {
+  static const String _messageRoute = '${ApiEndpoints.baseUrl}/message';
+  
+  static const String getAllChat = "$_messageRoute/rooms";
+  /// Get
+  static String getMessages(String chatId) => "$_messageRoute/$chatId";
+  /// Post
+  static String sendMessage(String chatId) => "$_messageRoute/$chatId";
+  /// Put
+  static String messageRead(String messageId) => "$_messageRoute/read/$messageId";
+  /// Put
+  static String editMessage(String messageId) => "$_messageRoute/$messageId";
+  /// Delete
+  static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
 }
 

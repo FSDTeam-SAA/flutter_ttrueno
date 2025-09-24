@@ -1,31 +1,63 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/location/service/location_service.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/interface/message_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/service/message_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/interface/notification_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/service/notification_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/service/profile_interface_impl.dart';
-
-import 'core/services/app_services.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_service.dart';
+import 'core/constants/api_endpoints.dart';
+import 'core/services/app_pigeon/app_pigeon.dart';
+import 'core/services/app_pigeon/refresh_token_manager.dart';
 import 'modules/auth/interface/auth_inerface.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+
+  DebugService.instance(allowsOnly: {DebugLabel.service, DebugLabel.auth, DebugLabel.controller});
+  final Dio _dio = Dio();
+  final AppPigeon appPigeon = AppPigeon(
+    _dio,
+    FlutterSecureStorage(),
+    RefreshTokenManager(_dio, ApiEndpoints.refreshToken),
+    baseUrl: ApiEndpoints.baseUrl,
+  );
+
+  serviceLocator.registerFactory<Dio>(()=> _dio);
+
+  serviceLocator.registerFactory<AppPigeon>(()=> appPigeon);
   // Dependencies
   serviceLocator.registerFactory<AuthInterface>(
-    () => AuthInterfaceImpl(AppServices.appPigeon,),
+    () => AuthInterfaceImpl(serviceLocator<AppPigeon>(),),
   );
 
   serviceLocator.registerFactory<ProfileInterface>(
-    ()=> ProfileInterfaceImpl(AppServices.appPigeon),
+    ()=> ProfileInterfaceImpl(serviceLocator<AppPigeon>()),
   );
 
   serviceLocator.registerFactory<NotificationInterface>(
-    ()=> NotificationInterfaceImpl(AppServices.appPigeon),
+    ()=> NotificationInterfaceImpl(serviceLocator<AppPigeon>()),
   );
-  //
-  // Call essential service initialization
-  await AppServices.coreInit();
+
+  serviceLocator.registerFactory<RideInterface>(
+    ()=> RideService(serviceLocator<AppPigeon>()),
+  );
+  
+  serviceLocator.registerFactory<LocationInterface>(
+    ()=> LocationService(Dio(), serviceLocator<AppPigeon>()),
+  );
+
+  serviceLocator.registerFactory<MessageInterface>(
+    ()=> MessageService(serviceLocator<AppPigeon>()),
+  );
 }
 
 

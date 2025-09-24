@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
-import 'package:ttrueno_fo827e642a0c4/auth_routing_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/app_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
@@ -14,10 +14,10 @@ class ProfileDataController extends GetxController {
   Rx <UserProfile?> userProfile = Rx<UserProfile?>(null);
   
   Future<void> getCurrentUserProfile() async {
-    if (Get.find<AuthRoutingController>().authStatus is Authenticated) {
+    if (Get.find<AppManager>().authStatus is Authenticated) {
       // first extract the auth from the auth status (Authenticated)
       final auth =
-          (Get.find<AuthRoutingController>().authStatus as Authenticated).auth;
+          (Get.find<AppManager>().authStatus as Authenticated).auth;
 
       final userid = auth.userId;
 

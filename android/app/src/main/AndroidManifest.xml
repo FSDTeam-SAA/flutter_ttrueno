@@ -15,9 +15,14 @@
 
 
     <application
-        android:label="ttrueno_fo827e642a0c4"
+        android:label="HopLift"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
         
         <activity
             android:name=".MainActivity"

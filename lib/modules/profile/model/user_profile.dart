@@ -1,9 +1,12 @@
+import 'package:flutter/rendering.dart';
+
 class UserProfile {
   final String id;
   final String name;
   final String email;
   final String number;
   final String imageUrl;
+  final num rating;
 
   const UserProfile({
     required this.id,
@@ -11,16 +14,23 @@ class UserProfile {
     required this.email,
     required this.number,
     required this.imageUrl,
+    required this.rating, 
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
-      id: (json['id'] ?? '').toString(),
-      name: (json['name'] ?? '').toString(),
-      email: (json['email'] ?? '').toString(),
-      number: (json['number'] ?? '').toString(),
-      imageUrl: (json['imageUrl'] ?? '').toString(),
-    );
+    try {
+      return UserProfile(
+        id: json['_id'] ?? '',
+        name: json['name'] ?? '',
+        email: json['email'] ?? '',
+        number: json['number'] ?? '',
+        imageUrl: json['profileImage'] ?? '',
+        rating: json["rating"] ?? 0,
+      );
+    } catch (e) {
+      debugPrint("Error parsing user profile: $e, json: $json");
+      throw FormatException("Error parsing user profile: $e");
+    }
   }
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +38,8 @@ class UserProfile {
         'name': name,
         'email': email,
         'number': number,
-        'imageUrl': imageUrl,
+        'profileImage': imageUrl,
+        'rating': rating
       };
 
   UserProfile copyWith({
@@ -37,6 +48,7 @@ class UserProfile {
     String? email,
     String? number,
     String? imageUrl,
+    num? rating
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -44,6 +56,7 @@ class UserProfile {
       email: email ?? this.email,
       number: number ?? this.number,
       imageUrl: imageUrl ?? this.imageUrl,
+      rating: rating ?? this.rating
     );
   }
 }

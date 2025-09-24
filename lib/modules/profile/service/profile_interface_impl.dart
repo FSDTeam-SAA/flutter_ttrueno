@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/change_password_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_avatar_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
 
 import '../../../core/helpers/format_response_data.dart';
@@ -52,9 +55,40 @@ final class ProfileInterfaceImpl extends ProfileInterface {
     );
   }
 
-  // @override
-  // FutureRequest<Success> resetPassword(ChangePassowrdParam params) {
-  //   // TODO: implement resetPassword
-  //   throw UnimplementedError();
-  // }
+  @override
+  FutureRequest<Success> updateProfile(UpdateProfileParam params) async{
+    return await asyncTryCatch(tryFunc: () async{
+      final response = await appPigeon.put(
+        "${ApiEndpoints.editProfile}/${params.id}",
+        data: params.toJson(),
+      );
+      return Success(message: extractSuccessMessage(response));
+    });
+  }
+
+  @override
+  FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) async{
+    return await asyncTryCatch(tryFunc: () async{
+      final response = await appPigeon.post(
+        "${ApiEndpoints.uploadProfileAvatar}/${params.userId}",
+        data: await params.toFormData(),
+        options: Options(
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        ),
+      );
+      return Success(message: extractSuccessMessage(response));
+    });
+  }
+  
+  @override
+  FutureRequest<Success> logout() async{
+    return await asyncTryCatch(tryFunc: () async{
+      await appPigeon.logOut();
+      return Success(message: "Successful logout.");
+    });
+  }
+
+  
 }
