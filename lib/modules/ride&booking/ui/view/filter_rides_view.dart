@@ -6,10 +6,9 @@ import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/widget/location_input.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/widget/slider_widget.dart';
 
 import '../../../../core/common/widgets/reactive_buttons/save_button.dart';
 import '../../../../core/notifiers/snackbar_notifier.dart';
@@ -24,67 +23,60 @@ class FilterRidesView extends StatefulWidget {
 class _FilterRidesViewState extends State<FilterRidesView> {
   final SearchRideController searchRideController = Get.find<SearchRideController>();
 
-  double departureDistanceFlex = 0;
-  double arrivalDistanceFlex = 0;
-  double departureTimeFlex = 1;
-  double arrivalTimeFlex = 1;
-
-  final List<double> allowedDistances = [
-    0.1,
-    0.2,
-    0.3,
-    0.4,
-    0.5,
-    0.6,
-    0.7,
-    0.8,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-  ];
-
-  final List<int> allowedTimes = [0, 15, 30, 45, 60, 120, 180, 240, 300];
-
   @override
   void initState() {
     super.initState();
-
-    departureDistanceFlex = _distanceToSlider(0.2);
-    arrivalDistanceFlex = _distanceToSlider(0.2);
-    departureTimeFlex = 1;
-    arrivalTimeFlex = 1;
-
   }
 
-  double _sliderToDistance(double value) {
-    int index = (value * (allowedDistances.length - 1)).round();
-    return allowedDistances[index];
+  // double _sliderToDistance(double value) {
+  //   int index = (value * (allowedDistances.length - 1)).round();
+  //   return allowedDistances[index];
+  // }
+  double calculateSliderValueFromDistance(double distance) {
+    // TODO:: calculate slider value from distance, so that we can pass the initial value to the slider
+    throw UnimplementedError();
   }
 
-  double _distanceToSlider(double distance) {
-    int index = allowedDistances.indexOf(distance);
-    if (index == -1) return 0;
-    return index / (allowedDistances.length - 1);
+  double calculateSliderValueFromMinutes(double minutes) {
+    // TODO:: calculate slider value from distance, so that we can pass the initial value to the slider
+    throw UnimplementedError();
   }
 
-  double _snapSliderToNearest(double value) {
-    int index = (value * (allowedDistances.length - 1)).round();
-    return index / (allowedDistances.length - 1);
+  double calculateSliderDistance(double value) {
+    if(value < 5) {
+      // 5/20 = 0.25
+      final metre = ((value / .25).floor()) * 100;
+      final km = metre/1000;
+      return km.toDouble();
+    } else {
+      // 5/8 = 0.625
+      double km = 2;
+      value -= 5;
+      km += (value / .625).floor();
+      return km.toDouble();
+    }
   }
 
-  String _formatDistance(double km) {
-    if (km < 1) return "${(km * 1000).round()} m";
-    return "${km.toStringAsFixed(0)} km";
+  int calulateMinuteSlider(double value) {
+    if(value < 5) {
+      // 5/4 = 1.25
+      final minutes = (value / 1.25).floor() * 15;
+      return minutes;
+    } else {
+      // 5/4 = 1.25
+      int minutes = 60;
+      value -= 5;
+      minutes += (value / 1.25).floor() * 60;
+      debugPrint("Minutes: $minutes");
+      return minutes;
+    }
   }
 
-  String _formatAllowedTime(int minutes) {
+  String _formatDistanceText(double km) {
+    return "${km.toStringAsFixed(1)} km";
+  }
+
+  String _formatAllowedTimeText(int minutes) {
     if (minutes < 60) return "$minutes min";
     int h = minutes ~/ 60;
     int m = minutes % 60;
@@ -93,7 +85,6 @@ class _FilterRidesViewState extends State<FilterRidesView> {
 
 
   Widget buildDepartureFlexibility() {
-    double currentKm = _sliderToDistance(departureDistanceFlex);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,77 +93,59 @@ class _FilterRidesViewState extends State<FilterRidesView> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         Gap.h16,
+        _distanceSlider(searchRideController.departureFlexKm),
+        Gap.h24,
+        // Time flexibility
         Row(
           children: [
             Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: 8,
-                  activeTrackColor: AppColors.primarybutton,
-                  inactiveTrackColor: AppColors.progressBg,
-                  thumbColor: Colors.white,
-                  thumbShape: CustomThumbShape(),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
-                ),
-                child: Slider(
-                  value: departureDistanceFlex,
-                  min: 0,
-                  max: 1,
-                  onChanged: (v) {
-                    setState(() {
-                      departureDistanceFlex = _snapSliderToNearest(v);
-                    });
-                  },
-                ),
-              ),
+              child: SliderWidget(
+                key: UniqueKey(),
+                initialValue: 15,
+                onValueChange: (p0) {
+                  debugPrint(p0.toString());
+                  searchRideController.departureFlexMinutes.value = calulateMinuteSlider(p0);
+                },
+              )
             ),
             Gap.w16,
-            Text(
-              _formatDistance(currentKm),
-              style: const TextStyle(fontSize: 14),
+            Obx(()=>
+              Text(
+                _formatAllowedTimeText(searchRideController.departureFlexMinutes.value),
+                style: const TextStyle(fontSize: 14),
+              ),
             ),
           ],
         ),
-        Gap.h24,
-        Row(
-          children: [
-            Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: 8,
-                  activeTrackColor: AppColors.primarybutton,
-                  inactiveTrackColor: AppColors.progressBg,
-                  thumbColor: Colors.white,
-                  thumbShape: CustomThumbShape(),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
-                  tickMarkShape: SliderTickMarkShape.noTickMark,
-                ),
-                child: Slider(
-                  value: departureTimeFlex,
-                  min: 0,
-                  max: (allowedTimes.length - 1).toDouble(),
-                  divisions: allowedTimes.length - 1,
-                  onChanged: (v) {
-                    setState(() {
-                      departureTimeFlex = v.roundToDouble();
-                    });
-                  },
-                ),
-              ),
-            ),
-            Gap.w16,
-            Text(
-              _formatAllowedTime(allowedTimes[departureTimeFlex.toInt()]),
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
+      
+      ],
+    );
+  }
+
+  Widget _distanceSlider(RxDouble rxDistance) {
+    return Row(
+      children: [
+        Expanded(
+          child: SliderWidget(
+            key: UniqueKey(),
+            initialValue: .1,
+            onValueChange: (p0) {
+              rxDistance.value = calculateSliderDistance(p0);
+            },
+          )
+        ),
+        Gap.w16,
+        Obx(()=>
+          Text(
+            _formatDistanceText(rxDistance.value),
+            style: const TextStyle(fontSize: 14),
+          ),
         ),
       ],
     );
   }
 
   Widget buildArrivalFlexibility() {
-    double currentKm = _sliderToDistance(arrivalDistanceFlex);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -181,37 +154,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         Gap.h16,
-        Row(
-          children: [
-            Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: 8,
-                  activeTrackColor: AppColors.primarybutton,
-                  inactiveTrackColor: AppColors.progressBg,
-                  thumbColor: Colors.white,
-                  thumbShape: CustomThumbShape(),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
-                ),
-                child: Slider(
-                  value: arrivalDistanceFlex,
-                  min: 0,
-                  max: 1,
-                  onChanged: (v) {
-                    setState(() {
-                      arrivalDistanceFlex = _snapSliderToNearest(v);
-                    });
-                  },
-                ),
-              ),
-            ),
-            Gap.w16,
-            Text(
-              _formatDistance(currentKm),
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+        _distanceSlider(searchRideController.arrivalFlexKm),
         Gap.h24,
       ],
     );
@@ -232,6 +175,9 @@ class _FilterRidesViewState extends State<FilterRidesView> {
           TextButton(
             onPressed: () async {
               searchRideController.resetForm(context);
+              setState(() {
+                
+              });
             },
             child: Text(
               "Reset".tr(),
@@ -321,7 +267,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "Seat availabile".tr(),
+                  "Seat Available".tr(),
                   style: AppText.mdRegular_16_400.copyWith(
                     color: AppColors.primaryTextblack,
                   ),
@@ -329,7 +275,9 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    if (searchRideController.passengers > 1) setState(() => searchRideController.passengers--);
+                    if (searchRideController.passengers > 1) {
+                      searchRideController.passengers--;
+                    }
                   },
                   icon: const Icon(Icons.remove_circle_outline),
                 ),

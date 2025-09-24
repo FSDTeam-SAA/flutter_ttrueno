@@ -5,12 +5,14 @@ import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/service/location_service.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/interface/message_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/service/message_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/interface/notification_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/service/notification_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/service/profile_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_interface_impl.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_service.dart';
 import 'core/constants/api_endpoints.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/services/app_pigeon/refresh_token_manager.dart';
@@ -46,11 +48,15 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerFactory<RideInterface>(
-    ()=> RideInterfaceImpl(serviceLocator<AppPigeon>()),
+    ()=> RideService(serviceLocator<AppPigeon>()),
   );
   
   serviceLocator.registerFactory<LocationInterface>(
     ()=> LocationService(Dio(), serviceLocator<AppPigeon>()),
+  );
+
+  serviceLocator.registerFactory<MessageInterface>(
+    ()=> MessageService(serviceLocator<AppPigeon>()),
   );
 }
 

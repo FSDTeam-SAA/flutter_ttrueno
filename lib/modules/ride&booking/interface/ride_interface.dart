@@ -70,6 +70,6 @@ abstract base class RideInterface extends ErrorCatcher {
 
   FutureRequest<Success> deleteRide({required String rideId});
 
-  Stream<RiderStreamState> riderStream();
+  //Stream<RiderStreamState> riderStream();
 
 }

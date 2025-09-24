@@ -31,6 +31,9 @@ class SearchRideController extends GetxController{
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   RxInt passengers = RxInt(1);
+  RxDouble departureFlexKm = RxDouble(.2);
+  RxDouble arrivalFlexKm = RxDouble(.2);
+  RxInt departureFlexMinutes = RxInt(15);
 
   Future<void> _initializeDefaultValues() async {
     final now = DateTime.now();
@@ -75,6 +78,7 @@ class SearchRideController extends GetxController{
       );
     }
   }
+
 
   Future<void> selectDate(BuildContext context) async {
     debugPrint("Selecting date");
@@ -127,6 +131,9 @@ class SearchRideController extends GetxController{
     passengers.value = 1;
     fromController.clear();
     toController.clear();
+    arrivalFlexKm.value = .2;
+    departureFlexKm.value = .2;
+    departureFlexMinutes.value = 15;
     await _setCurrentLocation();
   }
 
@@ -146,8 +153,9 @@ class SearchRideController extends GetxController{
     processStatusNotifier.setLoading();
     await serviceLocator<RideInterface>().filterRide(
       params: FilterRideReqParam(
-        arrivalFlexKm: 200,
-        departureFlexKm: 200,
+        arrivalFlexKm: arrivalFlexKm.value,
+        departureFlexKm: departureFlexKm.value,
+        departureFlexMinutes: departureFlexMinutes.value,
         fromLat: fromLocation!.lat ?? 0.0,
         fromLng: fromLocation!.lng ?? 0.0,
         toLat: toLocation!.lat ?? 0.0,
@@ -165,15 +173,20 @@ class SearchRideController extends GetxController{
       handleFold(
         either: lr,
         processStatusNotifier: processStatusNotifier,
+        //successSnackbarNotifier: snackbarNotifier,
+        errorSnackbarNotifier: snackbarNotifier,
         onSuccess: (data) {
-          processStatusNotifier.setEnabled();
+          
           if (data.isEmpty) {
             snackbarNotifier?.notify(message: 'No rides found'.tr());
           }
           searchResults.value = data;
+          searchResults.refresh();
         },
       );
     });
+
+    processStatusNotifier.setEnabled();
   }
 
   @override

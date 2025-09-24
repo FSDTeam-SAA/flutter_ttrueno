@@ -1,20 +1,14 @@
 enum Status {
   pending,
-  accepted,
-  rejected,
-  cancelled,
+  active,
   completed;
 
   factory Status.fromString(String value) {
     switch (value) {
       case 'pending':
         return Status.pending;
-      case 'accepted':
-        return Status.accepted;
-      case 'rejected':
-        return Status.rejected;
-      case 'cancelled':
-        return Status.cancelled;
+      case 'active':
+        return Status.active;
       case 'completed':
         return Status.completed;
       default:

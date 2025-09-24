@@ -18,12 +18,16 @@ class GreetingUserWidget extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(
-                text: "Hi ".tr(),
+                text: "Hi".tr(),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryTextblack,
                 ),
+              ),
+              TextSpan(
+                text: ' ',
+                style: TextStyle(color: AppColors.primaryTextblack),
               ),
               TextSpan(
                 text: '${controller.userProfile.value?.name ?? "User"} 👋',

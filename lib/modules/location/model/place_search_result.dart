@@ -24,15 +24,15 @@ class PlaceDetails {
     );
   }
 
-  factory PlaceDetails.fromPredictionAndDetails(
-    Map<String, dynamic> prediction,
-    Map<String, dynamic> details,
-  ) {
-    final loc = details["geometry"]["location"];
-    return PlaceDetails(
-      placeId: prediction["place_id"],
-      description: prediction["description"] ?? prediction["structured_formatting"]["main_text"] ?? "",
-      coordinate: Coordinate(latitude: loc["lat"], longitude: loc["lng"]),
-    );
-  }
+//   factory PlaceDetails.fromPredictionAndDetails(
+//     Map<String, dynamic> prediction,
+//     Map<String, dynamic> details,
+//   ) {
+//     final loc = details["geometry"]["location"];
+//     return PlaceDetails(
+//       placeId: prediction["place_id"],
+//       description: prediction["description"] ?? prediction["structured_formatting"]["main_text"] ?? "",
+//       coordinate: Coordinate(latitude: loc["lat"], longitude: loc["lng"]),
+//     );
+//   }
 }

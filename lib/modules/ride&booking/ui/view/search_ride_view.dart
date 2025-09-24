@@ -90,7 +90,11 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Welcome back to '.tr(),
+                        text: 'Welcome back to'.tr(),
+                        style: TextStyle(color: AppColors.primaryTextblack),
+                      ),
+                      TextSpan(
+                        text: ' ',
                         style: TextStyle(color: AppColors.primaryTextblack),
                       ),
                       TextSpan(

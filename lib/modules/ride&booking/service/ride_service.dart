@@ -27,10 +27,10 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_r
 
 import '../../../core/services/app_pigeon/app_pigeon.dart';
 
-final class RideInterfaceImpl extends RideInterface {
+final class RideService extends RideInterface {
   final AppPigeon appPigeon;
 
-  RideInterfaceImpl(this.appPigeon);
+  RideService(this.appPigeon);
 
   @override
   FutureRequest<Success<RideModel>> createRide(CreateRideReq params) async {
@@ -58,12 +58,14 @@ final class RideInterfaceImpl extends RideInterface {
 
   @override
   FutureRequest<Success<List<RideModel>>> filterRide({required FilterRideReqParam params}) async{
+    debugPrint("Filtering rides with params: ${params.toJson()}");
     return await asyncTryCatch(
       tryFunc: () async{
         final response = await appPigeon.get(
           ApiEndpoints.filterRide,
           query: params.toJson(),
         );
+        debugPrint("Filtering rides response: ${extractBodyData(response)}");
         return Success<List<RideModel>>(
           message: extractSuccessMessage(response),
           data: (extractBodyData(response)["rides"] as List<dynamic>).map((e) => RideModel.fromJson(e)).toList(),
@@ -157,9 +159,9 @@ final class RideInterfaceImpl extends RideInterface {
     );
   }
 
-  @override
-  Stream<RiderStreamState> riderStream() {
-    return appPigeon.listen("rider_state").map((e) => RiderStreamState.fromJson(e));
-  }
+  // @override
+  // Stream<RiderStreamState> riderStream() {
+  //   return appPigeon.listen("rider_state").map((e) => RiderStreamState.fromJson(e));
+  // }
 }
 

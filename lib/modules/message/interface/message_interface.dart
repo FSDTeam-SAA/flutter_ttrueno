@@ -16,4 +16,10 @@ abstract base class MessageInterface extends ErrorCatcher{
   FutureRequest<Success<List<Message>>> getMessages(String chatId);
 
   Stream<Message> messageStream();
+
+  Stream<ChatRoom> chatStream();
+
+  void joinRoom(String roomId);
+
+  void leaveRoom(String roomId);
 }

@@ -2,6 +2,7 @@
 class FilterRideReqParam {
   final double arrivalFlexKm;
   final double departureFlexKm;
+  final num departureFlexMinutes;
   final double fromLat;
   final double fromLng;
   final double toLat;
@@ -12,6 +13,7 @@ class FilterRideReqParam {
   FilterRideReqParam({
     required this.arrivalFlexKm,
     required this.departureFlexKm,
+    required this.departureFlexMinutes,
     required this.fromLat,
     required this.fromLng,
     required this.toLat,
@@ -25,6 +27,7 @@ class FilterRideReqParam {
     return {
       'arrivalFlexKm': arrivalFlexKm,
       'departureFlexKm': departureFlexKm,
+      'departureFlexMinutes': departureFlexMinutes,
       'fromLat': fromLat,
       'fromLng': fromLng,
       'toLat': toLat,

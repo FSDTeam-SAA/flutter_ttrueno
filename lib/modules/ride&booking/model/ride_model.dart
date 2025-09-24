@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_model.dart';
 
@@ -14,13 +14,13 @@ class RideModel {
   final DateTime departureTime;
   final num seatCount;
   final num bookedSeats;
-  final FilterModel filters;
+  final FilterModel? filters;
   final Status status;
   final bool deletedByCreator;
   final num price;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String chatRoomId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? chatRoomId;
   final List<Rider> participants;
 
   RideModel({
@@ -43,7 +43,9 @@ class RideModel {
 
 
   factory RideModel.fromJson(Map<String, dynamic> json) {
-    return RideModel(
+    //debugPrint((json['participants'] != null ? List<Rider>.from((json['participants'] as List<dynamic>).map((x) => Rider.fromJson(x))) : []).toString());
+    try {
+       return RideModel(
       id: json['_id'] as String,
       creator: UserProfile.fromJson(json['creator']),
       startLocation: LocationAdress.fromJson(json['startLocation']),
@@ -51,15 +53,19 @@ class RideModel {
       departureTime: DateTime.parse(json['departureTime']),
       seatCount: json['seatCount'] as num,
       bookedSeats: json['bookedSeats'] as num,
-      filters: FilterModel.fromJson(json['filters']),
-      status: json['status'],
+      filters: json['filters'] == null ? null : FilterModel.fromJson(json['filters']),
+      status: Status.fromString(json['status']),
       deletedByCreator: json['deletedByCreator'] ?? false,
-      price: json['price'] as num,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      chatRoomId: json['chatRoom'] ?? json['chatRoom']['_id'],
-      participants: json['participants'] != null ? List<Rider>.from(json['participants'].map((x) => Rider.fromJson(x))) : [],
+      price: (json['price'] as num?) ?? 0,
+      createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
+      updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
+      chatRoomId:  null,
+      participants: json['participants'] != null ? List<Rider>.from((json['participants'] as List<dynamic>).map((x) => Rider.fromJson(x))) : [],
     );
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -71,12 +77,12 @@ class RideModel {
       'departureTime': departureTime.toIso8601String(),
       'seatCount': seatCount,
       'bookedSeats': bookedSeats,
-      'filters': filters.toJson(),
+      'filters': filters?.toJson(),
       'status': status,
       'deletedByCreator': deletedByCreator,
       'price': price,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
       'chatRoom': chatRoomId,
       'participants': participants.map((x) => x.toJson()).toList(),
     };

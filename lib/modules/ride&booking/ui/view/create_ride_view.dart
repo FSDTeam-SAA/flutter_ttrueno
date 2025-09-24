@@ -212,11 +212,7 @@ class _CreateRideViewState extends State<CreateRideView> {
                   );
                 },
                 onDone: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Scaffold()),
-                    (route) => false,
-                  );
+                  Navigator.pop(context);
                 },
               ),
             ),

@@ -55,10 +55,10 @@ final class LocationService extends LocationInterface{
         },
 
         options: Options(
-        headers: {
-          'X-Goog-Api-Key': _apiKey,
-        },
-      ),
+          headers: {
+            'X-Goog-Api-Key': _apiKey,
+          },
+        ),
       );
       debugPrint("Place details $res");
       return Success(data: PlaceDetails.fromJson(res.data));
@@ -83,7 +83,7 @@ final class LocationService extends LocationInterface{
       );
       debugPrint("Search places $autocompleteRes");
       final predictions = List<Map<String, dynamic>>.from(
-        autocompleteRes.data["suggestions"],
+        autocompleteRes.data["suggestions"] ?? [],
       );
       return Success(data: predictions.map((e) => PlacePrediction.fromJson(e)).toList());
     });

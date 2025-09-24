@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+
 class UserProfile {
   final String id;
   final String name;
@@ -16,14 +18,19 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      number: json['number'] ?? '',
-      imageUrl: json['profileImage'] ?? '',
-      rating: json["rating"] ?? 0,
-    );
+    try {
+      return UserProfile(
+        id: json['_id'] ?? '',
+        name: json['name'] ?? '',
+        email: json['email'] ?? '',
+        number: json['number'] ?? '',
+        imageUrl: json['profileImage'] ?? '',
+        rating: json["rating"] ?? 0,
+      );
+    } catch (e) {
+      debugPrint("Error parsing user profile: $e, json: $json");
+      throw FormatException("Error parsing user profile: $e");
+    }
   }
 
   Map<String, dynamic> toJson() => {

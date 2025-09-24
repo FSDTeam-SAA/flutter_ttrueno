@@ -8,10 +8,13 @@ enum BaggageType {
   const BaggageType(this.name);
 
   factory BaggageType.fromString(String value) {
+    value = value.toLowerCase();
     switch (value) {
       case 'small':
         return BaggageType.small;
       case 'large':
+        return BaggageType.large;
+      case 'suitcase':
         return BaggageType.large;
       case 'none':
         return BaggageType.none;

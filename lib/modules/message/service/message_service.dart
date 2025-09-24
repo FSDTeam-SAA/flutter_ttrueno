@@ -27,7 +27,7 @@ base class MessageService extends MessageInterface{
 
   @override
   Stream<Message> messageStream() {
-    return appPigeon.listen("message").map((e) => Message.fromJson(e));
+    return appPigeon.listen("newMessage").map((e) => Message.fromJson(e));
   }
 
   @override
@@ -62,6 +62,20 @@ base class MessageService extends MessageInterface{
         return Success(message: extractSuccessMessage(response), data: chatRooms);
       },
     );
-    
+  }
+  
+  @override
+  void joinRoom(String roomId) {
+    appPigeon.emit("joinRoom", roomId);
+  }
+
+  @override
+  void leaveRoom(String roomId) {
+    appPigeon.emit("leaveRoom", roomId);
+  }
+  
+  @override
+  Stream<ChatRoom> chatStream() {
+    return appPigeon.listen("roomCreated").map((e) => ChatRoom.fromJson(e));
   }
 }

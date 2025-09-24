@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
+import 'core/common/controller/active_ride_chat_controller.dart';
 import 'core/constants/api_endpoints.dart';
 import 'core/notifiers/snackbar_notifier.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
@@ -59,8 +60,12 @@ class AppManager extends GetxController {
     if(Get.isRegistered<ProfileDataController>()) {
       Get.delete<ProfileDataController>();
     }
+    if(Get.isRegistered<ActiveRideAndChatsController>()) {
+      Get.delete<ActiveRideAndChatsController>();
+    }
     Get.put(SearchRideController());
     Get.put(ProfileDataController());
+    Get.put(ActiveRideAndChatsController());
   }
 
   Stream<AuthStatus?> getAuthStream({SnackbarNotifier? snackbarNotifier}) {

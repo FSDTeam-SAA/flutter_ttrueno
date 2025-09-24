@@ -1,28 +1,51 @@
+import 'package:flutter/rendering.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 
-class Rider extends UserProfile {
+class Rider {
   final BaggageType baggageType;
+  final String userId;
+  final num seatBooked;
+  final num avgRating;
+  final String name;
+  final String profileImage;
+
   Rider({
     required this.baggageType,
-    required super.id,
-    required super.name,
-    required super.email,
-    required super.number,
-    required super.imageUrl,
-    required super.rating,
+    required this.userId,
+    required this.seatBooked,
+    required this.avgRating,
+    required this.name,
+    required this.profileImage,
   });
 
+
+
   factory Rider.fromJson(Map<String, dynamic> json) {
-    return Rider(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      number: json['number'],
-      imageUrl: json['imageUrl'],
-      rating: json['rating'].toDouble(),
-      baggageType: BaggageType.fromString(json['baggageType']),
-    );
+    try {
+      return Rider(
+        userId: json['_id'] ?? json['userId'],
+        name: json['name'],
+        seatBooked: json['seatBooked'] as num,
+        profileImage: json['profileImage'] ?? "",
+        avgRating: json['avgRating'] as num,
+        baggageType: BaggageType.fromString(json['baggageType']),
+      );
+    } catch (e) {
+      debugPrint("Error parsing rider: $e, json: $json");
+      throw FormatException("Error parsing rider: $e");
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': userId,
+      'name': name,
+      'seatBooked': seatBooked,
+      'profileImage': profileImage,
+      'avgRating': avgRating,
+      'baggageType': baggageType.toString(),
+    };
   }
 
   @override
@@ -36,6 +59,6 @@ class Rider extends UserProfile {
 
   @override
   String toString() {
-    return 'Rider(id: $id, name: $name, email: $email, number: $number, imageUrl: $imageUrl, rating: $rating, baggageType: ${baggageType.toString()})';
+    return 'Rider(baggageType: $baggageType, userId: $userId, seatBooked: $seatBooked, avgRating: $avgRating, name: $name, profileImage: $profileImage)';
   }
 }

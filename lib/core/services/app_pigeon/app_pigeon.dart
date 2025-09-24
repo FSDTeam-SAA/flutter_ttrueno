@@ -102,13 +102,18 @@ class AppPigeon {
     return _dio.delete(path, data: data, queryParameters: queryParameters);
   }
 
+  /// Listen to socket event
   Stream<dynamic> listen(String channelName) {
 
-    if (_socketService.isConnected == false) {
-      throw Exception("Socket is not connected!. Make sure to call socketInit first.");
-    }
+    // if (_socketService.isConnected == false) {
+    //   throw Exception("Socket is not connected!. Make sure to call socketInit first.");
+    // }
     
-    return _socketService!.listen(channelName); // forward events, not just yield the stream object
+    return _socketService.listen(channelName); // forward events, not just yield the stream object
+  }
+  /// Emit an event through socket
+  void emit(String eventName, [dynamic data]) {
+    _socketService.emit(eventName, data);
   }
 
 }

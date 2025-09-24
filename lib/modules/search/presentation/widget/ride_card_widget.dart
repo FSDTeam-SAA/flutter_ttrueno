@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../message/ui/view/message_screen.dart';
@@ -242,10 +244,10 @@ class _RideCardState extends State<RideCard> {
     for (var rider in participants) {
       slots.add(
         _buildProfile(
-          rider.imageUrl,
+          rider.profileImage,
           rider.name,
-          rider.rating.toString(),
-          {rider.baggageType.name},
+          rider.avgRating.toString(),
+          {rider.baggageType},
         ),
       );
     }
@@ -289,37 +291,41 @@ class _RideCardState extends State<RideCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "From",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                        Text(
-                          widget.fromLocation,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "From",
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
-                        ),
-                      ],
+                          Text(
+                            widget.fromLocation,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "To",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                        Text(
-                          widget.toLocation,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "To",
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
-                        ),
-                      ],
+                          Text(
+                            widget.toLocation,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -367,11 +373,15 @@ class _RideCardState extends State<RideCard> {
     String imagePath,
     String name,
     String rating,
-    Set<String> baggageTypes,
+    Set<BaggageType> baggageTypes,
   ) {
     return Column(
       children: [
-        CircleAvatar(radius: 18, backgroundImage: AssetImage(imagePath)),
+        SmartNetworkImage.circle(
+          imageUrl: imagePath,
+          radius: 36,
+          fit: BoxFit.cover,
+        ),
         Gap.h4,
         Text(
           name,
@@ -390,16 +400,7 @@ class _RideCardState extends State<RideCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: baggageTypes.map((type) {
             String iconPath;
-            switch (type) {
-              case 'Large':
-                iconPath = 'assets/images/largebaggage.png';
-                break;
-              case 'Small':
-                iconPath = 'assets/images/smallbaggage.png';
-                break;
-              default:
-                iconPath = 'assets/images/empty.png';
-            }
+            iconPath = type.assetImagePath();
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2.0),
               child: Image.asset(

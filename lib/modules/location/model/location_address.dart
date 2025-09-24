@@ -25,4 +25,9 @@ class LocationAdress {
     data['lng'] = lng;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'LocationAdress(address: $address, lat: $lat, lng: $lng)';
+  }
 }

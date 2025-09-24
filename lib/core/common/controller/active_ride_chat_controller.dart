@@ -2,8 +2,6 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/enum/rider_state.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_stream_state.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
@@ -13,16 +11,17 @@ import '../../../modules/message/model/send_message_req_param.dart';
 import '../../helpers/handle_fold.dart';
 import '../model/rider.dart';
 
-class InboxController extends GetxController{
+class ActiveRideAndChatsController extends GetxController{
 
-  InboxController(){
+  ActiveRideAndChatsController(){
     getAllChat();
     _lisenToStreams();
   }
 
-  StreamSubscription<RiderStreamState>? _riderStreamStreamSubscription;
+  //StreamSubscription<RiderStreamState>? _riderStreamStreamSubscription;
   StreamSubscription<Message>? _messageStreamSubscription;
-  RxMap<String, ActiveRideChatController> rideChat = RxMap<String, ActiveRideChatController>({});
+  StreamSubscription<ChatRoom>? _chatRoomStreamSubscription;
+  RxList<ActiveRideChatController> rideChat = RxList<ActiveRideChatController>([]);
   
   Future<void> getAllChat() async{
     await serviceLocator<MessageInterface>().getAllChat().then((lr) {
@@ -30,8 +29,11 @@ class InboxController extends GetxController{
         either: lr,
         processStatusNotifier: null,
         onSuccess: (data) {
+          rideChat.clear();
           for(final chat in data) {
-            rideChat[chat.id] = ActiveRideChatController(chat: chat);
+            final activeRideChat = ActiveRideChatController(chat: chat);
+            rideChat.add(activeRideChat);
+            activeRideChat.init();
           }
         },
       );
@@ -39,18 +41,28 @@ class InboxController extends GetxController{
   }
 
   _lisenToStreams() {
-    _riderStreamStreamSubscription = serviceLocator<Stream<RiderStreamState>>().listen((riderStreamState) {
-      rideChat[riderStreamState.rideId]?._updateRiderState(riderStreamState);
+    // _riderStreamStreamSubscription = serviceLocator<RideInterface>().riderStream().listen((riderStreamState) {
+    //   rideChat.firstWhere((e) => e.rideId == riderStreamState.rideId)._updateRiderState(riderStreamState);
+    // });
+    _chatRoomStreamSubscription = serviceLocator<MessageInterface>().chatStream().listen((chatRoom) {
+      final index = rideChat.indexWhere((e) => e.chat.id == chatRoom.id);
+      if(index != -1) {
+        rideChat.add(ActiveRideChatController(chat: chatRoom));
+      } else {
+        rideChat[index] = ActiveRideChatController(chat: chatRoom);
+        rideChat.refresh();
+      }
     });
-    _messageStreamSubscription = serviceLocator<Stream<Message>>().listen((message) {
-      rideChat.values.firstWhere((e) => e.chat.id == message.chatId)._addMessage(message);
+    _messageStreamSubscription = serviceLocator<MessageInterface>().messageStream().listen((message) {
+      rideChat.firstWhere((e) => e.chat.id == message.chatId)._addMessage(message);
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _riderStreamStreamSubscription?.cancel();
+    //_riderStreamStreamSubscription?.cancel();
+    _chatRoomStreamSubscription?.cancel();
     _messageStreamSubscription?.cancel();
   }
 }
@@ -59,6 +71,11 @@ class ActiveRideChatController extends GetxController{
   
   ActiveRideChatController({required this.chat}){
     ride = Rx<RideModel>(chat.rideId);
+  }
+
+  init() {
+    serviceLocator<MessageInterface>().joinRoom(chat.id);
+    getMessages();
   }
 
   final ChatRoom chat;
@@ -73,20 +90,20 @@ class ActiveRideChatController extends GetxController{
     messages[message.id] = message;
   }
 
-  _updateRiderState(RiderStreamState riderStreamState) {
-    if(riderStreamState.riderState == RiderState.joined) {
-      participants.add(riderStreamState.rider);
-    }
+  // _updateRiderState(RiderStreamState riderStreamState) {
+  //   if(riderStreamState.riderState == RiderState.joined) {
+  //     participants.add(riderStreamState.rider);
+  //   }
 
-    if(riderStreamState.riderState == RiderState.left) {
-      participants.removeWhere((element) => element.id == riderStreamState.id);
-    }
+  //   if(riderStreamState.riderState == RiderState.left) {
+  //     participants.removeWhere((element) => element.id == riderStreamState.id);
+  //   }
 
-    if(riderStreamState.riderState == RiderState.kicked) {
-      participants.removeWhere((element) => element.id == riderStreamState.id);
-      notification.value = " ${riderStreamState.rider.name} have been kicked out from the ride";
-    }
-  }
+  //   if(riderStreamState.riderState == RiderState.kicked) {
+  //     participants.removeWhere((element) => element.id == riderStreamState.id);
+  //     notification.value = " ${riderStreamState.rider.name} have been kicked out from the ride";
+  //   }
+  // }
 
   getMessages({bool fetchNext = false}) async{
     if(messages.isNotEmpty && !fetchNext) {
@@ -120,8 +137,8 @@ class ActiveRideChatController extends GetxController{
   }
 }
 
-extension ToRider on RiderStreamState{
-  bool get isJoined => riderState == RiderState.joined;
+// extension ToRider on RiderStreamState{
+//   bool get isJoined => riderState == RiderState.joined;
 
-  Rider get rider => Rider(id: id, name: name, email: email, number: number, imageUrl: imageUrl, rating: rating, baggageType: baggageType);
-}
+//   Rider get rider => Rider(id: id, name: name, email: email, number: number, imageUrl: imageUrl, rating: rating, baggageType: baggageType);
+// }

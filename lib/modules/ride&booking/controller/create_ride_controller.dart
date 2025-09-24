@@ -156,6 +156,7 @@ class PostRideController extends GetxController{
         either: lr,
         processStatusNotifier: processStatusNotifier,
         successSnackbarNotifier: snackbarNotifier,
+        errorSnackbarNotifier: snackbarNotifier
       );
     });
     return true;
