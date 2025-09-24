@@ -1,45 +1,36 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:dio/dio.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../constants/api_endpoints.dart';
-import 'app_pigeon/app_pigeon.dart';
-import 'app_pigeon/refresh_token_manager.dart';
-import 'ui/auth/auth_controller.dart';
+// import '../constants/api_endpoints.dart';
+// import 'app_pigeon/app_pigeon.dart';
+// import 'app_pigeon/refresh_token_manager.dart';
+// import 'ui/auth/auth_controller.dart';
 
-class AppServices {
- static final Dio _dio = Dio();
-  static final AppPigeon appPigeon = AppPigeon(
-    _dio,
-    FlutterSecureStorage(),
-    RefreshTokenManager(_dio, ApiEndpoints.refreshToken),
-    baseUrl: ApiEndpoints.baseUrl,
-  );
+// class AppServices {
+ 
 
-  // ----------------- Services -----------------
+//   // ----------------- Services -----------------
 
-  // UI services/controllers
-  static final AuthController authController = AuthController();
-  static final AuthController profileController = AuthController();
 
-  // static Future<void> init() async {
-  //   DebugService.instance(
-  //     allowsOnly: {
-  //       DebugLabel.ui,
-  //       DebugLabel.service,
-  //       DebugLabel.controller,
-  //       DebugLabel.audio,
-  //     });
+//   // static Future<void> init() async {
+//   //   DebugService.instance(
+//   //     allowsOnly: {
+//   //       DebugLabel.ui,
+//   //       DebugLabel.service,
+//   //       DebugLabel.controller,
+//   //       DebugLabel.audio,
+//   //     });
 
-  //   await AudioService().initialize();
-  // }
+//   //   await AudioService().initialize();
+//   // }
 
-  static Future<void> coreInit() async {
-    //await notificationController.init();
-  }
+//   static Future<void> coreInit() async {
+//     //await notificationController.init();
+//   }
 
-  static Future<void> dispose() async {
-    await appPigeon.dispose();
-  }
-}
+//   static Future<void> dispose() async {
+//     await appPigeon.dispose();
+//   }
+// }

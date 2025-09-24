@@ -52,7 +52,7 @@ class LoginsScreenController extends ChangeNotifier {
             handleFold(
               either: lr,
               processStatusNotifier: processStatusNotifier,
-              snackbarNotifier: snackbarNotifier,
+              successSnackbarNotifier: snackbarNotifier,
               onError: (error) {
                 if (error.failure == Failure.forbidden) needVerification();
               },

@@ -1,0 +1,16 @@
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
+
+class JoinRideReqParam {
+  final String id;
+  int seatBooked = 1;
+  BaggageType baggageType = BaggageType.small;
+  JoinRideReqParam({required this.id});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'seatBooked': seatBooked,
+      'baggageType': baggageType.name,
+    };
+  }
+}

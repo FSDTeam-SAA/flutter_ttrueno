@@ -8,7 +8,7 @@ import '../helpers/dekhao.dart';
 import 'exceptions.dart';
 import 'failure.dart';
 
-abstract base class Repository {
+abstract base class ErrorCatcher {
   Future<Either<DataCRUDFailure, T>> asyncTryCatch<T>({required Future<T> Function() tryFunc, }) async{
       try {
         return await tryFunc().then((value) => Right(value));

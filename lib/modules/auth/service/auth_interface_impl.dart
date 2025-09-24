@@ -60,7 +60,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   Future<Either<DataCRUDFailure, Success>> logout() async {
     return asyncTryCatch(
       tryFunc: () async {
-        await appPigeon.clearAllAuth();
+        await appPigeon.logOut();
         return Success(message: "Successful logout.");
       },
     );

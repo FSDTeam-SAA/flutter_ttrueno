@@ -32,7 +32,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
-import 'auth_routing_controller.dart';
+import 'app_manager.dart';
 import 'core/helpers/auth_role.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/services/app_services.dart';
@@ -103,7 +103,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  late AuthRoutingController authRoutingController;
+  late AppManager authRoutingController;
   @override
   void initState() {
     super.initState();
@@ -113,13 +113,12 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    authRoutingController = AuthRoutingController();
+    authRoutingController = AppManager();
     Get.put(authRoutingController);
   }
 
   @override
   void dispose() async {
-    await AppServices.dispose();
     super.dispose();
   }
 
