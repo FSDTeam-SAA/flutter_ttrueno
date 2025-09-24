@@ -41,7 +41,7 @@
   "Select Baggage": "বাগেজ নির্বাচন করুন",
   "Language": "ভাষা",
   "Hi ": "হাই ",
-  "Welcome back to ": "স্বাগতম ",
+  "Welcome back to": "স্বাগতম ",
   "Genaral Setting": "সাধারণ সেটিং",
   "change password": "পাসওয়ার্ড পরিবর্তন করুন",
   "Are you sure?": "আপনি কি নিশ্চিত?",
@@ -361,7 +361,36 @@
   "Filter Rides": "রাইড ফিল্টার করুন",
   "Apply": "প্রয়োগ",
   "Suitcase": "সুটকেস",
-  "Join Ride": "রাইডে যোগ দিন"
+  "Join Ride": "রাইডে যোগ দিন",
+
+
+
+
+  "Search ": "অনুসন্ধান",
+  "Search for Rides": "রাইড অনুসন্ধান করুন",
+  "Search for Drivers": "ড্রাইভার অনুসন্ধান করুন",
+  "Inbox ": "ইনবক্স",
+  "Bookings ": "বুকিং",
+  "My Rides ": "আমার রাইড",
+  "My Profile ": "আমার প্রোফাইল",
+  "Settings ": "সেটিংস",
+  "Help ": "হেল্প",
+  "Share App ": "অ্যাপ শেয়ার করুন",
+  "Rate App ": "অ্যাপ রেট করুন",
+  "Logout ": "লগ আউট",
+  "Contact Us ": "যোগাযোগ করুন",
+  "About Us ": "আমাদের সম্পর্কে",
+  "Hoplift": "HopLift",
+  "Date ": "তারিখ",
+  "Time ": "সময়",
+  "Hi": "হাই ",
+  "Create Ride ": "রাইড তৈরি করুন",
+  "Welcome back to ": "আপনাকে আপনার পুনরায় স্বাগতম",
+  "Genaral Setting ": "সাধারণ সেটিংস",
+  "Passengers ": "পাসেনজার",
+  "Create": "তৈরি করুন",
+  "Update": "পরিবর্তন করুন"
+  
 
   
 }
