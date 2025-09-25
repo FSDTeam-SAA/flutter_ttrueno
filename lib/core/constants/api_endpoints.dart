@@ -28,6 +28,9 @@ base class ApiEndpoints {
   /// ### get
   static const String getUserNotifications = _Notification.getUserNotifications;
 
+  /// ### post
+  static const String readAllNotifications = _Notification.readAllNotifications;
+
   /// ### patch
   static String markNotificationAsRead({required String notificationId}) =>
       _Notification.markNotificationAsRead(notificationId);
@@ -125,6 +128,9 @@ class _Notification {
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
       '$_notificationRoute/$notificationId/read';
+
+  static const String readAllNotifications =
+      '$_notificationRoute/read-all';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
   static const String getUserNotifications = '$_notificationRoute/user';
 }

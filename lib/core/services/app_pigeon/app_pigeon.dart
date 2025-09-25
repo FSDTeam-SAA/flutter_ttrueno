@@ -20,7 +20,11 @@ class SocketConnetParamX {
   final String? token;
   final String socketUrl;
   final String joinId;
-  SocketConnetParamX({required this.token, required this.socketUrl, required this.joinId});
+  SocketConnetParamX({
+    required this.token,
+    required this.socketUrl,
+    required this.joinId,
+  });
 }
 
 class AppPigeon {
@@ -33,16 +37,15 @@ class AppPigeon {
   AppPigeon(
     this._dio,
     this._secureStorage,
-    this.refreshTokenManager,
-    {
-      required this.baseUrl,
-    }){
-      // Set base url
-      _dio.options.baseUrl = baseUrl;
-      // Initializes and adds auth interceptor
-      _authService = AuthService(_secureStorage, _dio, refreshTokenManager);
-      _dio.interceptors.add(_authService);
-      _init();
+    this.refreshTokenManager, {
+    required this.baseUrl,
+  }) {
+    // Set base url
+    _dio.options.baseUrl = baseUrl;
+    // Initializes and adds auth interceptor
+    _authService = AuthService(_secureStorage, _dio, refreshTokenManager);
+    _dio.interceptors.add(_authService);
+    _init();
   }
 
   _init() {
@@ -54,26 +57,30 @@ class AppPigeon {
     _socketService._disposeSocket();
   }
 
-  Future<void> socketInit(SocketConnetParamX param) async{
-    final token = param.token ?? (await _authService._authStorage.getCurrentAuth())?._accessToken;
-    if(token == null) {
+  Future<void> socketInit(SocketConnetParamX param) async {
+    final token =
+        param.token ??
+        (await _authService._authStorage.getCurrentAuth())?._accessToken;
+    if (token == null) {
       return;
     }
     final socketConnectParam = SocketConnectParam(
       url: param.socketUrl,
       token: token,
-      joinId: param.joinId
+      joinId: param.joinId,
     );
     _socketService.init(socketConnectParam);
   }
 
   Stream<AuthStatus> get authStream => _authService.authStream;
 
-  Future<void> saveNewAuth({required SaveNewAuthParams saveAuthParams}) async{
+  Future<void> saveNewAuth({required SaveNewAuthParams saveAuthParams}) async {
     await _authService.saveNewAuth(saveNewAuthParams: saveAuthParams);
   }
 
-  Future<void> updateCurrentAuth({required UpdateAuthParams updateAuthParams}) async{
+  Future<void> updateCurrentAuth({
+    required UpdateAuthParams updateAuthParams,
+  }) async {
     await _authService.updateCurrentAuth(updateAuthParams: updateAuthParams);
   }
 
@@ -82,7 +89,11 @@ class AppPigeon {
   }
 
   // Public GET/POST/PUT/DELETE wrappers
-  Future<Response> get(String path, {dynamic data, Map<String, dynamic>? query}) {
+  Future<Response> get(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? query,
+  }) {
     return _dio.get(path, queryParameters: query, data: data);
   }
 
@@ -90,15 +101,20 @@ class AppPigeon {
     return _dio.post(path, data: data);
   }
 
-  Future<Response> put(String path, {dynamic data, Options? options,}) {
+  Future<Response> put(String path, {dynamic data, Options? options}) {
     return _dio.put(path, data: data, options: options);
   }
 
-  Future<Response> patch(String path, {dynamic data, Options? options,}) {
+  Future<Response> patch(String path, {dynamic data, Options? options}) {
     return _dio.patch(path, data: data, options: options);
   }
 
-  Future<Response> delete(String path, {dynamic data, Options? options, Map<String, dynamic>? queryParameters}) {
+  Future<Response> delete(
+    String path, {
+    dynamic data,
+    Options? options,
+    Map<String, dynamic>? queryParameters,
+  }) {
     return _dio.delete(path, data: data, queryParameters: queryParameters);
   }
 
@@ -115,5 +131,4 @@ class AppPigeon {
   void emit(String eventName, [dynamic data]) {
     _socketService.emit(eventName, data);
   }
-
 }

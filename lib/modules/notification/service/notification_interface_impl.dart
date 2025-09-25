@@ -18,6 +18,7 @@ final class NotificationInterfaceImpl extends NotificationInterface {
   FutureRequest<Success<List<NotificationModel>>> getAllNotification() async {
     return await asyncTryCatch(
       tryFunc: () async {
+        // call api
         final Response response = await appPigeon.get(
           ApiEndpoints.getUserNotifications,
         );
@@ -52,6 +53,25 @@ final class NotificationInterfaceImpl extends NotificationInterface {
 
         //return
         return Success(message: message);
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> allNotificationRead() async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        // Call api
+        final response = await appPigeon.put(
+          ApiEndpoints.readAllNotifications,
+        );
+
+        //Parse
+        
+        //Return
+        return Success(
+          message: extractSuccessMessage(response),
+        );
       },
     );
   }

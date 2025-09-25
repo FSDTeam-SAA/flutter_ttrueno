@@ -40,15 +40,28 @@ class NotificationController extends GetxController {
       },
     );
   }
+  Future<void> readAllNotification() async {
+    final lr = await serviceLocator<NotificationInterface>()
+        .allNotificationRead();
 
-  void markAllAsRead() {
-    for (var i = 0; i < notifications.length; i++) {
-      final n = notifications[i];
-      if (!n.isRead) {
-        notifications[i] = n.copyWith(isRead: true, updatedAt: DateTime.now());
-      }
-    }
-    notifications.refresh();
+    lr.fold(
+      (error) {
+        debugPrint("error >> ${error.toString()}");
+      },
+      (success) {
+        for (var i = 0; i < notifications.length; i++) {
+          final n = notifications[i];
+          if (!n.isRead) {
+            notifications[i] = n.copyWith(
+              isRead: true,
+              updatedAt: DateTime.now(),
+            );
+          }
+          notifications.refresh();
+          update();
+        }
+      },
+    );
   }
 
   void toggleExpand(int index) {
