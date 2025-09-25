@@ -31,7 +31,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
-import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding3.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'app_manager.dart';
 import 'core/helpers/auth_role.dart';
@@ -133,38 +132,38 @@ class _MyAppState extends State<MyApp> {
       theme: AppTheme.light,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      // onGenerateRoute: (settings) {
-      //   switch (settings.name) {
-      //     case RouteNames.home:
-      //       if (authRoutingController.authStatus is Authenticated) {
-      //         return MaterialPageRoute(
-      //             builder: (_) => BottomNabarScreen());  
-      //       } else {
-      //         return MaterialPageRoute(
-      //           builder: (context) {
-      //             return LoginScreen();
-      //           },
-      //         );
-      //       }
-      //     case RouteNames.login:
-      //       return MaterialPageRoute(
-      //           builder: (context) {
-      //             return LoginScreen();
-      //           },
-      //         );
-      //     default:
-      //       return MaterialPageRoute(
-      //           builder: (context) {
-      //             return LoginScreen();
-      //           },
-      //         );
-      //   }
-      // },
-      // locale: context.locale,
-      // builder: (context, child) {
-      //   return BackgroundWidget(child: child ?? const SizedBox());
-      // },
-      home: OnboardingScreen3()
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case RouteNames.home:
+            if (authRoutingController.authStatus is Authenticated) {
+              return MaterialPageRoute(
+                  builder: (_) => BottomNabarScreen());  
+            } else {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return LoginScreen();
+                },
+              );
+            }
+          case RouteNames.login:
+            return MaterialPageRoute(
+                builder: (context) {
+                  return LoginScreen();
+                },
+              );
+          default:
+            return MaterialPageRoute(
+                builder: (context) {
+                  return LoginScreen();
+                },
+              );
+        }
+      },
+      locale: context.locale,
+      builder: (context, child) {
+        return BackgroundWidget(child: child ?? const SizedBox());
+      },
+      home: SplashScreen()
     );
   }
 }
