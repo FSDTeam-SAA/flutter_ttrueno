@@ -21,7 +21,6 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.onValueChange(val);
     });
@@ -30,7 +29,6 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     val = widget.initialValue;
   }

@@ -14,7 +14,7 @@ import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../main.dart';
 import '../model/filter_ride_req_param.dart';
 
-class SearchRideController extends GetxController{
+class SearchRideController extends GetxController {
   SearchRideController() {
     _initializeDefaultValues();
   }
@@ -23,7 +23,9 @@ class SearchRideController extends GetxController{
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
-  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
   LocationAdress? fromLocation;
   LocationAdress? toLocation;
   DateTime? _selectedDateTime;
@@ -79,7 +81,6 @@ class SearchRideController extends GetxController{
     }
   }
 
-
   Future<void> selectDate(BuildContext context) async {
     debugPrint("Selecting date");
     final now = DateTime.now();
@@ -91,7 +92,13 @@ class SearchRideController extends GetxController{
     );
     if (picked != null) {
       selectedDate = picked;
-      _selectedDateTime = DateTime(picked.year, picked.month, picked.day, selectedTime?.hour ?? 0, selectedTime?.minute ?? 0);
+      _selectedDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        selectedTime?.hour ?? 0,
+        selectedTime?.minute ?? 0,
+      );
       dateController.text =
           "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
     } else {
@@ -107,8 +114,14 @@ class SearchRideController extends GetxController{
     );
     if (picked != null) {
       selectedTime = picked;
-      _selectedDateTime = DateTime(selectedDate?.year ?? 0, selectedDate?.month ?? 0, selectedDate?.day ?? 0, picked.hour, picked.minute);
-      if(context.mounted) timeController.text = picked.format(context);
+      _selectedDateTime = DateTime(
+        selectedDate?.year ?? 0,
+        selectedDate?.month ?? 0,
+        selectedDate?.day ?? 0,
+        picked.hour,
+        picked.minute,
+      );
+      if (context.mounted) timeController.text = picked.format(context);
     }
   }
 
@@ -137,9 +150,7 @@ class SearchRideController extends GetxController{
     await _setCurrentLocation();
   }
 
-  Future<void> searchRide({
-    SnackbarNotifier? snackbarNotifier,
-  }) async {
+  Future<void> searchRide({SnackbarNotifier? snackbarNotifier}) async {
     // Validate inputs
     if (fromLocation == null || toLocation == null) {
       snackbarNotifier?.notify(message: 'Please fill in both locations'.tr());
@@ -151,40 +162,41 @@ class SearchRideController extends GetxController{
     }
     ControllerDebugger().dekhao("Searching Ride...");
     processStatusNotifier.setLoading();
-    await serviceLocator<RideInterface>().filterRide(
-      params: FilterRideReqParam(
-        arrivalFlexKm: arrivalFlexKm.value,
-        departureFlexKm: departureFlexKm.value,
-        departureFlexMinutes: departureFlexMinutes.value,
-        fromLat: fromLocation!.lat ?? 0.0,
-        fromLng: fromLocation!.lng ?? 0.0,
-        toLat: toLocation!.lat ?? 0.0,
-        toLng: toLocation!.lng ?? 0.0,
-        departureTime: DateTime(
-          selectedDate!.year,
-          selectedDate!.month,
-          selectedDate!.day,
-          selectedTime!.hour,
-          selectedTime!.minute,
-        ),
-        passengers: passengers.value
-      )
-    ).then((lr) {
-      handleFold(
-        either: lr,
-        processStatusNotifier: processStatusNotifier,
-        //successSnackbarNotifier: snackbarNotifier,
-        errorSnackbarNotifier: snackbarNotifier,
-        onSuccess: (data) {
-          
-          if (data.isEmpty) {
-            snackbarNotifier?.notify(message: 'No rides found'.tr());
-          }
-          searchResults.value = data;
-          searchResults.refresh();
-        },
-      );
-    });
+    await serviceLocator<RideInterface>()
+        .filterRide(
+          params: FilterRideReqParam(
+            arrivalFlexKm: arrivalFlexKm.value,
+            departureFlexKm: departureFlexKm.value,
+            departureFlexMinutes: departureFlexMinutes.value,
+            fromLat: fromLocation!.lat ?? 0.0,
+            fromLng: fromLocation!.lng ?? 0.0,
+            toLat: toLocation!.lat ?? 0.0,
+            toLng: toLocation!.lng ?? 0.0,
+            departureTime: DateTime(
+              selectedDate!.year,
+              selectedDate!.month,
+              selectedDate!.day,
+              selectedTime!.hour,
+              selectedTime!.minute,
+            ),
+            passengers: passengers.value,
+          ),
+        )
+        .then((lr) {
+          handleFold(
+            either: lr,
+            processStatusNotifier: processStatusNotifier,
+            //successSnackbarNotifier: snackbarNotifier,
+            errorSnackbarNotifier: snackbarNotifier,
+            onSuccess: (data) {
+              if (data.isEmpty) {
+                snackbarNotifier?.notify(message: 'No rides found'.tr());
+              }
+              searchResults.value = data;
+              searchResults.refresh();
+            },
+          );
+        });
 
     processStatusNotifier.setEnabled();
   }
@@ -198,4 +210,3 @@ class SearchRideController extends GetxController{
     timeController.dispose();
   }
 }
-

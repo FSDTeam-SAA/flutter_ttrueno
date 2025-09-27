@@ -52,6 +52,9 @@ dependencies:
   google_maps_flutter: ^2.13.1
   logger: ^2.6.1
 
+
+  url_launcher: ^6.3.2
+
   
 dev_dependencies:
   flutter_test:
