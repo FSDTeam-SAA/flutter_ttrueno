@@ -19,7 +19,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late TextEditingController emailController;
   late ForgetPasswordController forgetPasswordController;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {

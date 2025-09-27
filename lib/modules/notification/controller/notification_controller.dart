@@ -87,8 +87,8 @@ class NotificationController extends GetxController {
           if (error.failure == Failure.forbidden) ();
         },
         onSuccess: (data) {
-          notifications.value = data ?? [];
-          print("data >> ${data?.length}");
+          notifications.value = data;
+          print("data >> ${data.length}");
           notifications.refresh();
           update();
         },
