@@ -109,7 +109,7 @@ class FaqScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
-        color: AppColors.white, // ✅ consistent background
+        color: AppColors.white,
         child: ListView.builder(
           padding: EdgeInsets.all(16),
           itemCount: faqs.length,

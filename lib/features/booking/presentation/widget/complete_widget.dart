@@ -4,7 +4,6 @@ import 'package:ttrueno_fo827e642a0c4/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-
 import '../screen/share_experience_screen.dart';
 
 class User {
@@ -40,7 +39,7 @@ class BookingCard extends StatefulWidget {
     required this.fromLocation,
     required this.toLocation,
     required this.users,
-    this.actionButtons = const [], // ✅ default empty
+    this.actionButtons = const [],
     this.allowJoin = false,
     this.maxUsers = 4,
   });

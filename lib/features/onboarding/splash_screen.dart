@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/features/app_logo.dart';
 
 
 class SplashScreen extends StatelessWidget {
@@ -11,11 +12,8 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       body: Center(
         child: SizedBox(
-          height: 50,
-          width: 50,
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
+          child: AppLogo(),
+          
         )
       ),
     );
