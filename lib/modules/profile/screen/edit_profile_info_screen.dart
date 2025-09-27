@@ -76,7 +76,7 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
                   } else if (controller.beforeUserProfile?.imageUrl != null) {
                     avatar = SmartNetworkImage.circle(
                       imageUrl: controller.beforeUserProfile!.imageUrl,
-                      radius: 96,
+                      diameter: 96,
                     );
                   } else {
                     avatar = CircleShape(

@@ -1,0 +1,168 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_gap.dart';
+
+/// This screen/bottomsheet does not close or pop itself,
+/// rather it uses the onJoinComplete callback and delegate that responsibility to the parent widget.
+class JoinRideBottomsheet extends StatefulWidget {
+  final Function(BaggageType selectedBaggageType) onJoin;
+  final ProcessStatusNotifier pstn;
+  const JoinRideBottomsheet({super.key, required this.onJoin, required this.pstn});
+
+  @override
+  State<JoinRideBottomsheet> createState() => _JoinRideBottomsheetState();
+}
+
+class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
+
+  BaggageType? selectedBaggageType;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Select Baggage Type".tr(),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Gap.h16,
+              Obx(
+                ()=> Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ...BaggageType.values.map((baggageType) {
+                      return _buildBaggageImageIcon(
+                        imagePath: baggageType.assetImagePath(),
+                        isSelected: selectedBaggageType == baggageType,
+                        label: baggageType.name.tr(),
+                        onTap: () {
+                          setState(() {
+                            selectedBaggageType = baggageType;
+                          });
+                        },
+                      );
+                    })
+                  ],
+                ),
+              ),
+              Gap.h24,
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, null),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(
+                          color: AppColors.primarybutton,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Text("Not Now".tr()),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (selectedBaggageType == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Please select a baggage type.".tr(),
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                        widget.onJoin(
+                          selectedBaggageType!, 
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Join Ride".tr(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          RIcon(
+                            key: UniqueKey(),
+                            iconWidget: Container(),
+                            disableStateWidget: Container(),
+                            loadingStateWidget: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                            processStatusNotifier: widget.pstn,
+                            onDone: () {
+                              
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      
+      },
+    );
+  }
+
+   Widget _buildBaggageImageIcon({
+    required String imagePath,
+    required bool isSelected,
+    required VoidCallback onTap,
+    required String label,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Image.asset(
+            imagePath,
+            width: 28,
+            height: 28,
+            color: isSelected ? AppColors.primarybutton : Colors.grey,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: isSelected
+                  ? AppColors.primarybutton
+                  : AppColors.primaryTextblack,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}

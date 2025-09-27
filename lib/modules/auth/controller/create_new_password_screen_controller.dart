@@ -57,6 +57,7 @@ class CreateNewPasswordScreenController {
             either: lr,
             processStatusNotifier: processNotifier,
             successSnackbarNotifier: snackbarNotifier,
+            errorSnackbarNotifier: snackbarNotifier,
           );
         });
   }

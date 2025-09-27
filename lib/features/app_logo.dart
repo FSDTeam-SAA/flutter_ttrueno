@@ -22,7 +22,6 @@ class AppLogo extends StatelessWidget {
 }
 
 
-
 class Habit extends StatelessWidget {
   final double height;
   final double width;

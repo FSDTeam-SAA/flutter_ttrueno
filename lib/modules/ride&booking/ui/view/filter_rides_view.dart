@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
@@ -22,6 +23,7 @@ class FilterRidesView extends StatefulWidget {
 
 class _FilterRidesViewState extends State<FilterRidesView> {
   final SearchRideController searchRideController = Get.find<SearchRideController>();
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
 
   @override
   void initState() {
@@ -117,7 +119,6 @@ class _FilterRidesViewState extends State<FilterRidesView> {
             ),
           ],
         ),
-      
       ],
     );
   }
@@ -317,12 +318,13 @@ class _FilterRidesViewState extends State<FilterRidesView> {
               key: UniqueKey(),
               saveText: 'Apply'.tr(),
               loadingText: "Apply".tr(),
-              buttonStatusNotifier:
-                  searchRideController.processStatusNotifier,
+              buttonStatusNotifier: processStatusNotifier,
               onSaveTap: () => searchRideController.searchRide(
-                snackbarNotifier: SnackbarNotifier(context: context)
+                snackbarNotifier: SnackbarNotifier(context: context),
+                processStatusNotifier: processStatusNotifier,
               ),
               onDone: () {
+                debugPrint("filter done");
                 Navigator.pop(context);
               },
             ),

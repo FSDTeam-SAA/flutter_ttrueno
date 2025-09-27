@@ -38,6 +38,7 @@ class AuthService extends Interceptor {
   /// Attach access token to every request
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    _authDebugger.dekhao("${options.uri.toString()} ${options.method}");
     final auth = await _authStorage.getCurrentAuth();
     final accessToken = auth?._accessToken;
     if (accessToken != null) {
@@ -57,7 +58,7 @@ class AuthService extends Interceptor {
     }
     if(_refreshingToken) {
       _authDebugger.dekhao("Already refreshing token");
-      return;
+      return handler.reject(err);
     }
     
     if(err.requestOptions.cancelToken != null) {
@@ -69,7 +70,9 @@ class AuthService extends Interceptor {
       RefreshTokenResponse refreshTokenResponse;
       try {
         _refreshingToken = true;
-        refreshTokenResponse = await refreshTokenManager.refreshToken();
+        refreshTokenResponse = await refreshTokenManager.refreshToken(
+          refreshToken: status.auth._refreshToken ?? ""
+        );
         _refreshingToken = false;
         await _authStorage.updateCurrentAuth(
           UpdateAuthParams(
@@ -99,7 +102,7 @@ class AuthService extends Interceptor {
         return handler.reject(e as DioException);
       }
     }
-    debugPrint("error debug from dio interceptor: ${err.response?.data}");
+    _authDebugger.dekhao("error debug from dio interceptor: ${err.response?.data}");
     debugPrint(err.message);
     handler.next(err);
   }

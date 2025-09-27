@@ -23,7 +23,6 @@ class SearchRideController extends GetxController{
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
-  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
   LocationAdress? fromLocation;
   LocationAdress? toLocation;
   DateTime? _selectedDateTime;
@@ -121,7 +120,6 @@ class SearchRideController extends GetxController{
   }
 
   void resetForm(BuildContext context) async {
-    processStatusNotifier.setEnabled();
     final now = DateTime.now();
     selectedDate = now;
     dateController.text =
@@ -139,6 +137,7 @@ class SearchRideController extends GetxController{
 
   Future<void> searchRide({
     SnackbarNotifier? snackbarNotifier,
+    ProcessStatusNotifier? processStatusNotifier,
   }) async {
     // Validate inputs
     if (fromLocation == null || toLocation == null) {
@@ -150,7 +149,7 @@ class SearchRideController extends GetxController{
       return;
     }
     ControllerDebugger().dekhao("Searching Ride...");
-    processStatusNotifier.setLoading();
+    processStatusNotifier?.setLoading();
     await serviceLocator<RideInterface>().filterRide(
       params: FilterRideReqParam(
         arrivalFlexKm: arrivalFlexKm.value,
@@ -185,9 +184,10 @@ class SearchRideController extends GetxController{
         },
       );
     });
-
-    processStatusNotifier.setEnabled();
+    Future.delayed(Duration(seconds: 3)).then((_){processStatusNotifier?.setEnabled();});
   }
+
+  
 
   @override
   void dispose() {

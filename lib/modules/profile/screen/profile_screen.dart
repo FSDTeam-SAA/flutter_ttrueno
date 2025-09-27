@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         SmartNetworkImage.circle(
                           key: UniqueKey(),
-                          radius: 96,
+                          diameter: 96,
                           imageUrl:
                               profileDataController.userProfile.value?.imageUrl,
                           placeholder: Icon(

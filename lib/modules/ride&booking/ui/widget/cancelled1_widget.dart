@@ -1,12 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/car_divider_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
-import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
-import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
 
-import '../../../../modules/message/ui/widget/alart_message_widget.dart';
+import '../../../../core/theme/app_gap.dart';
+
 
 class User {
   final String name;
@@ -41,7 +39,7 @@ class BookingCard extends StatefulWidget {
     required this.fromLocation,
     required this.toLocation,
     required this.users,
-    required this.actionButtons,
+    this.actionButtons = const [], // ✅ default empty
     this.allowJoin = false,
     this.maxUsers = 4,
   });
@@ -69,16 +67,16 @@ class _BookingCardState extends State<BookingCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Select Baggage Type".tr(),
+                    "Select Baggage Type",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  Gap.h16,
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/largebaggage.png',
-                        label: 'Large'.tr(),
+                        label: 'Large',
                         isSelected: selectedBaggageTypes.contains('Large'),
                         onTap: () {
                           setModalState(() {
@@ -88,7 +86,7 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/smallbaggage.png',
-                        label: 'Sutcase'.tr(),
+                        label: 'Small',
                         isSelected: selectedBaggageTypes.contains('Small'),
                         onTap: () {
                           setModalState(() {
@@ -98,7 +96,7 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                       _buildBaggageImageIcon(
                         imagePath: 'assets/images/empty.png',
-                        label: 'None'.tr(),
+                        label: 'No Baggage',
                         isSelected: selectedBaggageTypes.contains('No Baggage'),
                         onTap: () {
                           setModalState(() {
@@ -140,7 +138,7 @@ class _BookingCardState extends State<BookingCard> {
                             setState(() {
                               joinedUsers.add(
                                 User(
-                                  name: "You".tr(),
+                                  name: "You",
                                   avatarAsset: "assets/images/user6.png",
                                   rating: 5.0,
                                   baggageTypes: Set<String>.from(
@@ -156,7 +154,7 @@ class _BookingCardState extends State<BookingCard> {
                             backgroundColor: Colors.green,
                           ),
                           child: Text(
-                            "Join Ride".tr(),
+                            "Join Ride",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -202,15 +200,7 @@ class _BookingCardState extends State<BookingCard> {
               color: isSelected ? AppColors.primarybutton : Colors.grey,
             ),
           ),
-          //const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: AppColors.primaryTextblack,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Gap.h4,
         ],
       ),
     );
@@ -238,14 +228,14 @@ class _BookingCardState extends State<BookingCard> {
             ),
           ),
           Gap.h8,
-          Text(
-            'Join'.tr(),
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          // Text(
+          //   'Join',
+          //   style: TextStyle(
+          //     fontSize: 12,
+          //     color: Colors.grey.shade600,
+          //     fontWeight: FontWeight.w500,
+          //   ),
+          // ),
           Gap.h4,
           // Empty space for rating
           Gap.h16,
@@ -297,7 +287,6 @@ class _BookingCardState extends State<BookingCard> {
                 Gap.h32,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _locationColumn(
                       'From'.tr(),
@@ -316,7 +305,6 @@ class _BookingCardState extends State<BookingCard> {
                 Gap.h16,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserSlots(),
                 ),
                 Gap.h20,
@@ -342,7 +330,7 @@ class _BookingCardState extends State<BookingCard> {
               ),
               child: Text(
                 widget.dateTime,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -390,7 +378,7 @@ class _BookingCardState extends State<BookingCard> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.star, color: Colors.amber, size: 14.0),
+            const Icon(Icons.star, color: Colors.amber, size: 14.0),
             Text(
               user.rating.toStringAsFixed(1),
               style: const TextStyle(fontSize: 12.0, color: Colors.grey),
@@ -423,7 +411,7 @@ class _BookingCardState extends State<BookingCard> {
                     imagePath,
                     width: 14,
                     height: 14,
-                    color: AppColors.primaryTextblack,
+                    color: AppColors.primaryTextblack, 
                   ),
                 );
               }).toList()
@@ -451,14 +439,14 @@ class _BookingCardState extends State<BookingCard> {
   }
 }
 
-class ActiveWidget extends StatefulWidget {
-  const ActiveWidget({super.key});
+class CancelledWidget extends StatefulWidget {
+  const CancelledWidget({super.key});
 
   @override
-  State<ActiveWidget> createState() => _ActiveWidgetState();
+  State<CancelledWidget> createState() => _CancelledWidgetState();
 }
 
-class _ActiveWidgetState extends State<ActiveWidget>
+class _CancelledWidgetState extends State<CancelledWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -490,39 +478,19 @@ class _ActiveWidgetState extends State<ActiveWidget>
         baggageTypes: {'Small'},
       ),
       User(
-        name: 'You',
+        name: 'Alex',
         avatarAsset: 'assets/images/user1.png',
+        rating: 4.5,
+        baggageTypes: {'No Baggage'},
+      ),
+      User(
+        name: 'Anna',
+        avatarAsset: 'assets/images/user4.png',
         rating: 4.5,
         baggageTypes: {'No Baggage'},
       ),
     ];
 
-    final users2 = [
-      User(
-        name: 'John',
-        avatarAsset: 'assets/images/user3.png',
-        rating: 4.5,
-        baggageTypes: {'No Baggage'},
-      ),
-      User(
-        name: 'Smith',
-        avatarAsset: 'assets/images/user4.png',
-        rating: 4.5,
-        baggageTypes: {'Small'},
-      ),
-      User(
-        name: 'Alex',
-        avatarAsset: 'assets/images/user5.png',
-        rating: 4.5,
-        baggageTypes: {'Large'},
-      ),
-      User(
-        name: 'You',
-        avatarAsset: 'assets/images/user1.png',
-        rating: 4.5,
-        baggageTypes: {'Large'},
-      ),
-    ];
 
     return Scaffold(
       body: TabBarView(
@@ -536,134 +504,6 @@ class _ActiveWidgetState extends State<ActiveWidget>
                 toLocation: 'Connell St 175',
                 users: users1,
                 allowJoin: true, // Allow joining this ride
-                actionButtons: [
-                  // TextButton.icon(
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => ConfirmActionBottomSheet(
-                  //           message: 'Are you sure?',
-                  //           onConfirm: () {
-                  //             "Confirm";
-                  //           },
-                  //           onCancel: () {
-                  //             "Cancel";
-                  //           },
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Image.asset(
-                  //     'assets/images/leave.png',
-                  //     width: 24,
-                  //     height: 24,
-                  //   ),
-                  //   label: Text(
-                  //     'Leave',
-                  //     style: AppText.xl2Medium_22_300.copyWith(
-                  //       color: Colors.red,
-                  //     ),
-                  //   ),
-                  // ),
-                  TextButton.icon(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(16),
-                          ),
-                        ),
-                        builder: (context) => ConfirmActionBottomSheet(
-                          message: 'Are you sure?'.tr(),
-                          confirmButtonText: 'Confirm'.tr(),
-                          cancelButtonText: 'Cancel'.tr(),
-                          onConfirm: () {
-                            // Add your confirm logic here
-                            Navigator.pop(
-                              context,
-                            ); // Close the bottom sheet if needed
-                          },
-                          onCancel: () {
-                            // Add your cancel logic here
-                            Navigator.pop(
-                              context,
-                            ); // Close the bottom sheet if needed
-                          },
-                        ),
-                      );
-                    },
-                    icon: Image.asset(
-                      'assets/images/leave.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    label: Text(
-                      'Leave'.tr(),
-                      style: AppText.xl2Medium_22_300.copyWith(
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MessageScreen(),
-                        ),
-                      );
-                    },
-                    icon: Image.asset(
-                      'assets/images/chat1.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    label: Text(
-                      'Chat'.tr(),
-                      style: AppText.xl2Medium_22_300.copyWith(
-                        color: AppColors.primaryTextblack,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Gap.h4,
-              BookingCard(
-                dateTime: '23 Feb 2025 at 10:00 AM',
-                fromLocation: 'Dublin Airport T1',
-                toLocation: 'Connell St 175',
-                users: users2,
-                allowJoin: false, // Don't allow joining this ride
-                actionButtons: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => print('Finish Ride tapped'.tr()),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide.none,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      ),
-                      icon: const Icon(
-                        Icons.check_box_outlined,
-                        size: 24,
-                        color: Colors.green,
-                      ),
-                      label: Text(
-                        'Finish Ride'.tr(),
-                        style: AppText.xl2Medium_22_500.copyWith(
-                          color: Colors.green,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

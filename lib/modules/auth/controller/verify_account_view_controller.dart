@@ -71,6 +71,7 @@ class VerifyForgetPasswordOtpController extends VerifyOtpController{
             either: lr,
             processStatusNotifier: prcessNotifier,
             successSnackbarNotifier: snackbarNotifier,
+            errorSnackbarNotifier: snackbarNotifier,
           );
         });
   }
