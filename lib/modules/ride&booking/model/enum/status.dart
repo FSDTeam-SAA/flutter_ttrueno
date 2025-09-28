@@ -5,6 +5,7 @@ enum Status {
   cancelled;
 
   factory Status.fromString(String value) {
+    value = value.toLowerCase();
     switch (value) {
       case 'pending':
         return Status.pending;

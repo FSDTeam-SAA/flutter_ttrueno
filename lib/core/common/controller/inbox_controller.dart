@@ -15,7 +15,7 @@ import '../../../modules/message/model/message.dart';
 import '../../../modules/message/model/send_message_req_param.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/interface/ride_interface.dart';
-import '../../helpers/handle_fold.dart';
+import '../../utils/helpers/handle_fold.dart';
 import '../model/rider.dart';
 import '../model/rider_joined_state.dart';
 import '../model/rider_left_state.dart';

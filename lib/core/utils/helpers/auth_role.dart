@@ -1,5 +1,5 @@
-import '../services/debug/debug_service.dart';
-import '../services/app_pigeon/app_pigeon.dart';
+import '../../services/debug/debug_service.dart';
+import '../../services/app_pigeon/app_pigeon.dart';
 
 enum AccountType {
   provider("provider"), user("user"), unknown("");
@@ -21,7 +21,7 @@ enum AccountType {
 }
 
 extension ExtraAuth on Auth {
-  String get userId => data["userId"];
+  String get userId => data["userId"] ?? "";
   AccountType get accountType {
     try {
       if(data["role"] == null) return AccountType.unknown;

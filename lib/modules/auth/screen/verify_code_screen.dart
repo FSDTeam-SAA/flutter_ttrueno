@@ -145,16 +145,17 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             children: [
                               TextSpan(
                                 text:
-                                    "Please enter the code we just sent to Phone Number",
+                                    "Please enter the code we just sent to your email",
                                 style: AppText.mdRegular_16_400.copyWith(
                                   color: AppColors.secondaryTextblack,
                                 ),
                               ),
                               TextSpan(
-                                text: "Alberxxx@gmail.com",
-                                style: AppText.mdSemiBold_16_600.copyWith(
-                                  color: AppColors.primaryTextblack,
-                                ),
+                                // "Alberxxx@gmail.com",
+                                text: " ${widget.email.replaceFirstMapped(
+                                  RegExp(r'(\w{3})\w+@'),
+                                  (match) => '${match[1]}xxx@',
+                                )}",
                               ),
                             ],
                           ),

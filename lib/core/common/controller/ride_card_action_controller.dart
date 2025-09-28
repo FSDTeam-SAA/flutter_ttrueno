@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/handle_fold.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
@@ -39,30 +39,9 @@ class RideCardActionController {
   bool eligibleForRatingRide = false;
   RxList<Rider> riders = RxList([]);
 
-  ProcessStatusNotifier leaveStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   ProcessStatusNotifier joinRideStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
-  ProcessStatusNotifier finishRideStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   late final JoinRideController joinRideController;
-  
-  Future<void> leaveRide({
-    required SnackbarNotifier? snackbarNotifier
-  }) async{
-    leaveStn.setLoading();
-    await serviceLocator<RideInterface>().leaveRide(rideId: ride.id).then((lr){
-      handleFold(
-        either: lr,
-        processStatusNotifier: leaveStn,
-        errorSnackbarNotifier: snackbarNotifier,
-        onSuccess: (data) {
-          final index = riders.indexWhere((element) => element.userId == Get.find<ProfileDataController>().userProfile.value?.id);
-          if(index >= 0) riders.removeAt(index);
-          final index2 = ride.participants.indexWhere((element) => element.userId == Get.find<ProfileDataController>().userProfile.value?.id);
-          if(index2 >= 0) ride.participants.removeAt(index);
-          snackbarNotifier?.notify(message: "You left the ride successfully");
-        },
-      );
-    });
-  }
+
 
   Future<void> joinRide({
     required SnackbarNotifier? snackbarNotifier,
@@ -81,24 +60,6 @@ class RideCardActionController {
           ride.participants.add(data.joinedRider);
           riders.refresh();
           snackbarNotifier?.notify(message: "You joined the ride successfully");
-        },
-      );
-    });
-  }
-
-  Future<void> finishRide({
-    required SnackbarNotifier? snackbarNotifier,
-  }) async{
-    finishRideStn.setLoading();
-    await serviceLocator<RideInterface>().finishRide(
-      rideId: ride.id
-    ).then((lr){
-      handleFold(
-        either: lr,
-        processStatusNotifier: finishRideStn,
-        errorSnackbarNotifier: snackbarNotifier,
-        onSuccess: (data) {
-          snackbarNotifier?.notify(message: "You completed the ride successfully. Thanks for riding with us");
         },
       );
     });

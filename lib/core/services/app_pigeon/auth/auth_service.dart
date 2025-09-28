@@ -78,7 +78,8 @@ class AuthService extends Interceptor {
           UpdateAuthParams(
             accessToken: refreshTokenResponse.accessToken,
             refreshToken: refreshTokenResponse.refreshToken,
-            data: refreshTokenResponse.data)
+            data: refreshTokenResponse.data
+          )
         );
         // Wait a second to receive changes from secure storage.
         await Future.delayed(Duration(seconds: 1)).then((_) async{
@@ -87,6 +88,10 @@ class AuthService extends Interceptor {
           try {
             final cloneReq = await dio.request(
               requestOptions.path,
+              options: Options(
+                method: requestOptions.method,
+                contentType: requestOptions.contentType,
+              ),
               cancelToken: _CancelRefreshToken(),
               data: requestOptions.data,
               queryParameters: requestOptions.queryParameters,
@@ -101,10 +106,12 @@ class AuthService extends Interceptor {
         _refreshingToken = false;
         return handler.reject(e as DioException);
       }
+    } else {
+      _authDebugger.dekhao("error debug from dio interceptor: ${err.response?.data}");
+      debugPrint(err.message);
+      return handler.next(err);
     }
-    _authDebugger.dekhao("error debug from dio interceptor: ${err.response?.data}");
-    debugPrint(err.message);
-    handler.next(err);
+    
   }
 
   /// Saves the new auth as currentAuth.

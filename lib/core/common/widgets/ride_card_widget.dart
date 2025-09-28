@@ -3,22 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/ride_card_action_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
-import '../../../modules/ride&booking/ui/view/share_experience_screen.dart';
 import '../../theme/app_colors.dart';
-import '../../theme/text_style.dart';
-import '../../../modules/message/ui/widget/alart_message_widget.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 
+/// Usecases: Search or filtered rides, Chat screen ride preview
 class RideCard extends StatefulWidget {
   final double elevation;
   final String date;
@@ -45,7 +38,7 @@ class RideCard extends StatefulWidget {
       fromLocation: ride.startLocation.address ?? "..",
       toLocation: ride.endLocation.address ?? "..",
       ride: ride,
-      elevation: elevation ?? 0,
+      elevation: elevation ?? 2,
       allowJoin: allowJoin,
     );
   }
@@ -135,25 +128,11 @@ class _RideCardState extends State<RideCard> {
                   allowJoin: rideCardController.ride.status != Status.completed,
                   riders: rideCardController.riders,
                   onJoin: (p0) => rideCardController.joinRide(
-                    snackbarNotifier: Get.find(),
+                    snackbarNotifier: SnackbarNotifier(context: context),
                     baggageType: p0,
                   ),
                   joinRideStn: rideCardController.joinRideStn,
                 ),
-                Gap.h8,
-                if(widget.ride.status != Status.completed && widget.ride.participants.any((e)=> e.userId == currentUserId)) SizedBox(
-                  width: double.infinity,
-                  height: 120,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildLeaveAndChatOption(),
-                      if(rideCardController.eligibleToFinish) _buildFinishRideOption(),
-                      
-                    ],
-                  ),
-                ),
-                if(rideCardController.eligibleForRatingRide) _buildRateRideWidget(),
               ],
             ),
           ),
@@ -183,150 +162,6 @@ class _RideCardState extends State<RideCard> {
 
         ],
       ),
-    );
-  }
-
-  Widget _buildFinishRideOption() {
-    return Expanded(
-      child: OutlinedButton.icon(
-        onPressed: () {
-          rideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
-        },
-        style: OutlinedButton.styleFrom(
-          side: BorderSide.none,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-        ),
-        icon: RIcon(
-          key: UniqueKey(),
-          iconWidget: Icon(
-            Icons.check_box_outlined,
-            size: 24,
-            color: Colors.green,
-          ),
-          loadingStateWidget: SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(
-              color: Colors.black,
-            ),
-          ),
-          processStatusNotifier: rideCardController.finishRideStn,
-        ),
-        label: Text(
-          'Finish Ride'.tr(),
-          style: AppText.xl2Medium_22_500.copyWith(
-            color: Colors.green,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLeaveAndChatOption() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        TextButton.icon(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-              ),
-              builder: (context) => ConfirmActionBottomSheet(
-                message: 'Are you sure?'.tr(),
-                confirmButtonText: 'Confirm'.tr(),
-                cancelButtonText: 'Cancel'.tr(),
-                onConfirm: () {
-                  rideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-                onCancel: () {
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-              ),
-            );
-          },
-          icon: RIcon(
-            key: UniqueKey(),
-            iconWidget: Image.asset(
-              'assets/images/leave.png',
-              width: 24,
-              height: 24,
-            ),
-            loadingStateWidget: SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
-            ),
-            processStatusNotifier: rideCardController.leaveStn,
-          ),
-          label: Text(
-            'Leave'.tr(),
-            style: AppText.xl2Medium_22_300.copyWith(
-              color: Colors.red,
-            ),
-          ),
-        ),
-
-        TextButton.icon(
-          onPressed: () {
-            
-          },
-          icon: Image.asset(
-            'assets/images/chat1.png',
-            width: 24,
-            height: 24,
-          ),
-          label: Text(
-            'Chat'.tr(),
-            style: AppText.xl2Medium_22_300.copyWith(
-              color: AppColors.primaryTextblack,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRateRideWidget() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return TextButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShareExperienceScreen(),
-                ), 
-            );},
-            icon: Image.asset(
-              'assets/images/like.png',
-              width: 24,
-              height: 24,
-            ),
-          
-            label: Text(
-              'Rate your ride'.tr(),
-              style: AppText.xl2Medium_22_300.copyWith(
-                color: AppColors.primaryTextblack,
-              ),
-            ),
-          );
-      },
     );
   }
 

@@ -1,18 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/failure.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/failure.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/login_entity.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_otp_param.dart';
-
-import '../../../core/helpers/format_response_data.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/forget_password_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {

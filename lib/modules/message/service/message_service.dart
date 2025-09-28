@@ -1,14 +1,13 @@
 import 'package:flutter/rendering.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/interface/message_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/message.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/send_message_req_param.dart';
-
-import '../../../core/helpers/format_response_data.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/get_chats_req_param.dart';
 import '../model/get_messages_param.dart';
 

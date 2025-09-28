@@ -8,9 +8,9 @@ import '../debug/debug_service.dart';
 base class RefreshTokenResponse {
   final String accessToken;
   final String refreshToken;
-  final dynamic data;
+  final Map<String, dynamic>? data;
   RefreshTokenResponse({
-    required this.data,
+    this.data,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -39,16 +39,19 @@ class RefreshTokenManager implements RefreshTokenManagerInterface{
   @override
   Future<RefreshTokenResponse> refreshToken({required String refreshToken}) async{
     AuthDebugger().dekhao("Refreshing token with url: $url, refreshToken: $refreshToken");
-    final response = await _dio.post(url);
+    final response = await _dio.post(url, data: {
+      "refreshToken": refreshToken,
+    });
     debugPrint("Refresh token response: ${response.data}");
     final data = extractBodyData(response);
     return RefreshTokenResponse(
       accessToken: data["accessToken"], 
       refreshToken: data["refreshToken"],
-      data: {
-        "userId": data["userId"],
-        "role": data["role"]
-      },);
+      data: (data["userId"] != null) ? 
+        {
+          "userId": data["userId"],
+        } : null
+    );
   }
   
   @override

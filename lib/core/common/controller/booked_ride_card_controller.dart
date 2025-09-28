@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/controller/finish_ride_controller.dart';
 import '../../../modules/ride&booking/model/enum/status.dart';
+import '../../notifiers/snackbar_notifier.dart';
 import '../model/rider.dart';
 
 class BookedRideCardActionController {
@@ -37,11 +37,23 @@ class BookedRideCardActionController {
   bool eligibleForRatingRide = false;
   RxList<Rider> riders = RxList([]);
 
-  ProcessStatusNotifier leaveStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
-  ProcessStatusNotifier joinRideStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
-  ProcessStatusNotifier finishRideStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
+  late ProcessStatusNotifier leaveStn = leaveRideController.stn;
+  late ProcessStatusNotifier finishRideStn = finishRideController.stn;
   late final FinishRideController finishRideController;
   late final LeaveRideController leaveRideController;
+
+
+  Future<void> leaveRide({
+    required SnackbarNotifier? snackbarNotifier
+  }) async{
+    leaveRideController.leaveRide(snackbarNotifier: snackbarNotifier);
+  }
+
+  Future<void> finishRide({
+    required SnackbarNotifier? snackbarNotifier,
+  }) async{
+    finishRideController.finishRide(snackbarNotifier: snackbarNotifier);
+  }
 
 }
 

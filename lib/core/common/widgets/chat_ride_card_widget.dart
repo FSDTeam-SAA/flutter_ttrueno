@@ -7,7 +7,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/auth_role.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 

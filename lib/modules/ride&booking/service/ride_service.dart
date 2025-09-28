@@ -1,23 +1,9 @@
-// import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-// import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/interface/ride_interface.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/post_ride_model.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/ride_model.dart';
-
-// final class RideInterfaceImpl extends RideInterface {
-//   @override
-//   FutureRequest<Success<RideModel>> createRide(PostRideModel params) {
-//     throw UnimplementedError();
-//   }
-// }
 
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/format_response_data.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
@@ -28,6 +14,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_r
 
 import '../../../core/common/model/rider_joined_state.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/join_ride_req_response.dart';
 
 final class RideService extends RideInterface {
@@ -109,6 +96,7 @@ final class RideService extends RideInterface {
           ApiEndpoints.joinRide(param.rideId),
           data: param.toJson(),
         );
+          debugPrint("Join ride response: ${extractBodyData(response)}");
         return Success(
           message: extractSuccessMessage(response),
           data: JoinRideReqResponse.fromJson(extractBodyData(response)),

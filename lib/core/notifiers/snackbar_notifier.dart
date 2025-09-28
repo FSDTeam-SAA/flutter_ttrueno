@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import '../extensions/textstyle_ext.dart';
+import '../utils/extensions/textstyle_ext.dart';
 
 
 class SnackbarNotifier {

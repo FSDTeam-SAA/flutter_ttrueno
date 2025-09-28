@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../api_handler/failure.dart';
+import '../../service_handler/failure.dart';
 
 typedef Request<T> = Either<DataCRUDFailure, T>;
 

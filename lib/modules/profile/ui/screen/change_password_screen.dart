@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/password_change_success_screen.dart';
-import '../../../core/common/widgets/reactive_buttons/save_button.dart';
-import '../../../core/theme/app_colors.dart';
-import '../controller/change_password_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/password_change_success_screen.dart';
+import '../../../../core/common/widgets/reactive_buttons/save_button.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../controller/change_password_controller.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});

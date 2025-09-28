@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/forget_password_param.dart';
-import '../../../core/helpers/handle_fold.dart';
+import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 import '../../../init_dependency.dart';

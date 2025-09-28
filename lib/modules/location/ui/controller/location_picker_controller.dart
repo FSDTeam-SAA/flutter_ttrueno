@@ -7,7 +7,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interf
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 
 import '../../../../core/common/model/coordinate.dart';
-import '../../../../core/helpers/handle_fold.dart';
+import '../../../../core/utils/helpers/handle_fold.dart';
 import '../../model/place_prediction.dart';
 
 extension LocationExt on Coordinate {

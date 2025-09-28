@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
 
 import 'package:ttrueno_fo827e642a0c4/core/common/model/coordinate.dart';
 
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';

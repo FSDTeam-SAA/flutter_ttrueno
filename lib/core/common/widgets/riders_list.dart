@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/instance_manager.dart';
@@ -12,11 +14,11 @@ import '../model/rider.dart';
 import 'cache/smart_network_image.dart';
 
 class RidersListWidget extends StatefulWidget {
-  final Function(BaggageType) onJoin;
-  final ProcessStatusNotifier joinRideStn;
+  final Function(BaggageType)? onJoin;
+  final ProcessStatusNotifier? joinRideStn;
   final bool allowJoin;
   final RxList<Rider> riders;
-  const RidersListWidget({super.key, required this.allowJoin, required this.riders, required this.onJoin, required this.joinRideStn});
+  const RidersListWidget({super.key, required this.allowJoin, required this.riders, this.onJoin, this.joinRideStn});
 
   @override
   State<RidersListWidget> createState() => _RidersListWidgetState();
@@ -33,46 +35,63 @@ class _RidersListWidgetState extends State<RidersListWidget> {
   
   @override
   Widget build(BuildContext context) {
-    List<Widget> slots = [];
-    int maxUsers = 4;
+    
 
-    for (var rider in widget.riders) {
-      slots.add(
-        _buildProfile(
-          rider.profileImage,
-          rider.userId == currentUserId ? "You" : rider.name,
-          rider.avgRating.toString(),
-          {rider.baggageType},
-        ),
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        List<Widget> slots = [];
+          int maxUsers = 4;
 
-    int totalUsers = widget.riders.length;
-    int remainingSlots = maxUsers - totalUsers;
+          for (var rider in widget.riders) {
+            slots.add(
+              SizedBox(
+                width: min(80, constraints.maxWidth / 4),
+                child: _buildProfile(
+                  rider.profileImage,
+                  rider.userId == currentUserId ? "You" : rider.name,
+                  rider.avgRating.toString(),
+                  {rider.baggageType},
+                ),
+              ),
+            );
+          }
 
-    if(widget.allowJoin) {
-      for (int i = 0; i < remainingSlots; i++) {
-        slots.add(_buildAddButton());
+          int totalUsers = widget.riders.length;
+          int remainingSlots = maxUsers - totalUsers;
+
+          if(widget.allowJoin) {
+            for (int i = 0; i < remainingSlots; i++) {
+              slots.add(SizedBox(width: min(80, constraints.maxWidth / 4), child: _buildAddButton()));
+            }
+          }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: max(4, min(16, (constraints.maxWidth - (slots.length * 80)) / widget.riders.length)),
+          children: [
+            ...slots
+          ],
+        );
       }
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ...slots
-      ],
     );
   }
 
   void _showJoinBottomSheet() {
+    if(widget.joinRideStn == null) return;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return JoinRideBottomsheet(onJoin: widget.onJoin, pstn: widget.joinRideStn);
+        return JoinRideBottomsheet(
+          onJoin: (baggageType) {
+            if (widget.onJoin != null) {
+              widget.onJoin!(baggageType);
+            }
+          },
+          pstn: widget.joinRideStn!,
+        );
       },
     );
   }

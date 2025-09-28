@@ -35,8 +35,8 @@ import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'app_manager.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/theme/app_theme.dart';
-import 'features/auth/presentation/widget/background_image.dart';
-import 'features/onboarding/splash_screen.dart';
+import 'app/widget/background_image.dart';
+import 'modules/onboarding/splash_screen.dart';
 import 'init_dependency.dart';
 import 'routing/route_names.dart';
 

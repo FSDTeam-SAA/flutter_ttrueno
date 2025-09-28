@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/onboarding/onboarding3.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/onboarding/onboarding3.dart';
 
 import '../../core/theme/app_gap.dart';
 

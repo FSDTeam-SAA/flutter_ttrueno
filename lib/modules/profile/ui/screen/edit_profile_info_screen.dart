@@ -8,7 +8,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/features/profile/widget/text_field.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/textfields/text_field.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/edit_profile_info_controller.dart';
 
 class EditProfileInfoScreen extends StatefulWidget {

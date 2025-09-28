@@ -41,8 +41,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               Gap.h16,
-              Obx(
-                ()=> Row(
+              Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ...BaggageType.values.map((baggageType) {
@@ -59,7 +58,6 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                     })
                   ],
                 ),
-              ),
               Gap.h24,
               Row(
                 children: [
@@ -97,6 +95,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                         backgroundColor: Colors.green,
                       ),
                       child: Row(
+                        spacing: 4,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -108,8 +107,8 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                             iconWidget: Container(),
                             disableStateWidget: Container(),
                             loadingStateWidget: SizedBox(
-                              height: 30,
-                              width: 30,
+                              height: 20,
+                              width: 20,
                               child: CircularProgressIndicator(
                                 color: Colors.white,
                               ),

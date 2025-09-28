@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/failure.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/handle_fold.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/validation.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/failure.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/validation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 

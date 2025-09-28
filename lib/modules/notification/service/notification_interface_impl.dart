@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/format_response_data.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/interface/notification_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/model/notification_model.dart';
 
 import '../../../core/services/app_pigeon/app_pigeon.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
 
 final class NotificationInterfaceImpl extends NotificationInterface {
   final AppPigeon appPigeon;

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/extensions/datetime_ext.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
@@ -195,13 +195,9 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                     itemCount: searchRideController.searchResults.length,
                     itemBuilder: (context, index) {
                       final ride = searchRideController.searchResults[index];
-                      return RideCard(
-                        ride: ride,
+                      return RideCard.fromRide(
+                        ride,
                         allowJoin: true,
-                        date: DateFormat.yMMMd().format(ride.departureTime),
-                        time: DateFormat.jm().format(ride.departureTime),
-                        fromLocation: ride.startLocation.address ?? "..",
-                        toLocation: ride.endLocation.address ?? "..",
                       );
                     },
                   ),
