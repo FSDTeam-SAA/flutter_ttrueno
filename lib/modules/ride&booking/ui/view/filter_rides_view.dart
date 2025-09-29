@@ -28,25 +28,29 @@ class _FilterRidesViewState extends State<FilterRidesView> {
     super.initState();
   }
 
-  // double _sliderToDistance(double value) {
-  //   int index = (value * (allowedDistances.length - 1)).round();
-  //   return allowedDistances[index];
-  // }
+  
   double calculateSliderValueFromDistance(double distanceKM,) {
     final distancemeter = distanceKM * 1000;
-    if (distanceKM < 2) {  //2 KM
+    if (distancemeter < 2000) {
       final slidervalue = ((distancemeter / 100).floor()) * 0.25;
       return slidervalue.toDouble();
     } else {
-      double value = 5;
-      value += (distancemeter / 100).floor() * 0.625;
-      return value.toDouble();
+      double slidervalue = 5;
+      slidervalue += (distancemeter / 8000).floor() * 5;
+      return slidervalue.toDouble();
     }
   }
 
   double calculateSliderValueFromMinutes(double minutes) {
-    // TODO:: calculate slider value from distance, so that we can pass the initial value to the slider
-    throw UnimplementedError();
+    if (minutes < 60) {
+      final slidervalue = ((minutes / 15).floor()) * 1.25;
+      return slidervalue.toDouble();
+    } else {
+      double slidervalue = 5;
+      minutes -= 60;
+      slidervalue += (minutes / 60).floor() * 1.25;
+      return slidervalue.toDouble();
+    }
   }
 
   double calculateSliderDistance(double value) {
@@ -107,10 +111,10 @@ class _FilterRidesViewState extends State<FilterRidesView> {
             Expanded(
               child: SliderWidget(
                 key: UniqueKey(),
-                initialValue: 1.25,
-                // initialValue: calculateSliderValueFromMinutes(
-                //   searchRideController.departureFlexMinutes.value.toDouble(),
-                // ),
+                // initialValue: 1.25,
+                initialValue: calculateSliderValueFromMinutes(
+                  searchRideController.departureFlexMinutes.value.toDouble(),
+                ),
                 onValueChange: (p0) {
                   debugPrint(p0.toString());
                   searchRideController.departureFlexMinutes.value =
@@ -139,7 +143,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
         Expanded(
           child: SliderWidget(
             key: UniqueKey(),
-            initialValue:0.5, //calculateSliderValueFromDistance(rxDistance.value),
+            initialValue: calculateSliderValueFromDistance(rxDistance.value),
             onValueChange: (p0) {
               rxDistance.value = calculateSliderDistance(p0);
             },
@@ -327,7 +331,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
             RSaveButton(
               key: UniqueKey(),
               saveText: 'Apply'.tr(),
-              loadingText: "Apply".tr(),
+              loadingText: "Applying".tr(),
               buttonStatusNotifier: searchRideController.processStatusNotifier,
               onSaveTap: () => searchRideController.searchRide(
                 snackbarNotifier: SnackbarNotifier(context: context),

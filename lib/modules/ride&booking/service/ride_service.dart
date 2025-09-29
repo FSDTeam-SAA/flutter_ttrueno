@@ -1,19 +1,5 @@
-// import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-// import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/interface/ride_interface.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/post_ride_model.dart';
-// import 'package:ttrueno_fo827e642a0c4/modules/ride/model/ride_model.dart';
-
-// final class RideInterfaceImpl extends RideInterface {
-//   @override
-//   FutureRequest<Success<RideModel>> createRide(PostRideModel params) {
-//     throw UnimplementedError();
-//   }
-// }
-
 import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_stream_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/core/helpers/format_response_data.dart';

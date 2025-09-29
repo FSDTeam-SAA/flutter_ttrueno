@@ -5,7 +5,6 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/active_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/booking/presentation/widget/complete_widget.dart';
 
-import '../widget/cancelled1_widget.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});

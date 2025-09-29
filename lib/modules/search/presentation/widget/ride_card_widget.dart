@@ -4,7 +4,6 @@ import 'package:ttrueno_fo827e642a0c4/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -144,7 +143,6 @@ class _RideCardState extends State<RideCard> {
                               });
                             });
                             selectedBaggageType = null;
-                            // Navigator.pop(context);
                             Future.delayed(
                               const Duration(milliseconds: 300),
                               () {

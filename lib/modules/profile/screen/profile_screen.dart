@@ -8,8 +8,8 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_im
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/ui/widget/alart_message_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/features/onboarding/splash_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/ui/widget/alart_message_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/change_password_screen.dart';
@@ -17,7 +17,6 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/faq_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/language_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
-import '../../auth/interface/auth_inerface.dart';
 import 'edit_profile_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -252,7 +251,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context,
                 icon: Icons.star_border,
                 title: 'Rate Us'.tr(),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ),
+                  );
+                },
               ),
 
               Gap.h32,
