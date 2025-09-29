@@ -5,14 +5,14 @@ import 'package:dio/dio.dart';
 
 class SendMessageReqParam {
   final String chatId;
-  final String? content;
+  final String? message;
   final String contentType;
   final String? replyTo;
   final List<File>? files;
 
   SendMessageReqParam({
     required this.chatId,
-    this.content,
+    this.message,
     this.contentType = 'text',
     this.files,
     this.replyTo
@@ -20,7 +20,7 @@ class SendMessageReqParam {
 
   Map<String, dynamic> toMap() => {
         'chatId': chatId,
-        'content': content,
+        'message': message,
         'contentType': contentType,
         'files': files,
       };
@@ -29,7 +29,7 @@ class SendMessageReqParam {
     final FormData formData = FormData();
     formData.fields.addAll([
       MapEntry('chatId', chatId),
-      MapEntry('content', content ?? ''),
+      MapEntry('message', message ?? ''),
       MapEntry('contentType', contentType),
       MapEntry('replyTo', replyTo ?? ''),
     ]);
@@ -43,5 +43,5 @@ class SendMessageReqParam {
 
   @override
   String toString() =>
-      'SendMessageParams(chatId: $chatId, content: $content, contentType: $contentType, files: ${files?.length})';
+      'SendMessageParams(chatId: $chatId, content: $message, contentType: $contentType, files: ${files?.length})';
 }

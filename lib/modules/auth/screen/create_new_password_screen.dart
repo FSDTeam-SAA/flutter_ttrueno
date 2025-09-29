@@ -4,8 +4,8 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/screen/password_change_success_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/password_change_success_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
 
 import '../controller/create_new_password_screen_controller.dart';
 

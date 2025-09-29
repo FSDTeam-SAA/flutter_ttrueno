@@ -10,7 +10,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interf
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_model.dart';
-import '../../../core/helpers/handle_fold.dart';
+import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../main.dart';
 

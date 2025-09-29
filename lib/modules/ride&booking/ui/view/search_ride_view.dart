@@ -6,10 +6,11 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/notification/screen/notification_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/widget/greeting_user_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/widget/greeting_user_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/create_ride_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/search_result_view.dart';
+import '../../../../core/notifiers/button_status_notifier.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
@@ -22,16 +23,25 @@ class SearchScreenView extends StatefulWidget {
   State<SearchScreenView> createState() => _SearchScreenViewState();
 }
 
-class _SearchScreenViewState extends State<SearchScreenView> {
+class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepAliveClientMixin{
   late final SearchRideController searchRideController;
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
+  
   int passengers = 1;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    
+  }
 
   @override
   void initState() {
     super.initState();
-    searchRideController = Get.find<SearchRideController>();
-    final controller = Get.find<ProfileDataController>();
-    controller.getCurrentUserProfile();
+    debugPrint('SearchScreenView initState');
+    searchRideController = Get.find<SearchRideController>();    
+    Get.find<ProfileDataController>().getCurrentUserProfile();
   }
 
   @override
@@ -44,6 +54,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -265,10 +276,10 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                             key: UniqueKey(),
                             saveText: 'Search'.tr(),
                             loadingText: "Search".tr(),
-                            buttonStatusNotifier:
-                                searchRideController.processStatusNotifier,
+                            buttonStatusNotifier: processStatusNotifier,
                             onSaveTap: () => searchRideController.searchRide(
-                              snackbarNotifier: SnackbarNotifier(context: context)
+                              snackbarNotifier: SnackbarNotifier(context: context),
+                              processStatusNotifier: processStatusNotifier,
                             ),
                             onDone: () {
                               Navigator.push(
@@ -317,4 +328,8 @@ class _SearchScreenViewState extends State<SearchScreenView> {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

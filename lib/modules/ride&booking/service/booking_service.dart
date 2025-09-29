@@ -1,5 +1,6 @@
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/booking_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/booking.dart';
@@ -26,6 +27,7 @@ base class BookingService extends BookingInterface{
     return asyncTryCatch(tryFunc: ()async{
       final response = await appPigeon.get(ApiEndpoints.getMyBookings);
       final data = extractBodyData(response) as List<dynamic>;
+      debugPrint("getMyBookings response data: $data");
       return Success(message: extractSuccessMessage(response), data: data.map((e) => Booking.fromJson(e)).toList());
     });
   }

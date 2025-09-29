@@ -1,8 +1,8 @@
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/trycatch.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/error_catcher.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
-import '../../../../../core/api_handler/success.dart';
+import '../../../core/service_handler/success.dart';
 import '../../../core/common/model/coordinate.dart';
-import '../../../core/helpers/typedefs.dart';
+import '../../../core/utils/helpers/typedefs.dart';
 import '../model/place_prediction.dart';
 import '../model/place_search_result.dart';
 

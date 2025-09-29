@@ -1,8 +1,9 @@
+
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/format_response_data.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
@@ -11,7 +12,10 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/update_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_req_param.dart';
 
+import '../../../core/common/model/rider_joined_state.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
+import '../model/join_ride_req_response.dart';
 
 final class RideService extends RideInterface {
   final AppPigeon appPigeon;
@@ -65,7 +69,7 @@ final class RideService extends RideInterface {
     return await asyncTryCatch(
       tryFunc: () async{
         final response = await appPigeon.post(
-          "${ApiEndpoints.finishRide}/$rideId",
+          ApiEndpoints.finishRide(rideId),
         );
         return Success(message: extractSuccessMessage(response));
       },
@@ -85,14 +89,18 @@ final class RideService extends RideInterface {
   }
 
   @override
-  FutureRequest<Success<RideModel>> joinRide({required JoinRideReqParam param}) async{
+  FutureRequest<Success<JoinRideReqResponse>> joinRide({required JoinRideReqParam param}) async{
     return await asyncTryCatch(
       tryFunc: () async{
         final response = await appPigeon.post(
-          ApiEndpoints.joinRide(param.id),
+          ApiEndpoints.joinRide(param.rideId),
           data: param.toJson(),
         );
-        return Success(message: extractSuccessMessage(response), data: RideModel.fromJson(extractBodyData(response)));
+          debugPrint("Join ride response: ${extractBodyData(response)}");
+        return Success(
+          message: extractSuccessMessage(response),
+          data: JoinRideReqResponse.fromJson(extractBodyData(response)),
+        );
       },
     );
   }
@@ -143,6 +151,16 @@ final class RideService extends RideInterface {
         return Success(message: extractSuccessMessage(response));
       },
     );
+  }
+
+  @override
+  Stream<RiderJoinedState> riderJoinedStream() {
+    return appPigeon.listen("rider_joined").map((e) => RiderJoinedState.fromJson(e));
+  }
+
+  @override
+  Stream<RiderLeftState> riderLeftStream() {
+    return appPigeon.listen("userLeft").map((e) => RiderLeftState.fromJson(e));
   }
 
   // @override

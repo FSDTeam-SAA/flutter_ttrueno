@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import '../../api_handler/failure.dart';
-import '../../helpers/typedefs.dart';
+import '../../service_handler/failure.dart';
+import '../../utils/helpers/typedefs.dart';
 
 abstract interface class AsyncUsecase<SuccessType, Params>{
   Future<SuccessType> call(Params params);

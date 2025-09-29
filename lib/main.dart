@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
+import 'package:ttrueno_fo827e642a0c4/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'app_manager.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/theme/app_theme.dart';
-import 'features/auth/presentation/widget/background_image.dart';
-import 'features/onboarding/splash_screen.dart';
+import 'app/widget/background_image.dart';
+import 'modules/onboarding/splash_screen.dart';
 import 'init_dependency.dart';
 import 'routing/route_names.dart';
 
@@ -72,23 +72,29 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  late AppManager authRoutingController;
+  late AppManager appManager;
   @override
   void initState() {
     super.initState();
+    debugPrint("App started");
+    
+     WidgetsBinding.instance.addPostFrameCallback((x){
+      
+    });
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    authRoutingController = AppManager();
-    Get.put(authRoutingController);
+    appManager = AppManager();
+    Get.put(appManager);
   }
 
   @override
   void dispose() async {
     super.dispose();
+    
+   
   }
 
   
@@ -104,9 +110,9 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case RouteNames.home:
-            if (authRoutingController.authStatus is Authenticated) {
+            if (appManager.authStatus is Authenticated) {
               return MaterialPageRoute(
-                  builder: (_) => BottomNabarScreen());  
+                  builder: (_) => BottomNabBarScreen());  
             } else {
               return MaterialPageRoute(
                 builder: (context) {

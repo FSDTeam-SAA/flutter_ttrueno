@@ -151,7 +151,7 @@ class _Ride {
   static const String createRide = _rideRoute;
   static String updateRide(String id) => "$_rideRoute/$id";
   static String leaveRide(String id) => "$_rideRoute/$id/leave";
-  static String finishRide(String id) => "$_rideRoute/$id/filter";
+  static String finishRide(String id) => "$_rideRoute/$id/finish";
   static const String filterRide = _rideRoute;
   static String getRideById(String id) => "$_rideRoute/$id";
   static String joinRide(String id) => "$_rideRoute/$id/join";

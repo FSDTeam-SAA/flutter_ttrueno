@@ -11,7 +11,9 @@ import 'package:ttrueno_fo827e642a0c4/modules/notification/interface/notificatio
 import 'package:ttrueno_fo827e642a0c4/modules/notification/service/notification_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/service/profile_interface_impl.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/booking_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/booking_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_service.dart';
 import 'core/constants/api_endpoints.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
@@ -27,7 +29,7 @@ Future<void> initDependencies() async {
   final AppPigeon appPigeon = AppPigeon(
     _dio,
     FlutterSecureStorage(),
-    RefreshTokenManager(_dio, ApiEndpoints.refreshToken),
+    RefreshTokenManager(ApiEndpoints.refreshToken),
     baseUrl: ApiEndpoints.baseUrl,
   );
 
@@ -57,6 +59,10 @@ Future<void> initDependencies() async {
 
   serviceLocator.registerFactory<MessageInterface>(
     ()=> MessageService(serviceLocator<AppPigeon>()),
+  );
+
+  serviceLocator.registerFactory<BookingInterface>(
+    ()=> BookingService(serviceLocator<AppPigeon>()),
   );
 }
 

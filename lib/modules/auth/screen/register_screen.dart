@@ -5,7 +5,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/verify_code_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';

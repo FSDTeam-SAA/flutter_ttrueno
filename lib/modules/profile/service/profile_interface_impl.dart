@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/typedefs.dart';
+import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/change_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_avatar_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
-
-import '../../../core/helpers/format_response_data.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
+import '../../../core/utils/helpers/format_response_data.dart';
 
 final class ProfileInterfaceImpl extends ProfileInterface {
   final AppPigeon appPigeon;

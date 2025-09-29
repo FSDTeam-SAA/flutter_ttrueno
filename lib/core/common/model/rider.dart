@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/model/user_profile.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 
 class Rider {
