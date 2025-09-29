@@ -14,7 +14,7 @@ import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../main.dart';
 import '../model/filter_ride_req_param.dart';
 
-class SearchRideController extends GetxController{
+class SearchRideController extends GetxController {
   SearchRideController() {
     _initializeDefaultValues();
   }
@@ -23,6 +23,9 @@ class SearchRideController extends GetxController{
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
   LocationAdress? fromLocation;
   LocationAdress? toLocation;
   DateTime? _selectedDateTime;
@@ -78,7 +81,6 @@ class SearchRideController extends GetxController{
     }
   }
 
-
   Future<void> selectDate(BuildContext context) async {
     debugPrint("Selecting date");
     final now = DateTime.now();
@@ -90,7 +92,13 @@ class SearchRideController extends GetxController{
     );
     if (picked != null) {
       selectedDate = picked;
-      _selectedDateTime = DateTime(picked.year, picked.month, picked.day, selectedTime?.hour ?? 0, selectedTime?.minute ?? 0);
+      _selectedDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        selectedTime?.hour ?? 0,
+        selectedTime?.minute ?? 0,
+      );
       dateController.text =
           "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
     } else {
@@ -106,8 +114,14 @@ class SearchRideController extends GetxController{
     );
     if (picked != null) {
       selectedTime = picked;
-      _selectedDateTime = DateTime(selectedDate?.year ?? 0, selectedDate?.month ?? 0, selectedDate?.day ?? 0, picked.hour, picked.minute);
-      if(context.mounted) timeController.text = picked.format(context);
+      _selectedDateTime = DateTime(
+        selectedDate?.year ?? 0,
+        selectedDate?.month ?? 0,
+        selectedDate?.day ?? 0,
+        picked.hour,
+        picked.minute,
+      );
+      if (context.mounted) timeController.text = picked.format(context);
     }
   }
 
@@ -198,4 +212,3 @@ class SearchRideController extends GetxController{
     timeController.dispose();
   }
 }
-

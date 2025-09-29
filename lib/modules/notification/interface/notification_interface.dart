@@ -7,6 +7,7 @@ abstract base class NotificationInterface extends ErrorCatcher {
   FutureRequest<Success<List<NotificationModel>>> getAllNotification(
   );
 
-  FutureRequest<Success> singleNotificationRead( String id
-  );
+  FutureRequest<Success> singleNotificationRead(String id);
+
+  FutureRequest<Success> allNotificationRead();
 }

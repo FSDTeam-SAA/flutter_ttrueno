@@ -17,12 +17,8 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/faq_screen.dart'
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/language_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
-import '../../../auth/interface/auth_inerface.dart';
 import 'edit_profile_info_screen.dart';
-
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -252,7 +248,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context,
                 icon: Icons.star_border,
                 title: 'Rate Us'.tr(),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ),
+                  );
+                },
               ),
 
               Gap.h32,

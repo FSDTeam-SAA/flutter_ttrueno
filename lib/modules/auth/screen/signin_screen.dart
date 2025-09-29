@@ -35,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late final LoginsScreenController _loginsScreenController;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
 
   bool _obscure = true;
 

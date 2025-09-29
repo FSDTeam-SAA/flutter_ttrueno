@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -23,32 +22,42 @@ class FilterRidesView extends StatefulWidget {
 
 class _FilterRidesViewState extends State<FilterRidesView> {
   final SearchRideController searchRideController = Get.find<SearchRideController>();
-  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
 
   @override
   void initState() {
     super.initState();
   }
 
-  // double _sliderToDistance(double value) {
-  //   int index = (value * (allowedDistances.length - 1)).round();
-  //   return allowedDistances[index];
-  // }
-  double calculateSliderValueFromDistance(double distance) {
-    // TODO:: calculate slider value from distance, so that we can pass the initial value to the slider
-    throw UnimplementedError();
+  
+  double calculateSliderValueFromDistance(double distanceKM,) {
+    final distancemeter = distanceKM * 1000;
+    if (distancemeter < 2000) {
+      final slidervalue = ((distancemeter / 100).floor()) * 0.25;
+      return slidervalue.toDouble();
+    } else {
+      double slidervalue = 5;
+      slidervalue += (distancemeter / 8000).floor() * 5;
+      return slidervalue.toDouble();
+    }
   }
 
   double calculateSliderValueFromMinutes(double minutes) {
-    // TODO:: calculate slider value from distance, so that we can pass the initial value to the slider
-    throw UnimplementedError();
+    if (minutes < 60) {
+      final slidervalue = ((minutes / 15).floor()) * 1.25;
+      return slidervalue.toDouble();
+    } else {
+      double slidervalue = 5;
+      minutes -= 60;
+      slidervalue += (minutes / 60).floor() * 1.25;
+      return slidervalue.toDouble();
+    }
   }
 
   double calculateSliderDistance(double value) {
-    if(value < 5) {
-      // 5/20 = 0.25
+    if (value < 5) {
+      // 5/20 = 0.25                
       final metre = ((value / .25).floor()) * 100;
-      final km = metre/1000;
+      final km = metre / 1000;
       return km.toDouble();
     } else {
       // 5/8 = 0.625
@@ -60,7 +69,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
   }
 
   int calulateMinuteSlider(double value) {
-    if(value < 5) {
+    if (value < 5) {
       // 5/4 = 1.25
       final minutes = (value / 1.25).floor() * 15;
       return minutes;
@@ -85,7 +94,6 @@ class _FilterRidesViewState extends State<FilterRidesView> {
     return m > 0 ? "${h}h ${m}m" : "${h}h";
   }
 
-
   Widget buildDepartureFlexibility() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,17 +111,23 @@ class _FilterRidesViewState extends State<FilterRidesView> {
             Expanded(
               child: SliderWidget(
                 key: UniqueKey(),
-                initialValue: 15,
+                // initialValue: 1.25,
+                initialValue: calculateSliderValueFromMinutes(
+                  searchRideController.departureFlexMinutes.value.toDouble(),
+                ),
                 onValueChange: (p0) {
                   debugPrint(p0.toString());
-                  searchRideController.departureFlexMinutes.value = calulateMinuteSlider(p0);
+                  searchRideController.departureFlexMinutes.value =
+                      calulateMinuteSlider(p0);
                 },
-              )
+              ),
             ),
             Gap.w16,
-            Obx(()=>
-              Text(
-                _formatAllowedTimeText(searchRideController.departureFlexMinutes.value),
+            Obx(
+              () => Text(
+                _formatAllowedTimeText(
+                  searchRideController.departureFlexMinutes.value,
+                ),
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -129,15 +143,15 @@ class _FilterRidesViewState extends State<FilterRidesView> {
         Expanded(
           child: SliderWidget(
             key: UniqueKey(),
-            initialValue: .1,
+            initialValue: calculateSliderValueFromDistance(rxDistance.value),
             onValueChange: (p0) {
               rxDistance.value = calculateSliderDistance(p0);
             },
-          )
+          ),
         ),
         Gap.w16,
-        Obx(()=>
-          Text(
+        Obx(
+          () => Text(
             _formatDistanceText(rxDistance.value),
             style: const TextStyle(fontSize: 14),
           ),
@@ -152,7 +166,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
       children: [
         Text(
           "Arrival Flexibility".tr(),
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         Gap.h16,
         _distanceSlider(searchRideController.arrivalFlexKm),
@@ -176,9 +190,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
           TextButton(
             onPressed: () async {
               searchRideController.resetForm(context);
-              setState(() {
-                
-              });
+              setState(() {});
             },
             child: Text(
               "Reset".tr(),
@@ -211,11 +223,12 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                   child: TextField(
                     controller: searchRideController.dateController,
                     readOnly: true,
-                    onTap:()async => searchRideController.selectDate(context),
+                    onTap: () async => searchRideController.selectDate(context),
                     decoration: InputDecoration(
                       prefixIcon: IconButton(
                         icon: const Icon(Icons.calendar_today_outlined),
-                        onPressed: ()async => searchRideController.selectDate(context),
+                        onPressed: () async =>
+                            searchRideController.selectDate(context),
                       ),
                       hintText: 'Date'.tr(),
                       contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -238,11 +251,12 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                   child: TextField(
                     controller: searchRideController.timeController,
                     readOnly: true,
-                    onTap: ()async => searchRideController.selectTime(context),
+                    onTap: () async => searchRideController.selectTime(context),
                     decoration: InputDecoration(
                       prefixIcon: IconButton(
                         icon: const Icon(Icons.watch_later_outlined),
-                        onPressed: ()async => searchRideController.selectTime(context)
+                        onPressed: () async =>
+                            searchRideController.selectTime(context),
                       ),
                       hintText: 'Time'.tr(),
                       contentPadding: const EdgeInsets.symmetric(vertical: 20),
@@ -291,7 +305,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                   ),
                   alignment: Alignment.center,
                   child: Obx(
-                    ()=> Text(
+                    () => Text(
                       '${searchRideController.passengers}',
                       style: const TextStyle(
                         fontSize: 16,
@@ -334,7 +348,6 @@ class _FilterRidesViewState extends State<FilterRidesView> {
     );
   }
 }
-
 
 class CustomThumbShape extends RoundSliderThumbShape {
   @override

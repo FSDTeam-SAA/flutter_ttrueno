@@ -17,7 +17,7 @@
     <application
         android:label="HopLift"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <!-- Google Maps API Key -->
         <meta-data
@@ -56,4 +56,25 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <!-- Query visibility for apps -->
+    <queries>
+        <!-- Instagram -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="instagram" />
+        </intent>
+
+        <!-- TikTok -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="tiktok" />
+        </intent>
+
+        <!-- Optional: Other apps -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="twitter" />
+        </intent>
+    </queries>
+
 </manifest>
