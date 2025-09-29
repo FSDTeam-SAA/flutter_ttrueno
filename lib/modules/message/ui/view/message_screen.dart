@@ -9,8 +9,10 @@ import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/message.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/send_message_req_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 
 import '../../../../app_manager.dart';
+import '../../../../core/notifiers/snackbar_notifier.dart';
 import '../../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../../core/theme/app_gap.dart';
 
@@ -23,6 +25,21 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+
+  late final LeaveRideController leaveRideController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    leaveRideController = LeaveRideController(
+      rideId: widget.activeRideChatController.ride.value.id,
+      onLeaveSuccess: () {
+        Get.find<InboxController>().getAllChat(forceRefresh: true);
+        Navigator.of(context).pop();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +56,7 @@ class _MessageScreenState extends State<MessageScreen> {
             child: GestureDetector(
               onTap: () {
                 if(widget.activeRideChatController.eligibleToLeave.value) {
-                  
+                  leaveRideController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
                 }
               },
               child: Row(

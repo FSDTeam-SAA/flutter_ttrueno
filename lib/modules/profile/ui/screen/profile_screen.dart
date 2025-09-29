@@ -19,6 +19,8 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/language_screen.
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'edit_profile_info_screen.dart';
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }

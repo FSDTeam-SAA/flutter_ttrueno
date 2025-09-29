@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -22,7 +24,7 @@ class FilterRidesView extends StatefulWidget {
 
 class _FilterRidesViewState extends State<FilterRidesView> {
   final SearchRideController searchRideController = Get.find<SearchRideController>();
-
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
   @override
   void initState() {
     super.initState();
@@ -291,7 +293,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 IconButton(
                   onPressed: () {
                     if (searchRideController.passengers > 1) {
-                      searchRideController.passengers--;
+                      searchRideController.decrementPassengers();
                     }
                   },
                   icon: const Icon(Icons.remove_circle_outline),
@@ -316,7 +318,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 ),
                 IconButton(
                   onPressed: () {
-                    searchRideController.incrementPassengers();
+                    if(searchRideController.passengers < 4) searchRideController.incrementPassengers();
                   },
                   icon: const Icon(Icons.add_circle_outline),
                 ),

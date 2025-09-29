@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
-
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
@@ -67,7 +66,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: max(4, min(16, (constraints.maxWidth - (slots.length * 80)) / widget.riders.length)),
+          spacing: max(0, min(8, (constraints.maxWidth - (slots.length * 80)) / widget.riders.length)),
           children: [
             ...slots
           ],

@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -173,12 +175,26 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                               children: [
                                 FilterChipWidget(
                                   label: 'Departure Flex : 200 meters',
+                                  onTap: () {
+                                    searchRideController.departureFlexKm.value = 0.2;
+                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                                  },
                                 ),
                                 SizedBox(width: 8),
-                                FilterChipWidget(label: 'Departure Flex : 30 min'),
+                                FilterChipWidget(
+                                  label: 'Departure Flex : 30 min',
+                                  onTap: () {
+                                    searchRideController.departureFlexMinutes.value = 30;
+                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                                  },  
+                                ),
                                 SizedBox(width: 8),
                                 FilterChipWidget(
                                   label: 'Arrival Flex : 200 meters',
+                                  onTap: () {
+                                    searchRideController.arrivalFlexKm.value = 0.2;
+                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                                  },
                                 ),
                               ],
                             ),
@@ -190,16 +206,44 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                 ),
           
                 Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: searchRideController.searchResults.length,
-                    itemBuilder: (context, index) {
-                      final ride = searchRideController.searchResults[index];
-                      return RideCard.fromRide(
-                        ride,
-                        allowJoin: true,
-                      );
-                    },
+                  child: Obx(
+                    ()=> 
+                    ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: searchRideController.searchResults.length + 1,
+                      itemBuilder: (context, index) {
+                        if(index == searchRideController.searchResults.length) {
+                          if(searchRideController.isSearching.value) {
+                            return Column(
+                              children: [
+                                ...List.generate(10, (_)=>
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: BookedRideCardSkeleton()
+                                  )
+                                )
+                              ],
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Center(
+                              child: searchRideController.isSearching.value ? CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primarybutton),
+                              ) : Text(
+                                'No more rides',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          );
+                        }
+                        final ride = searchRideController.searchResults[index];
+                        return RideCard.fromRide(
+                          ride,
+                          allowJoin: true,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Padding(

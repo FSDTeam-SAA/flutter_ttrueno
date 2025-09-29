@@ -41,12 +41,13 @@ class InboxController extends GetxController{
   RxList<ActiveRideChatController> rideChats = RxList<ActiveRideChatController>([]);
   
   Future<void> getAllChat({bool? forceRefresh}) async{
-    if(_isLoading || _isLastPage) return;
-
     if(forceRefresh == true) {
       _page = 1;
       _isLastPage = false;
+      _isLoading = false;
+      rideChats.clear();
     }
+    if(_isLoading || _isLastPage ) return;
     _isLoading = true;
     await serviceLocator<MessageInterface>().getAllChat(
       GetChatsParam(page: _page, limit: _limit)

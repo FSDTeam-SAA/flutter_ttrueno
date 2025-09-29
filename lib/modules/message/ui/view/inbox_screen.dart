@@ -64,7 +64,7 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
         onRefresh: () {
           return chatListController.getAllChat(forceRefresh: true);
         },
-        child: Obx(()=>
+        child: ObxValue((rideChats)=>
           ListView.separated(
             itemCount: chatListController.rideChats.length,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -203,6 +203,7 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
               );
             },
           ),
+          chatListController.rideChats
         ),
       ),
     );

@@ -18,6 +18,7 @@ class SearchRideController extends GetxController {
   SearchRideController() {
     _initializeDefaultValues();
   }
+  RxBool isSearching = RxBool(false);
   final RxList<RideModel> searchResults = RxList<RideModel>();
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
@@ -35,6 +36,7 @@ class SearchRideController extends GetxController {
   RxInt passengers = RxInt(1);
   RxDouble departureFlexKm = RxDouble(.2);
   RxDouble arrivalFlexKm = RxDouble(.2);
+  /// In minutes
   RxInt departureFlexMinutes = RxInt(15);
 
   Future<void> _initializeDefaultValues() async {
@@ -146,12 +148,18 @@ class SearchRideController extends GetxController {
     arrivalFlexKm.value = .2;
     departureFlexKm.value = .2;
     departureFlexMinutes.value = 15;
+    isSearching.value = false;
     await _setCurrentLocation();
   }
+
+  int _page = 1;
+  final int _limit = 20;
+  bool _allLoaded = false;
 
   Future<void> searchRide({
     SnackbarNotifier? snackbarNotifier,
     ProcessStatusNotifier? processStatusNotifier,
+    bool forceRefresh = false,
   }) async {
     // Validate inputs
     if (fromLocation == null || toLocation == null) {
@@ -163,7 +171,14 @@ class SearchRideController extends GetxController {
       return;
     }
     ControllerDebugger().dekhao("Searching Ride...");
+    // if(forceRefresh) {
+    //   _page = 1;
+    //   _allLoaded = false;
+    //   searchResults.clear();
+    // }
+    searchResults.clear();
     processStatusNotifier?.setLoading();
+    isSearching.value = true;
     await serviceLocator<RideInterface>().filterRide(
       params: FilterRideReqParam(
         arrivalFlexKm: arrivalFlexKm.value,
@@ -195,6 +210,7 @@ class SearchRideController extends GetxController {
           }
           searchResults.value = data;
           searchResults.refresh();
+          isSearching.value = false;
         },
       );
     });

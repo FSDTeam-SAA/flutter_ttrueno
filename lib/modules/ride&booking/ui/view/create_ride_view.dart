@@ -130,7 +130,7 @@ class _CreateRideViewState extends State<CreateRideView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "seats available".tr(),
+                  "Seats Available".tr(),
                   style: AppText.lgMedium_18_500.copyWith(
                     color: AppColors.primaryTextblack,
                   ),

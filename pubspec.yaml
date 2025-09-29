@@ -54,6 +54,7 @@ dependencies:
 
 
   url_launcher: ^6.3.2
+  shimmer: ^3.0.0
 
   
 dev_dependencies:
