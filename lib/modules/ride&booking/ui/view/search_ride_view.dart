@@ -33,7 +33,6 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    
   }
 
   @override

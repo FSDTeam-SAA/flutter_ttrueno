@@ -6,6 +6,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart
 
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/controller/finish_ride_controller.dart';
+import '../../../modules/ride&booking/controller/join_ride_controller.dart';
 import '../../../modules/ride&booking/model/enum/status.dart';
 import '../../notifiers/snackbar_notifier.dart';
 import '../model/rider.dart';
@@ -19,6 +20,7 @@ class BookedRideCardActionController {
     }
     finishRideController = FinishRideController(rideId: ride.id, onFinishRideSuccess: onFinishRideSuccess);
     leaveRideController = LeaveRideController(rideId: ride.id, onLeaveSuccess: onLeaveSuccess);
+    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: onJoinSuccess);
     // eligibility to finish, rate-ride
     if(currentUserId == ride.creator?.id) {
       eligibleToFinish = true;
@@ -41,7 +43,7 @@ class BookedRideCardActionController {
   late ProcessStatusNotifier finishRideStn = finishRideController.stn;
   late final FinishRideController finishRideController;
   late final LeaveRideController leaveRideController;
-
+  late final JoinRideController joinRideController;
 
   Future<void> leaveRide({
     required SnackbarNotifier? snackbarNotifier
@@ -53,6 +55,11 @@ class BookedRideCardActionController {
     required SnackbarNotifier? snackbarNotifier,
   }) async{
     finishRideController.finishRide(snackbarNotifier: snackbarNotifier);
+  }
+
+  void onJoinSuccess(Rider rider) {
+    riders.add(rider);
+    eligibleForChat.value = true;
   }
 
 }

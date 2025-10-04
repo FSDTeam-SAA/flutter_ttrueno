@@ -14,7 +14,7 @@ class JoinRideController {
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   Rx<BaggageType?> baggageType = Rx<BaggageType?>(null);
   final String rideId;
-  final Function(Rider rider) onJoinSuccess;
+  final void Function(Rider rider) onJoinSuccess;
 
   Future<void> joinRide({
     required SnackbarNotifier? snackbarNotifier
@@ -22,6 +22,7 @@ class JoinRideController {
     if(baggageType.value == null){
       return;
     }
+    stn.setLoading();
     await serviceLocator<RideInterface>().joinRide(
       param: JoinRideReqParam(rideId: rideId, baggageType: baggageType.value!,)
     ).then((lr){

@@ -85,7 +85,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
       body: Column(
         children: [
-          ChatRideCardWidget(activeRide: widget.activeRideChatController.ride),
+          ChatRideCardWidget(activeRide: widget.activeRideChatController),
           //RideCard.fromRide(widget.activeRideChatController.ride.value, elevation: 0),
           Gap.h20,
           Divider(height: 4, color: AppColors.primarybutton),

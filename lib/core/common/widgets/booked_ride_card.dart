@@ -133,6 +133,11 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 RidersListWidget(
                   allowJoin: widget.allowJoin,
                   riders: bookedRideCardController.riders,
+                  joinRideStn: bookedRideCardController.joinRideController.stn,
+                  onJoin: (p0) {
+                    bookedRideCardController.joinRideController.baggageType.value = p0;
+                    bookedRideCardController.joinRideController.joinRide(snackbarNotifier: SnackbarNotifier(context: context));
+                  },
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),

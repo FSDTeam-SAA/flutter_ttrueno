@@ -10,6 +10,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/my_booking_controller.dart';
 import '../../../../core/common/widgets/booked_ride_card.dart';
+import '../../../../core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
 import '../../../../core/common/widgets/ride_card_widget.dart';
 import '../../model/booking.dart';
 
@@ -118,15 +119,27 @@ class _ActiveBookingListState extends State<_ActiveBookingList> {
         },
         child: Obx(
           () => ListView.builder(
-            itemCount: widget.bookedRideCardActionControllers.length,
+            itemCount: widget.bookedRideCardActionControllers.length + 1,
             itemBuilder: (context, index) {
+              if(index == widget.bookedRideCardActionControllers.length) {
+                  return Column(
+                      children: [
+                        ...List.generate(4, (_)=>
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: BookedRideCardSkeleton()
+                          )
+                        )
+                      ],
+                    );
+              }
               final bookedRideCardActionController = widget.bookedRideCardActionControllers[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: BookedRideCard.fromRide(
                   bookedRideCardActionController.ride,
                   bookedRideCardActionController,
-                  allowJoin: false,
+                  allowJoin: true,
                   elevation: 2,
                 ),
               );

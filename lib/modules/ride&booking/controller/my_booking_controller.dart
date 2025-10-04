@@ -27,9 +27,11 @@ class MyBookingController extends GetxController{
   _onLeaveSuccess() {
     myBookings();
   }
+
   _onFinishRideSuccess() {
     myBookings();
   }
+
   Future<void> myBookings({
     SnackbarNotifier? snackbarNotifier
   }) async{
@@ -43,6 +45,7 @@ class MyBookingController extends GetxController{
     if(_fetchCount > 1) {
       snackbarNotifier?.notifySuccess(message:  "Refreshing bookings...".tr());
     }
+    await Future.delayed(const Duration(seconds: 1));
     await serviceLocator<BookingInterface>().getMyBookings().then((lr) {
       handleFold(
         either: lr,

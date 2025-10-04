@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/controller_helper/loading_state.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
@@ -20,14 +21,17 @@ import '../model/rider.dart';
 import '../model/rider_joined_state.dart';
 import '../model/rider_left_state.dart';
 
+
+
 class InboxController extends GetxController{
 
   InboxController();
-  int _page = 1;
   int _limit = 10;
-  bool _isLoading = false;
+  Rx<Pagination<List<ActiveRideChatController>>> rideChatPages =
+      Rx<Pagination<List<ActiveRideChatController>>>(
+        NotInitialized<List<ActiveRideChatController>>([]),
+      );
   bool _isLastPage = false;
-  bool get isLoading => _isLoading;
 
   Future<void> init() async{
     await getAllChat();
@@ -38,36 +42,40 @@ class InboxController extends GetxController{
   StreamSubscription<RiderLeftState>? _riderLeftStreamSubscription;
   StreamSubscription<Message?>? _messageStreamSubscription;
   StreamSubscription<ChatRoom?>? _chatRoomStreamSubscription;
-  RxList<ActiveRideChatController> rideChats = RxList<ActiveRideChatController>([]);
   
   Future<void> getAllChat({bool? forceRefresh}) async{
     if(forceRefresh == true) {
-      _page = 1;
       _isLastPage = false;
-      _isLoading = false;
-      rideChats.clear();
+      rideChatPages.value = RefreshingPage([]);
+    } else {
+      if(_isLastPage) {
+        return;
+      }
+      if(rideChatPages.value is LoadingMorePage || rideChatPages.value is RefreshingPage) {
+        return;
+      }
+      rideChatPages.value = LoadingMorePage(rideChatPages.value.data);
     }
-    if(_isLoading || _isLastPage ) return;
-    _isLoading = true;
+
     await serviceLocator<MessageInterface>().getAllChat(
-      GetChatsParam(page: _page, limit: _limit)
+      GetChatsParam(page: rideChatPages.value.page, limit: _limit)
     ).then((lr) {
       handleFold(
         either: lr,
         processStatusNotifier: null,
         onSuccess: (data) {
-          rideChats.clear();
+          List<ActiveRideChatController> page = [];
           for(final chat in data) {
             final activeRideChat = ActiveRideChatController(chat: chat);
-            rideChats.add(activeRideChat);
+            page.add(activeRideChat);
             activeRideChat.init();
           }
-          rideChats.refresh();
-          _page++;
+          rideChatPages.refresh();
           if(data.length < _limit) {
             _isLastPage = true;
           }
-          _isLoading = false;
+          rideChatPages.value = Loaded(rideChatPages.value is RefreshingPage ? page : [...rideChatPages.value.data, ...page]); 
+          rideChatPages.refresh(); 
         },
       );
     });
@@ -76,34 +84,33 @@ class InboxController extends GetxController{
   _lisenToStreams() {
     // Rider join stream
     _riderJoinedStreamSubscription = serviceLocator<RideInterface>().riderJoinedStream().listen((riderState) {
-      rideChats.firstWhere((e) => e.rideId == riderState.rideId).addNewRider(riderState.rider);
+      rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.rideId).addNewRider(riderState.rider);
     });
     // Rider left stream
     _riderLeftStreamSubscription = serviceLocator<RideInterface>().riderLeftStream().listen((riderState) {
-      rideChats.firstWhere((e) => e.rideId == riderState.riderId).removeRider(riderState.riderId);
+      rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.riderId).removeRider(riderState.riderId);
     });
     _chatRoomStreamSubscription = serviceLocator<MessageInterface>().chatStream().listen((chatRoom) {
       if(chatRoom == null) return;
-      final index = rideChats.indexWhere((e) => e.chat.id == chatRoom.id);
+      final index = rideChatPages.value.data.indexWhere((e) => e.chat.id == chatRoom.id);
       if(index != -1) {
-        rideChats.add(ActiveRideChatController(chat: chatRoom));
+        rideChatPages.value.data.add(ActiveRideChatController(chat: chatRoom));
       } else {
-        rideChats[index] = ActiveRideChatController(chat: chatRoom);
-        rideChats.refresh();
+        rideChatPages.value.data[index] = ActiveRideChatController(chat: chatRoom);
+        rideChatPages.refresh();
       }
     });
     _messageStreamSubscription = serviceLocator<MessageInterface>().messageStream().listen((message) {
       if(message == null) return;
-      rideChats.firstWhere((e) => e.chat.id == message.chatId)._addMessage(message);
+      rideChatPages.value.data.firstWhere((e) => e.chat.id == message.chatId)._addMessage(message);
     });
-
-
   }
 
   @override
   void dispose() {
     super.dispose();
-    //_riderStreamStreamSubscription?.cancel();
+    _riderJoinedStreamSubscription?.cancel();
+    _riderLeftStreamSubscription?.cancel();
     _chatRoomStreamSubscription?.cancel();
     _messageStreamSubscription?.cancel();
   }
@@ -116,7 +123,7 @@ class ActiveRideChatController extends GetxController{
     participants.addAll(chat.participants);
     eligibleToLeave.value = chat.participants.any((e) => e.userId == Get.find<ProfileDataController>().userProfile.value?.id);
     leaveRideController = LeaveRideController(rideId: chat.id, onLeaveSuccess: () {
-      
+      Get.find<InboxController>().getAllChat(forceRefresh: true);
     },);
   }
 
