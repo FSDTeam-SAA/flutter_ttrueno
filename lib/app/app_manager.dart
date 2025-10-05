@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
-import 'core/common/controller/inbox_controller.dart';
-import 'core/constants/api_endpoints.dart';
-import 'core/notifiers/snackbar_notifier.dart';
-import 'core/services/app_pigeon/app_pigeon.dart';
-import 'init_dependency.dart';
-import 'main.dart';
-import 'modules/auth/interface/auth_inerface.dart';
-import 'modules/ride&booking/controller/my_booking_controller.dart';
-import 'routing/route_names.dart';
+import '../core/common/controller/inbox_controller.dart';
+import '../core/constants/api_endpoints.dart';
+import '../core/notifiers/snackbar_notifier.dart';
+import '../core/services/app_pigeon/app_pigeon.dart';
+import '../init_dependency.dart';
+import '../main.dart';
+import '../modules/auth/interface/auth_inerface.dart';
+import '../modules/ride&booking/controller/my_booking_controller.dart';
+import '../routing/route_names.dart';
 
 class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;

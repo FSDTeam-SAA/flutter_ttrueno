@@ -11,7 +11,7 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_im
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
-import '../../../app_manager.dart';
+import '../../../app/app_manager.dart';
 import 'car_divider_widget.dart';
 import '../../../modules/message/ui/widget/alart_message_widget.dart';
 import '../../theme/app_colors.dart';

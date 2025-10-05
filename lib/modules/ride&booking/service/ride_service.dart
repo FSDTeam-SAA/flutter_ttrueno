@@ -1,6 +1,6 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
@@ -16,11 +16,12 @@ import '../../../core/common/model/rider_joined_state.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/join_ride_req_response.dart';
+import '../model/rate_ride_req_param.dart';
 
 final class RideService extends RideInterface {
-  final AppPigeon appPigeon;
-
   RideService(this.appPigeon);
+
+  final AppPigeon appPigeon;
 
   @override
   FutureRequest<Success<RideModel>> createRide(CreateRideReq params) async {
@@ -162,10 +163,18 @@ final class RideService extends RideInterface {
   Stream<RiderLeftState> riderLeftStream() {
     return appPigeon.listen("userLeft").map((e) => RiderLeftState.fromJson(e));
   }
-
-  // @override
-  // Stream<RiderStreamState> riderStream() {
-  //   return appPigeon.listen("rider_state").map((e) => RiderStreamState.fromJson(e));
-  // }
+  
+  @override
+  FutureRequest<Success> rateRide({required RateRideReqParam param}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.rateRide(param.rideId),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
 }
 

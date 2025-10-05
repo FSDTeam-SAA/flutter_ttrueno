@@ -11,7 +11,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/message/model/message.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/send_message_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 
-import '../../../../app_manager.dart';
+import '../../../../app/app_manager.dart';
 import '../../../../core/notifiers/snackbar_notifier.dart';
 import '../../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../../core/theme/app_gap.dart';

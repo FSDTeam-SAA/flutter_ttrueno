@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/bottom_nab_bar_page.dart';
+import 'package:ttrueno_fo827e642a0c4/app/view/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/login_screen_controller.dart';

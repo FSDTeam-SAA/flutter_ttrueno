@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ttrueno_fo827e642a0c4/app_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/app/app_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';

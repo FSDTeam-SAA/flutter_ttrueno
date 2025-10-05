@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/failure.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/failure.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';

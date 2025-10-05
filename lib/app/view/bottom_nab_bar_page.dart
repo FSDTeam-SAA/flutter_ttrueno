@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/inbox_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/search_ride_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/profile_screen.dart';
 
-import 'modules/ride&booking/ui/view/booking_view.dart';
+import '../../modules/ride&booking/ui/view/booking_view.dart';
 
 
 class BottomNabBarScreen extends StatefulWidget {
@@ -17,7 +16,6 @@ class BottomNabBarScreen extends StatefulWidget {
 }
 
 class _BottomNabBarScreenState extends State<BottomNabBarScreen> with SingleTickerProviderStateMixin {
-  late int _selectedIndex;
 
   late final TabController _tabController ;
 
@@ -32,7 +30,6 @@ class _BottomNabBarScreenState extends State<BottomNabBarScreen> with SingleTick
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _selectedIndex = widget.initialIndex;
   }
 
   @override

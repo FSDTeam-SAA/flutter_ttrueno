@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:ttrueno_fo827e642a0c4/core/base/controller_helper/loading_state.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/pagination.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';

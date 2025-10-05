@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/booking_interface.dart';

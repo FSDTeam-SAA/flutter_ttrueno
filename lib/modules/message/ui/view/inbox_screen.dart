@@ -13,7 +13,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
 
-import '../../../../core/base/controller_helper/loading_state.dart';
+import '../../../../core/base/pagination.dart';
 import '../../../../core/common/controller/inbox_controller.dart';
 import '../../../../core/common/model/rider.dart';
 

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'exceptions.dart';
 import 'failure.dart';
 
-abstract base class ErrorCatcher {
+abstract base class BaseRepository {
   Future<Either<DataCRUDFailure, T>> asyncTryCatch<T>({required Future<T> Function() tryFunc, }) async{
       try {
         return await tryFunc().then((value) => Right(value));
