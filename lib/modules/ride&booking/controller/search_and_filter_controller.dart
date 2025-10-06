@@ -210,10 +210,11 @@ class SearchRideController extends GetxController {
           }
           searchResults.value = data;
           searchResults.refresh();
-          isSearching.value = false;
+          
         },
       );
     });
+    isSearching.value = false;
     Future.delayed(Duration(seconds: 3)).then((_){processStatusNotifier?.setEnabled();});
   }
 

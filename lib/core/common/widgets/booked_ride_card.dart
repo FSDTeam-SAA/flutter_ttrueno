@@ -141,14 +141,14 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
-                if(widget.ride.status != Status.completed && widget.ride.participants.any((e)=> e.userId == currentUserId)) SizedBox(
+                if(bookedRideCardController.eligibleToFinish) SizedBox(
                   width: double.infinity,
                   height: 120,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildLeaveAndChatOption(),
-                      if(bookedRideCardController.eligibleToFinish) _buildFinishRideOption(),
+                      _buildFinishRideOption(),
                     ],
                   ),
                 ),

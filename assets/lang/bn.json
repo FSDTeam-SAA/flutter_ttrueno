@@ -386,8 +386,9 @@
   "Genaral Setting ": "সাধারণ সেটিংস",
   "Passengers ": "পাসেনজার",
   "Create": "তৈরি করুন",
-  "Update": "পরিবর্তন করুন"
-  
+  "Update": "পরিবর্তন করুন",
+  "No more rides.": "আরো রাইড নেই।",
+  "No rides found!": "কোনো রাইড পাওয়া যায়নি!"
 
   
 }

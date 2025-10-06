@@ -42,6 +42,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
+            tooltip: "Filter Rides",
             icon: Image.asset(
               'assets/images/filter.png',
               width: 24,
@@ -57,7 +58,6 @@ class _SearchResultsViewState extends State<SearchResultsView> {
           ),
         ],
       ),
-
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SafeArea(
@@ -116,7 +116,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          searchRideController.selectedDateTime?.dmeAthm ?? '',
+                          searchRideController.selectedDateTime?.dmyAth24 ?? '',
                           style: AppText.smMedium_14_600.copyWith(
                             color: AppColors.secondaryTextblack,
                           ),
@@ -159,47 +159,34 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                 //     ),
                 //   ],
                 // ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    runAlignment: WrapAlignment.start,
                     children: [
-                      // Departure Flex Distance
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: SizedBox(
-                          height:
-                              48, // Adjust height as needed to fit your chip size
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                FilterChipWidget(
-                                  label: 'Departure Flex : 200 meters',
-                                  onTap: () {
-                                    searchRideController.departureFlexKm.value = 0.2;
-                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                                  },
-                                ),
-                                SizedBox(width: 8),
-                                FilterChipWidget(
-                                  label: 'Departure Flex : 30 min',
-                                  onTap: () {
-                                    searchRideController.departureFlexMinutes.value = 30;
-                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                                  },  
-                                ),
-                                SizedBox(width: 8),
-                                FilterChipWidget(
-                                  label: 'Arrival Flex : 200 meters',
-                                  onTap: () {
-                                    searchRideController.arrivalFlexKm.value = 0.2;
-                                    searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      FilterChipWidget(
+                        label: 'Departure Flex : 200 meters',
+                        onTap: () {
+                          searchRideController.departureFlexKm.value = 0.2;
+                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                        },
+                      ),
+                      FilterChipWidget(
+                        label: 'Departure Flex : 30 min',
+                        onTap: () {
+                          searchRideController.departureFlexMinutes.value = 30;
+                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                        },  
+                      ),
+                      FilterChipWidget(
+                        label: 'Arrival Flex : 200 meters',
+                        onTap: () {
+                          searchRideController.arrivalFlexKm.value = 0.2;
+                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
+                        },
                       ),
                     ],
                   ),
@@ -231,7 +218,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                               child: searchRideController.isSearching.value ? CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(AppColors.primarybutton),
                               ) : Text(
-                                'No more rides',
+                                searchRideController.searchResults.isEmpty ? "No rides found!".tr() : 'No more rides.'.tr(),
                                 style: TextStyle(color: Colors.grey),
                               ),
                             ),

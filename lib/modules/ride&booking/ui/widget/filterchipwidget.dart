@@ -10,21 +10,15 @@ class FilterChipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primarybutton),
-        //color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        //border: Border.all(color: AppColors.primarybutton),
+        color: Colors.grey.shade300,
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: () {
-          onTap();
-        },
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Text(
-            label,
-            style: TextStyle(color: AppColors.secondaryText, fontSize: 14),
-          ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Text(
+          label,
+          style: TextStyle(color: AppColors.secondaryText, fontSize: 14),
         ),
       ),
     );

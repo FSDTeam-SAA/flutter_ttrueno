@@ -8,6 +8,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import '../../../../core/theme/app_gap.dart';
 
 class ShareExperienceScreen extends StatefulWidget {
+  
   const ShareExperienceScreen({super.key});
 
   @override

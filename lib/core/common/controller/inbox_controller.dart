@@ -34,7 +34,7 @@ class InboxController extends GetxController{
   bool _isLastPage = false;
 
   Future<void> init() async{
-    await getAllChat();
+    await getAllChat(forceRefresh: true);
     _lisenToStreams();
   }
 
@@ -66,6 +66,7 @@ class InboxController extends GetxController{
         onSuccess: (data) {
           List<ActiveRideChatController> page = [];
           for(final chat in data) {
+            debugPrint("Chat Room: ${chat.id}, participants: ${chat.participants.length}");
             final activeRideChat = ActiveRideChatController(chat: chat);
             page.add(activeRideChat);
             activeRideChat.init();

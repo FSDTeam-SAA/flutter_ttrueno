@@ -386,5 +386,14 @@
   "Genaral Setting ": "General Setting",
   "Passengers ": "Passengers",
   "Create": "Create",
-  "Update": "Update"
+  "Update": "Update",
+  "Seats Available": "Seats Available",
+  "Baggage": "Baggage",
+  "Select Date": "Select Date",
+  "Select Time": "Select Time",
+  "Select Seats": "Select Seats",
+  "Select Passengers": "Select Passengers",
+  "Select Location": "Select Location",
+  "No more rides.": "No more rides.",
+  "No rides found!": "No rides found!"
 }

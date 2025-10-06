@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/booking.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
 import '../../../modules/profile/controller/profile_data_controller.dart';
@@ -12,25 +13,28 @@ import '../../notifiers/snackbar_notifier.dart';
 import '../model/rider.dart';
 
 class BookedRideCardActionController {
-  BookedRideCardActionController({required this.ride, required this.onLeaveSuccess, required this.onFinishRideSuccess}) {
+  BookedRideCardActionController({required this.booking, required this.onLeaveSuccess, required this.onFinishRideSuccess}) {
     final String currentUserId = Get.find<ProfileDataController>().userProfile.value?.id ?? "";
-    for(final rider in ride.participants){
+    for(final rider in booking.ride.participants){
       if(rider.userId == currentUserId) eligibleForChat.value = true;
       riders.add(rider);
     }
-    finishRideController = FinishRideController(rideId: ride.id, onFinishRideSuccess: onFinishRideSuccess);
-    leaveRideController = LeaveRideController(rideId: ride.id, onLeaveSuccess: onLeaveSuccess);
-    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: onJoinSuccess);
+    finishRideController = FinishRideController(rideId: booking.id, onFinishRideSuccess: onFinishRideSuccess);
+    leaveRideController = LeaveRideController(rideId: booking.id, onLeaveSuccess: onLeaveSuccess);
+    joinRideController = JoinRideController(rideId: booking.id, onJoinSuccess: onJoinSuccess);
     // eligibility to finish, rate-ride
-    if(currentUserId == ride.creator?.id) {
+    if(booking.status == Status.active) {
       eligibleToFinish = true;
+      eligibleForChat.value = true;
     }
-    if(ride.status == Status.completed) {
+    if(booking.status == Status.completed) {
       eligibleForRatingRide = true;
+      eligibleForChat.value = false;
+      eligibleToFinish = false;
     }
   }
 
-  final RideModel ride;
+  final Booking booking;
   final VoidCallback onLeaveSuccess;
   final VoidCallback onFinishRideSuccess;
 

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
@@ -11,8 +9,6 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/my_booking_controller.dart';
 import '../../../../core/common/widgets/booked_ride_card.dart';
 import '../../../../core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
-import '../../../../core/common/widgets/ride_card_widget.dart';
-import '../../model/booking.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -25,13 +21,15 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late final TabController _tabController;
-  final MyBookingController myBookingController = Get.find<MyBookingController>();
-
+  final ActiveBookingController activeBookingControllers = Get.find<ActiveBookingController>();
+  final CompleteBookingController completeBookingControllers = Get.find<CompleteBookingController>();
+  
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    myBookingController.myBookings(snackbarNotifier: SnackbarNotifier(context: context));
+    activeBookingControllers.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
+    completeBookingControllers.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
   }
 
   @override
@@ -42,6 +40,7 @@ class _BookingScreenState extends State<BookingScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -70,10 +69,10 @@ class _BookingScreenState extends State<BookingScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          _ActiveBookingList(bookedRideCardActionControllers: myBookingController.activeBookings, onRefresh: myBookingController.myBookings),
+          _ActiveBookingList(bookedRideCardActionControllers: activeBookingControllers.bookings, onRefresh: activeBookingControllers.getBookings),
           _CompletedBookingList(
-            bookedRideCardActionControllers: myBookingController.completedBookings,
-            onRefresh: myBookingController.myBookings,
+            bookedRideCardActionControllers: completeBookingControllers.bookings,
+            onRefresh: completeBookingControllers.getBookings,
           ),
         ],
       ),
@@ -84,8 +83,6 @@ class _BookingScreenState extends State<BookingScreen>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
-
-
 
 class _ActiveBookingList extends StatefulWidget {
   final RxList<BookedRideCardActionController> bookedRideCardActionControllers;
@@ -137,7 +134,7 @@ class _ActiveBookingListState extends State<_ActiveBookingList> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: BookedRideCard.fromRide(
-                  bookedRideCardActionController.ride,
+                  bookedRideCardActionController.booking.ride,
                   bookedRideCardActionController,
                   allowJoin: true,
                   elevation: 2,
@@ -177,7 +174,6 @@ class _CompletedBookingListState extends State<_CompletedBookingList> {
   @override
   Widget build(BuildContext context) {
     
-
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async{
@@ -191,7 +187,7 @@ class _CompletedBookingListState extends State<_CompletedBookingList> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: BookedRideCard.fromRide(
-                  bookedCardController.ride,
+                  bookedCardController.booking.ride,
                   bookedCardController,
                   allowJoin: false,
                   elevation: 2,

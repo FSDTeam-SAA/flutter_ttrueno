@@ -387,5 +387,13 @@
   "Passengers ": "Pasajeros",
   "Create": "Crear",
   "Update": "Actualizar",
-  "Seats Available": "Asientos disponibles"
+  "Seats Available": "Asientos disponibles",
+  "Baggage": "Equipaje",
+  "Select Date": "Seleccionar fecha",
+  "Select Time": "Seleccionar hora",
+  "Select Seats": "Seleccionar asientos",
+  "Select Passengers": "Seleccionar pasajeros",
+  "Select Location": "Seleccionar ubicación",
+  "No more rides.": "No hay más viajes.",
+  "No rides found!": "¡No se encontraron viajes!"
 }

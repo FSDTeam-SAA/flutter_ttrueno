@@ -134,14 +134,12 @@ class _ChatBriefWidget extends StatelessWidget {
   
   
   double chatHeadWidthOffsetFromLeft({required double containerWidth, required double chatHeadDiameter, required int index, required int totalItems}) {
-    final minOverLayOffset = 16;
+    final minOverLayOffset = 24;
     final togetherHeadsWidth = (chatHeadDiameter * totalItems) - (minOverLayOffset * (totalItems - 1));
-    debugPrint("togetherHeadsWidth: $togetherHeadsWidth, containerWidth: $containerWidth");
     final minusVal = togetherHeadsWidth - containerWidth;
     final finalOverlayOffset = minOverLayOffset + ((minusVal <= 0) ? 0 : (minusVal / max(1, (totalItems - 1))));
     final double emptySpace = containerWidth - ((totalItems * chatHeadDiameter) - ((totalItems - 1) * finalOverlayOffset));
     final double leftOffset = emptySpace + ((index * chatHeadDiameter) - (max(0, (index)) * finalOverlayOffset));
-    debugPrint("leftOffset: $leftOffset");
     return leftOffset;
   }
 

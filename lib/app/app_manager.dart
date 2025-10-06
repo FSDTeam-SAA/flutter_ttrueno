@@ -64,13 +64,18 @@ class AppManager extends GetxController {
     if(Get.isRegistered<InboxController>()) {
       Get.delete<InboxController>();
     }
-    if(Get.isRegistered<MyBookingController>()) {
-      Get.delete<MyBookingController>();
+    if(Get.isRegistered<ActiveBookingController>()) {
+      Get.delete<ActiveBookingController>();
     }
+    if(Get.isRegistered<CompleteBookingController>()) {
+      Get.delete<CompleteBookingController>();
+    }
+    
     Get.put(SearchRideController());
     Get.put(ProfileDataController());
     Get.put(InboxController());
-    Get.put(MyBookingController());
+    Get.put(ActiveBookingController(null));
+    Get.put(CompleteBookingController(null));
   }
 
   Stream<AuthStatus?> getAuthStream({SnackbarNotifier? snackbarNotifier}) {

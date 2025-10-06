@@ -182,15 +182,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
 
-              Divider(color: Colors.grey.shade300, thickness: 1),
-
-              _buildProfileOption(
-                context,
-                icon: Icons.settings_outlined,
-                title: 'Genaral Setting'.tr(),
-                onTap: () {},
-              ),
               Gap.h8,
+
               _buildProfileOption(
                 context,
                 icon: Icons.lock_outline,
@@ -202,18 +195,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       builder: (context) => const ChangePasswordPage(),
                     ),
                   );
-                },
-              ),
-              _buildProfileOption(
-                context,
-                icon: Icons.notifications_none,
-                title: 'Notification'.tr(),
-                isToggle: true,
-                toggleValue: _notificationEnabled,
-                onToggleChanged: (value) {
-                  setState(() {
-                    _notificationEnabled = value;
-                  });
                 },
               ),
 
@@ -245,20 +226,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
-              Gap.h8,
-              _buildProfileOption(
-                context,
-                icon: Icons.star_border,
-                title: 'Rate Us'.tr(),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SplashScreen(),
-                    ),
-                  );
-                },
-              ),
+              // Gap.h8,
+              // _buildProfileOption(
+              //   context,
+              //   icon: Icons.star_border,
+              //   title: 'Rate Us'.tr(),
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const SplashScreen(),
+              //       ),
+              //     );
+              //   },
+              // ),
 
               Gap.h32,
               SizedBox(
