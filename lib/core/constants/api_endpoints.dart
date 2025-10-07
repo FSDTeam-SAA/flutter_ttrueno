@@ -94,10 +94,10 @@ base class ApiEndpoints {
 
 class _RemoteServer {
   static const String socketUrl =
-      'https://ttrueno-backend-5nhs.onrender.com';
+      'https://ttrueno-backend.onrender.com';
 
   static const String baseUrl =
-      'https://ttrueno-backend-5nhs.onrender.com/api/v1';
+      'https://ttrueno-backend.onrender.com/api/v1';
 }
 
 class _LocalHostWifi {

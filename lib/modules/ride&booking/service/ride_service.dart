@@ -156,7 +156,7 @@ final class RideService extends RideInterface {
 
   @override
   Stream<RiderJoinedState> riderJoinedStream() {
-    return appPigeon.listen("rider_joined").map((e) => RiderJoinedState.fromJson(e));
+    return appPigeon.listen("userJoined").map((e) => RiderJoinedState.fromJson(e));
   }
 
   @override

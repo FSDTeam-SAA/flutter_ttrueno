@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
@@ -18,9 +18,9 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_gap.dart';
 
 class ChatRideCardWidget extends StatefulWidget {
-  final ActiveRideChatController activeRide;
+  final ActiveRideChatController activeRideChatController;
   
-  const ChatRideCardWidget({super.key, required this.activeRide});
+  const ChatRideCardWidget({super.key, required this.activeRideChatController});
 
   @override
   State<ChatRideCardWidget> createState() => _ChatRideCardWidgetState();
@@ -32,15 +32,15 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
     return Column(
       children: [
         _LocationHeader(
-          fromLocation: widget.activeRide.ride.value.startLocation.address ?? "",
-          toLocation: widget.activeRide.ride.value.endLocation.address ?? "",
+          fromLocation: widget.activeRideChatController.ride.value.startLocation.address ?? "",
+          toLocation: widget.activeRideChatController.ride.value.endLocation.address ?? "",
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: [
               Text(
-                DateFormat.yMMMMEEEEd().format(widget.activeRide.ride.value.departureTime),
+                DateFormat.yMMMMEEEEd().format(widget.activeRideChatController.ride.value.departureTime),
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColors.primaryTextblack,
@@ -48,7 +48,7 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
               ),
               Gap.w12,
               Text(
-                DateFormat.Hm().format(widget.activeRide.ride.value.departureTime),
+                DateFormat.Hm().format(widget.activeRideChatController.ride.value.departureTime),
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColors.primaryTextblack,
@@ -62,7 +62,7 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
           child: CarDivider(),
         ),
         Gap.h12,
-        RidersListWidget(allowJoin: true, avatarSize: 50, riders: widget.activeRide.participants),
+        RidersListWidget(allowJoin: true, avatarSize: 50, riders: widget.activeRideChatController.participants),
         // _UserAvatarsRow(
         //   joinedUsers: widget.activeRide.value.participants,
         // ),

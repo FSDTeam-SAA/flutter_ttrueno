@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
-import '../core/common/controller/inbox_controller.dart';
+import '../core/common/controller/inbox_controller/inbox_controller.dart';
 import '../core/constants/api_endpoints.dart';
 import '../core/notifiers/snackbar_notifier.dart';
 import '../core/services/app_pigeon/app_pigeon.dart';
@@ -64,18 +64,14 @@ class AppManager extends GetxController {
     if(Get.isRegistered<InboxController>()) {
       Get.delete<InboxController>();
     }
-    if(Get.isRegistered<ActiveBookingController>()) {
-      Get.delete<ActiveBookingController>();
-    }
-    if(Get.isRegistered<CompleteBookingController>()) {
-      Get.delete<CompleteBookingController>();
+    if(Get.isRegistered<MyBookingControllers>()) {
+      Get.delete<MyBookingControllers>();
     }
     
     Get.put(SearchRideController());
     Get.put(ProfileDataController());
     Get.put(InboxController());
-    Get.put(ActiveBookingController(null));
-    Get.put(CompleteBookingController(null));
+    Get.put(MyBookingControllers());
   }
 
   Stream<AuthStatus?> getAuthStream({SnackbarNotifier? snackbarNotifier}) {

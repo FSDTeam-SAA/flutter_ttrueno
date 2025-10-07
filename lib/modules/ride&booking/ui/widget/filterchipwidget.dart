@@ -3,8 +3,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
 class FilterChipWidget extends StatelessWidget {
   final String label;
-  final VoidCallback onTap;
-  const FilterChipWidget({super.key, required this.label, required this.onTap});
+  const FilterChipWidget({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {

@@ -234,9 +234,7 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                               const Spacer(),
                               IconButton(
                                 onPressed: () {
-                                  if (passengers > 1) {
-                                    searchRideController.decrementPassengers();
-                                  }
+                                  searchRideController.decrementPassengers();
                                 },
                                 icon: const Icon(Icons.remove_circle_outline),
                               ),

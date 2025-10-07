@@ -36,12 +36,15 @@ class NotificationScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
                 ),
-                child: const Text(
-                  "read all",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "Read all",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

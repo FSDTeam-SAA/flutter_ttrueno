@@ -1,5 +1,5 @@
 sealed class Pagination<T> {
-  final T data;
+  final List<T> data;
   int page = 1;
   Pagination(this.data);
 }

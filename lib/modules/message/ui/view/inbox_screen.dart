@@ -6,6 +6,7 @@ import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/list/paginated_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/loading/inbox_chat_skeleton.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -14,7 +15,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
 
 import '../../../../core/base/pagination.dart';
-import '../../../../core/common/controller/inbox_controller.dart';
+import '../../../../core/common/controller/inbox_controller/inbox_controller.dart';
 import '../../../../core/common/model/rider.dart';
 
 class InboxScreen extends StatefulWidget {
@@ -54,65 +55,20 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return chatListController.getAllChat(forceRefresh: true);
-        },
-        child: ObxValue((rideChatPages){
-          debugPrint("rideChatPages: ${rideChatPages.value.runtimeType}");
-          if(rideChatPages.value is RefreshingPage<List<ActiveRideChatController>>) {
-            debugPrint("rideChatPages is RefreshingPage");
-            return ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return InboxChatSkeleton();
-              },
-            );
-          } else if(rideChatPages.value is Loaded<List<ActiveRideChatController>> && rideChatPages.value.data.isEmpty) {
-            return Center(
-              child: Text(
-                'No chats available.'.tr(),
-                style: AppText.mdRegular_16_400.copyWith(
-                  color: AppColors.primaryTextblack,
-                ),
-              ),
-            );
-          } else {
-            debugPrint("rideChatPages data length: ${rideChatPages.value.data.length}");
-            return ListView.separated(
-              itemCount: rideChatPages.value.data.length,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              separatorBuilder: (context, index) =>
-                  Divider(height: 1, color: Colors.grey.shade300),
-              itemBuilder: (context, index) {
-                final rideChat = rideChatPages.value.data[index];
-                final participants = rideChatPages.value.data[index].participants;
-                return Column(
-                  children: [
-                    _ChatBriefWidget(
-                      rideChat: rideChat,
-                      participants: participants,
-                    ),
-                    if(rideChatPages.value is RefreshingPage<List<ActiveRideChatController>>) 
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return InboxChatSkeleton();
-                        },
-                      )
-                    
-                  ],
-                );
-              },
-            );
-          
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PaginatedListWidget(
+          pagination: chatListController.rideChatPages,
+          onRefresh: () => chatListController.getAllChat(forceRefresh: true), 
+          skeleton: InboxChatSkeleton(), skeletonCount: 4, 
+          builder: (index, rideChat) {
+            return _ChatBriefWidget(
+                rideChat: rideChat,
+                participants: rideChat.participants,
+              );
           }
-        },
-          
-          chatListController.rideChatPages
         ),
-      ),
+      )
     );
   }
   
@@ -167,7 +123,6 @@ class _ChatBriefWidget extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  
                   spacing: 4,
                   children: [
                     Row(
@@ -181,9 +136,7 @@ class _ChatBriefWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Flexible(child: Text(rideChat.ride.value.startLocation.address ?? "..", maxLines: 2, style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),)),
-                              
-                              Text("To ".tr(),style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),),
-                              
+                              Text("To ".tr(), style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack,),),
                               Flexible(child: Text(rideChat.ride.value.endLocation.address ?? "..", maxLines: 2, style: TextStyle(fontSize: 18, color: AppColors.primaryTextblack),)),
                             ],
                           ),

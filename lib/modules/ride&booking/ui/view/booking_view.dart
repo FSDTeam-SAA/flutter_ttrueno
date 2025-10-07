@@ -2,34 +2,32 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/booked_ride_card_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/my_booking_controller.dart';
 import '../../../../core/common/widgets/booked_ride_card.dart';
+import '../../../../core/common/widgets/list/paginated_list.dart';
 import '../../../../core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _BookingScreenState createState() => _BookingScreenState();
+  State<BookingScreen> createState() => _BookingScreenState();
 }
 
 class _BookingScreenState extends State<BookingScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late final TabController _tabController;
-  final ActiveBookingController activeBookingControllers = Get.find<ActiveBookingController>();
-  final CompleteBookingController completeBookingControllers = Get.find<CompleteBookingController>();
+  final MyBookingControllers bookingControllers = Get.find<MyBookingControllers>();
   
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    activeBookingControllers.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
-    completeBookingControllers.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
+    bookingControllers.active.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
+    bookingControllers.completed.getBookings(snackbarNotifier: SnackbarNotifier(context: context));
   }
 
   @override
@@ -69,10 +67,39 @@ class _BookingScreenState extends State<BookingScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          _ActiveBookingList(bookedRideCardActionControllers: activeBookingControllers.bookings, onRefresh: activeBookingControllers.getBookings),
-          _CompletedBookingList(
-            bookedRideCardActionControllers: completeBookingControllers.bookings,
-            onRefresh: completeBookingControllers.getBookings,
+          PaginatedListWidget(
+            pagination: bookingControllers.active.paginatedbookedRideControllers,
+            skeleton: BookedRideCardSkeleton(),
+            skeletonCount: 4,
+            onRefresh:()=> bookingControllers.active.getBookings(forceRefresh: true),
+            builder: (index, data) {
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: BookedRideCard.fromRide(
+                    data.booking.ride,
+                    data,
+                    allowJoin: true,
+                    elevation: 2,
+                  ),
+                );
+            },
+          ),
+          PaginatedListWidget(
+            pagination: bookingControllers.completed.paginatedbookedRideControllers,
+            skeleton: BookedRideCardSkeleton(),
+            skeletonCount: 4,
+            onRefresh:()=> bookingControllers.completed.getBookings(forceRefresh: true),
+            builder: (index, data) {
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: BookedRideCard.fromRide(
+                    data.booking.ride,
+                    data,
+                    allowJoin: false,
+                    elevation: 2,
+                  ),
+                );
+            },
           ),
         ],
       ),
@@ -84,120 +111,3 @@ class _BookingScreenState extends State<BookingScreen>
   bool get wantKeepAlive => true;
 }
 
-class _ActiveBookingList extends StatefulWidget {
-  final RxList<BookedRideCardActionController> bookedRideCardActionControllers;
-  final VoidCallback onRefresh;
-  const _ActiveBookingList({super.key, required this.bookedRideCardActionControllers, required this.onRefresh});
-
-  @override
-  State<_ActiveBookingList> createState() => _ActiveBookingListState();
-}
-
-class _ActiveBookingListState extends State<_ActiveBookingList> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    
-
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async{
-          widget.onRefresh();
-        },
-        child: Obx(
-          () => ListView.builder(
-            itemCount: widget.bookedRideCardActionControllers.length + 1,
-            itemBuilder: (context, index) {
-              if(index == widget.bookedRideCardActionControllers.length) {
-                  return Column(
-                      children: [
-                        ...List.generate(4, (_)=>
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: BookedRideCardSkeleton()
-                          )
-                        )
-                      ],
-                    );
-              }
-              final bookedRideCardActionController = widget.bookedRideCardActionControllers[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: BookedRideCard.fromRide(
-                  bookedRideCardActionController.booking.ride,
-                  bookedRideCardActionController,
-                  allowJoin: true,
-                  elevation: 2,
-                ),
-              );
-            },
-          )
-        ),
-      ),
-    
-    );
-  }
-}
-
-
-class _CompletedBookingList extends StatefulWidget {
-  final RxList<BookedRideCardActionController> bookedRideCardActionControllers;
-  final VoidCallback onRefresh;
-  const _CompletedBookingList({super.key, required this.bookedRideCardActionControllers, required this.onRefresh});
-
-  @override
-  State<_CompletedBookingList> createState() => _CompletedBookingListState();
-}
-
-class _CompletedBookingListState extends State<_CompletedBookingList> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async{
-          widget.onRefresh();
-        },
-        child: Obx(
-          () => ListView.builder(
-            itemCount: widget.bookedRideCardActionControllers.length,
-            itemBuilder: (context, index) {
-              final bookedCardController = widget.bookedRideCardActionControllers[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: BookedRideCard.fromRide(
-                  bookedCardController.booking.ride,
-                  bookedCardController,
-                  allowJoin: false,
-                  elevation: 2,
-                ),
-              );
-            },
-          )
-        ),
-      ),
-    
-    );
-  }
-}

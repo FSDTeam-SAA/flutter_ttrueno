@@ -22,11 +22,11 @@ class FinishRideController {
         either: lr,
         processStatusNotifier: stn,
         successSnackbarNotifier: snackbarNotifier,
+        errorSnackbarNotifier: snackbarNotifier,
         onSuccess: (data) {
           onFinishRideSuccess();
         },
       );
-
       Future.delayed(const Duration(seconds: 1)).then((_) {
         stn.setEnabled();
       });

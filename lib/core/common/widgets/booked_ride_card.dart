@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/booked_ride_card_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
@@ -141,7 +142,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
-                if(bookedRideCardController.eligibleToFinish) SizedBox(
+                SizedBox(
                   width: double.infinity,
                   height: 120,
                   child: Column(
@@ -186,97 +187,106 @@ class _BookedRideCardState extends State<BookedRideCard> {
   }
 
   Widget _buildFinishRideOption() {
+    
     return Expanded(
-      child: OutlinedButton.icon(
-        onPressed: () {
-          bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
-        },
-        style: OutlinedButton.styleFrom(
-          side: BorderSide.none,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-        ),
-        icon: RIcon(
-          key: UniqueKey(),
-          iconWidget: Icon(
-            Icons.check_box_outlined,
-            size: 24,
-            color: Colors.green,
-          ),
-          loadingStateWidget: SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(
-              color: Colors.black,
+      child: Opacity(
+          opacity: bookedRideCardController.eligibleToFinish ? 1.0 : 0.3,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
+            },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide.none,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+            ),
+            icon: RIcon(
+              key: UniqueKey(),
+              iconWidget: Icon(
+                Icons.check_box_outlined,
+                size: 24,
+                color: Colors.green,
+              ),
+              loadingStateWidget: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              ),
+              processStatusNotifier: bookedRideCardController.finishRideStn,
+            ),
+            label: Text(
+              'Finish Ride'.tr(),
+              style: AppText.xl2Medium_22_500.copyWith(
+                color: Colors.green,
+              ),
             ),
           ),
-          processStatusNotifier: bookedRideCardController.finishRideStn,
         ),
-        label: Text(
-          'Finish Ride'.tr(),
-          style: AppText.xl2Medium_22_500.copyWith(
-            color: Colors.green,
-          ),
-        ),
-      ),
     );
   }
 
   Widget _buildLeaveAndChatOption() {
+    final opacityValue = bookedRideCardController.booking.ride.departureTime.isAfter(DateTime.now()) ? 1 : 0.5;
+    debugPrint(opacityValue.toString());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        TextButton.icon(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
+        Opacity(
+          opacity: opacityValue.toDouble(),
+          child: TextButton.icon(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                ),
+                builder: (context) => ConfirmActionBottomSheet(
+                  message: 'Are you sure?'.tr(),
+                  confirmButtonText: 'Confirm'.tr(),
+                  cancelButtonText: 'Cancel'.tr(),
+                  onConfirm: () {
+                    bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
+                    // Navigator.pop(
+                    //   context,
+                    // );
+                  },
+                  onCancel: () {
+                    // Navigator.pop(
+                    //   context,
+                    // );
+                  },
+                ),
+              );
+            },
+            icon: RIcon(
+              key: UniqueKey(),
+              iconWidget: Image.asset(
+                'assets/images/leave.png',
+                width: 24,
+                height: 24,
+              ),
+              loadingStateWidget: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
                 ),
               ),
-              builder: (context) => ConfirmActionBottomSheet(
-                message: 'Are you sure?'.tr(),
-                confirmButtonText: 'Confirm'.tr(),
-                cancelButtonText: 'Cancel'.tr(),
-                onConfirm: () {
-                  bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-                onCancel: () {
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-              ),
-            );
-          },
-          icon: RIcon(
-            key: UniqueKey(),
-            iconWidget: Image.asset(
-              'assets/images/leave.png',
-              width: 24,
-              height: 24,
+              processStatusNotifier: bookedRideCardController.leaveStn,
             ),
-            loadingStateWidget: SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.black,
+            label: Text(
+              'Leave'.tr(),
+              style: AppText.xl2Medium_22_300.copyWith(
+                color: Colors.red,
               ),
-            ),
-            processStatusNotifier: bookedRideCardController.leaveStn,
-          ),
-          label: Text(
-            'Leave'.tr(),
-            style: AppText.xl2Medium_22_300.copyWith(
-              color: Colors.red,
             ),
           ),
         ),

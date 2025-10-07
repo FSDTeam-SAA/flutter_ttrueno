@@ -161,34 +161,24 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                 // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    runAlignment: WrapAlignment.start,
-                    children: [
-                      FilterChipWidget(
-                        label: 'Departure Flex : 200 meters',
-                        onTap: () {
-                          searchRideController.departureFlexKm.value = 0.2;
-                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                        },
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(
+                      ()=> Row(
+                        spacing: 8,
+                        children: [
+                          FilterChipWidget(
+                            label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexKm} kilometres',
+                          ),
+                          FilterChipWidget(
+                            label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexMinutes} min',
+                          ),
+                          FilterChipWidget(
+                            label: 'Arrival Flex : ${searchRideController.filtered.value.arrivalFlexKm} kilometres',
+                          ),
+                        ],
                       ),
-                      FilterChipWidget(
-                        label: 'Departure Flex : 30 min',
-                        onTap: () {
-                          searchRideController.departureFlexMinutes.value = 30;
-                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                        },  
-                      ),
-                      FilterChipWidget(
-                        label: 'Arrival Flex : 200 meters',
-                        onTap: () {
-                          searchRideController.arrivalFlexKm.value = 0.2;
-                          searchRideController.searchRide(snackbarNotifier: SnackbarNotifier(context: context));
-                        },
-                      ),
-                    ],
+                    ),
                   ),
                 ),
           

@@ -11,8 +11,9 @@ class LeaveRideController {
   final VoidCallback onLeaveSuccess;
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
 
+  /// Make sure you have the [stn] to use the state changes.
   Future<void> leaveRide({
-    required SnackbarNotifier? snackbarNotifier,
+    SnackbarNotifier? snackbarNotifier,
   }) async{
     await serviceLocator<RideInterface>().finishRide(rideId: rideId).then((lr){
       handleFold(

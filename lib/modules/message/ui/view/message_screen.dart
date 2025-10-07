@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/chat_ride_card_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
@@ -85,7 +85,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
       body: Column(
         children: [
-          ChatRideCardWidget(activeRide: widget.activeRideChatController),
+          ChatRideCardWidget(activeRideChatController: widget.activeRideChatController),
           //RideCard.fromRide(widget.activeRideChatController.ride.value, elevation: 0),
           Gap.h20,
           Divider(height: 4, color: AppColors.primarybutton),
@@ -259,6 +259,7 @@ class _InputMessageBoxState extends State<_InputMessageBox> {
     );
     textEditingController.clear();
   }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(

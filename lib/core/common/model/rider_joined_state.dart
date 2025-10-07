@@ -12,5 +12,4 @@ class RiderJoinedState {
         chatId: json['chatId'],
         rider: Rider.fromJson(json['rider']),
       );
-
 }

@@ -8,6 +8,7 @@ import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
@@ -20,6 +21,11 @@ class SearchRideController extends GetxController {
   }
   RxBool isSearching = RxBool(false);
   final RxList<RideModel> searchResults = RxList<RideModel>();
+  Rx<FilterModel> filtered = Rx(FilterModel(
+    arrivalFlexKm: .2,
+    departureFlexKm: .2,
+    departureFlexMinutes: 15,
+  ));
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
@@ -128,7 +134,7 @@ class SearchRideController extends GetxController {
   }
 
   void incrementPassengers() {
-    passengers++;
+    if (passengers < 4) passengers++;
   }
 
   void decrementPassengers() {
@@ -209,7 +215,11 @@ class SearchRideController extends GetxController {
             snackbarNotifier?.notify(message: 'No rides found'.tr());
           }
           searchResults.value = data;
-          searchResults.refresh();
+          filtered.value = FilterModel(
+            arrivalFlexKm: arrivalFlexKm.value,
+            departureFlexKm: departureFlexKm.value,
+            departureFlexMinutes: departureFlexMinutes.value,
+          );
           
         },
       );
