@@ -134,11 +134,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 RidersListWidget(
                   allowJoin: widget.allowJoin,
                   riders: bookedRideCardController.riders,
-                  joinRideStn: bookedRideCardController.joinRideController.stn,
-                  onJoin: (p0) {
-                    bookedRideCardController.joinRideController.baggageType.value = p0;
-                    bookedRideCardController.joinRideController.joinRide(snackbarNotifier: SnackbarNotifier(context: context));
-                  },
+                  joinRideController: bookedRideCardController.joinRideController,
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
@@ -153,7 +149,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                     ],
                   ),
                 ),
-                if(bookedRideCardController.eligibleForRatingRide) _buildRateRideWidget(),
+                if(bookedRideCardController.eligibleForRatingRide) _buildRateRideWidget(bookedRideCardController.booking.ride),
               ],
             ),
           ),
@@ -311,7 +307,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
     );
   }
 
-  Widget _buildRateRideWidget() {
+  Widget _buildRateRideWidget(RideModel ride) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return TextButton.icon(
@@ -319,7 +315,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ShareExperienceScreen(),
+                  builder: (context) => ShareExperienceScreen(ride: ride,),
                 ), 
             );},
             icon: Image.asset(

@@ -5,7 +5,7 @@ import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
 
 import '../../../core/notifiers/button_status_notifier.dart';
-import '../interface/auth_inerface.dart';
+import '../interface/auth_interface.dart';
 
 class CreateNewPasswordScreenController {
   final String email;

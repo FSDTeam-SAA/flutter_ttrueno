@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/service/location_service.dart';
@@ -18,7 +19,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_service.
 import 'core/constants/api_endpoints.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/services/app_pigeon/refresh_token_manager.dart';
-import 'modules/auth/interface/auth_inerface.dart';
+import 'modules/auth/interface/auth_interface.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -36,9 +37,11 @@ Future<void> initDependencies() async {
   serviceLocator.registerFactory<Dio>(()=> _dio);
 
   serviceLocator.registerFactory<AppPigeon>(()=> appPigeon);
+
+  serviceLocator.registerFactory<OAuthService>(()=> OAuthService(serviceLocator<AppPigeon>()));
   // Dependencies
   serviceLocator.registerFactory<AuthInterface>(
-    () => AuthInterfaceImpl(serviceLocator<AppPigeon>(),),
+    () => AuthInterfaceImpl(serviceLocator<AppPigeon>(), serviceLocator<OAuthService>()),
   );
 
   serviceLocator.registerFactory<ProfileInterface>(

@@ -7,7 +7,7 @@ import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_req_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/update_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_req_param.dart';

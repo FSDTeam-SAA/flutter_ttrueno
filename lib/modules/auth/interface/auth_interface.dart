@@ -13,9 +13,15 @@ import '../model/login_entity.dart';
 
  abstract base class AuthInterface extends BaseRepository{
   FutureRequest<Success> login(LoginRequestParams params);
+
+  FutureRequest<Success> googleLogin();
+
   FutureRequest<Success> signup(SignupParam params);
   /// Verify account
   FutureRequest<Success> verifyAccount(VerifyAccountParam params);
+
+  FutureRequest<Success<AuthStatus>> getCurrentAuth();
+
   Stream<AuthStatus?> authStream();
 
   FutureRequest<Success> forgetPassword(ForgetPasswordParam email);
@@ -25,6 +31,4 @@ import '../model/login_entity.dart';
   FutureRequest<Success> createNewPassword(CreateNewPasswordParam params);
   
   Future<Either<DataCRUDFailure, Success>> logout();
-  bool isFirstTimeInstall();
-  void setFirstTimeInstall();
 }

@@ -1,6 +1,6 @@
 class Rating {
   final String userId;
-  final int score;
+  final double score;
 
   Rating({required this.userId, required this.score});
 

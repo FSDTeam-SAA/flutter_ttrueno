@@ -127,11 +127,7 @@ class _RideCardState extends State<RideCard> {
                 RidersListWidget(
                   allowJoin: rideCardController.ride.status != Status.completed,
                   riders: rideCardController.riders,
-                  onJoin: (p0) => rideCardController.joinRide(
-                    snackbarNotifier: SnackbarNotifier(context: context),
-                    baggageType: p0,
-                  ),
-                  joinRideStn: rideCardController.joinRideStn,
+                  joinRideController: rideCardController.joinRideController,
                 ),
               ],
             ),

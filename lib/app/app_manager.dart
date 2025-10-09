@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
 import '../core/common/controller/inbox_controller/inbox_controller.dart';
@@ -10,7 +11,7 @@ import '../core/notifiers/snackbar_notifier.dart';
 import '../core/services/app_pigeon/app_pigeon.dart';
 import '../init_dependency.dart';
 import '../main.dart';
-import '../modules/auth/interface/auth_inerface.dart';
+import '../modules/auth/interface/auth_interface.dart';
 import '../modules/ride&booking/controller/my_booking_controller.dart';
 import '../routing/route_names.dart';
 
@@ -21,29 +22,36 @@ class AppManager extends GetxController {
     _init();
   }
 
-  _init() {
-    debugPrint("listening to auth stream");
-    _authStreamSubscription = getAuthStream().listen((authStatus) async{
-      debugPrint("(In AuthRoutingController)Auth status: $authStatus");
-      if(authStatus != null) {
-          _authStatus = authStatus; 
-          if(_authStatus is UnAuthenticated) {
-            navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);
-          } else if(_authStatus is Authenticated) {
-            initializeControllers();
-            await serviceLocator<AppPigeon>().socketInit(
-              SocketConnetParamX(
-                token: null,
-                socketUrl: ApiEndpoints.socketUrl,
-                joinId: (_authStatus as Authenticated).auth.userId,
-              )
-            );
-            navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.home, (route) => false);
-          }
-          update();
-        }
+  _init() async{
+    // Get initail auth status
+    final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
+    handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
+    // Start listening to the auth status changes
+    _authStreamSubscription = getAuthStream().listen((newStatus) async{
+      _decideRoute(newStatus);
     });
   }
+
+  _decideRoute(AuthStatus? authStatus) async{
+    debugPrint("(In Appmanager)Auth status: $authStatus");
+    if(authStatus != null) {
+      _authStatus = authStatus; 
+      if(_authStatus is UnAuthenticated) {
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);
+      } else if(_authStatus is Authenticated) {
+        initializeControllers();
+        await serviceLocator<AppPigeon>().socketInit(
+          SocketConnetParamX(
+            token: null,
+            socketUrl: ApiEndpoints.socketUrl,
+            joinId: (_authStatus as Authenticated).auth.userId,
+          )
+        );
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.home, (route) => false);
+      }
+      update();
+    }
+  } 
 
   @override
   void dispose() {

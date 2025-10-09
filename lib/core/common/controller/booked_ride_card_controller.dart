@@ -64,8 +64,8 @@ class BookedRideCardActionController {
     await finishRideController.finishRide(snackbarNotifier: snackbarNotifier);
   }
 
-  void onJoinSuccess(Rider rider) {
-    riders.add(rider);
+  void onJoinSuccess(List<Rider> newRiders) {
+    riders.addAll(newRiders);
     eligibleForChat.value = true;
   }
 }

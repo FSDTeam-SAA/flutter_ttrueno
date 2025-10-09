@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -10,9 +10,8 @@ import '../../../../core/theme/app_gap.dart';
 /// This screen/bottomsheet does not close or pop itself,
 /// rather it uses the onJoinComplete callback and delegate that responsibility to the parent widget.
 class JoinRideBottomsheet extends StatefulWidget {
-  final Function(BaggageType selectedBaggageType) onJoin;
-  final ProcessStatusNotifier pstn;
-  const JoinRideBottomsheet({super.key, required this.onJoin, required this.pstn});
+  final JoinRideController joinRideController;
+  const JoinRideBottomsheet({super.key, required this.joinRideController});
 
   @override
   State<JoinRideBottomsheet> createState() => _JoinRideBottomsheetState();
@@ -52,6 +51,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                         onTap: () {
                           setState(() {
                             selectedBaggageType = baggageType;
+                            widget.joinRideController.baggageType.value = baggageType;
                           });
                         },
                       );
@@ -87,9 +87,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                           );
                           return;
                         }
-                        widget.onJoin(
-                          selectedBaggageType!, 
-                        );
+                        widget.joinRideController.joinRide(snackbarNotifier: SnackbarNotifier(context: context));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -113,9 +111,9 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                                 color: Colors.white,
                               ),
                             ),
-                            processStatusNotifier: widget.pstn,
+                            processStatusNotifier: widget.joinRideController.stn,
                             onDone: () {
-                              
+                              Navigator.pop(context);
                             },
                           )
                         ],

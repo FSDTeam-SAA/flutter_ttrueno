@@ -62,7 +62,12 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
           child: CarDivider(),
         ),
         Gap.h12,
-        RidersListWidget(allowJoin: true, avatarSize: 50, riders: widget.activeRideChatController.participants),
+        RidersListWidget(
+          allowJoin: true,
+          avatarSize: 50,
+          riders: widget.activeRideChatController.participants,
+          joinRideController: widget.activeRideChatController.joinRideController,
+        ),
         // _UserAvatarsRow(
         //   joinedUsers: widget.activeRide.value.participants,
         // ),

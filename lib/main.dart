@@ -77,10 +77,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     debugPrint("App started");
-    
-     WidgetsBinding.instance.addPostFrameCallback((x){
-      
-    });
   }
 
   @override
@@ -93,10 +89,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() async {
     super.dispose();
-    
-   
   }
-
   
   @override
   Widget build(BuildContext context) {

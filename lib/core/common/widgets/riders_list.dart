@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
@@ -17,15 +17,14 @@ import 'cache/smart_network_image.dart';
 /// 
 /// If you want to allow users to join the ride, set [allowJoin] to true and provide
 /// a callback function [onJoin] to handle the join action. You should also provide a
-/// [joinRideStn] to manage the state of the join
+/// [joinRideController] to manage the state of the join
 
 class RidersListWidget extends StatefulWidget {
-  final Function(BaggageType)? onJoin;
-  final ProcessStatusNotifier? joinRideStn;
+  final JoinRideController joinRideController;
   final bool allowJoin;
   final double avatarSize;
   final RxList<Rider> riders;
-  const RidersListWidget({super.key, this.avatarSize = 55, required this.allowJoin, required this.riders, this.onJoin, this.joinRideStn});
+  const RidersListWidget({super.key, this.avatarSize = 55, required this.allowJoin, required this.riders, required this.joinRideController});
 
   @override
   State<RidersListWidget> createState() => _RidersListWidgetState();
@@ -105,11 +104,9 @@ class _RidersListWidgetState extends State<RidersListWidget> {
         );
       }
     );
-      
   }
 
   void _showJoinBottomSheet() {
-    if(widget.joinRideStn == null) return;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -117,12 +114,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
       ),
       builder: (context) {
         return JoinRideBottomsheet(
-          onJoin: (baggageType) {
-            if (widget.onJoin != null) {
-              widget.onJoin!(baggageType);
-            }
-          },
-          pstn: widget.joinRideStn!,
+          joinRideController: widget.joinRideController,
         );
       },
     );
@@ -153,7 +145,6 @@ class _RidersListWidgetState extends State<RidersListWidget> {
       ),
     );
   }
-
 
   Widget _buildProfile(
     String imagePath,

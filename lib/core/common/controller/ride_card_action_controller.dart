@@ -20,8 +20,8 @@ class RideCardActionController {
       if(rider.userId == currentUserId) eligibleForChat.value = true;
       riders.add(rider);
     }
-    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (rider) {
-      riders.add(rider);
+    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (newRiders) {
+      riders.addAll(newRiders);
     },);
     // eligibility to finish, rate-ride
     if(currentUserId == ride.creator?.id) {
@@ -43,27 +43,12 @@ class RideCardActionController {
   late final JoinRideController joinRideController;
 
 
-  Future<void> joinRide({
-    required SnackbarNotifier? snackbarNotifier,
-    required BaggageType baggageType
-  }) async{
-    joinRideStn.setLoading();
-    await serviceLocator<RideInterface>().joinRide(
-      param: JoinRideReqParam(rideId: ride.id, baggageType: baggageType)
-    ).then((lr){
-      handleFold(
-        either: lr,
-        processStatusNotifier: joinRideStn,
-        errorSnackbarNotifier: snackbarNotifier,
-        onSuccess: (data) {
-          riders.add(data.joinedRider);
-          ride.participants.add(data.joinedRider);
-          riders.refresh();
-          snackbarNotifier?.notify(message: "You joined the ride successfully");
-        },
-      );
-    });
-  }
+  // Future<void> joinRide({
+  //   required SnackbarNotifier? snackbarNotifier,
+  //   required BaggageType baggageType
+  // }) async{
+  //   await joinRideController.joinRide(snackbarNotifier: snackbarNotifier);
+  // }
 
 }
 

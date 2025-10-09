@@ -30,6 +30,7 @@ class AuthService extends Interceptor {
 
   Stream<AuthStatus> get authStream => _authStorage._authStreamController.stream;
 
+  Future<AuthStatus> currentAuth() async=> await _authStorage.currentAuthStatus();
   Future<void> dispose() async{
     _authStorage.dispose();
   }

@@ -11,10 +11,11 @@ import '../model/join_ride_req_param.dart';
 
 class JoinRideController {
   JoinRideController({required this.rideId, required this.onJoinSuccess});
+  
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   Rx<BaggageType?> baggageType = Rx<BaggageType?>(null);
   final String rideId;
-  final void Function(Rider rider) onJoinSuccess;
+  final void Function(List<Rider> rider) onJoinSuccess;
 
   Future<void> joinRide({
     required SnackbarNotifier? snackbarNotifier

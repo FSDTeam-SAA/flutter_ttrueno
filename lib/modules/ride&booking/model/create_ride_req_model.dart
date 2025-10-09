@@ -6,7 +6,7 @@ class CreateRideReq {
   final LocationAdress endLocation;
   final DateTime departureTime;
   final int seatCount;
-  final int seatAvailable;
+  final int availableSeats;
   final String pinnedNote;
   final BaggageType baggageType;
 
@@ -15,7 +15,7 @@ class CreateRideReq {
     required this.endLocation,
     required this.departureTime,
     required this.seatCount,
-    required this.seatAvailable,
+    required this.availableSeats,
     required this.pinnedNote,
     required this.baggageType,
   });
@@ -26,7 +26,7 @@ class CreateRideReq {
       'endLocation': endLocation.toJson(),
       'departureTime': departureTime.toIso8601String(),
       'seatCount': 4,
-      'seatAvailable': seatAvailable,
+      'availableSeats': availableSeats,
       'pinnedNote': pinnedNote,
       "baggageType": baggageType.name
     };

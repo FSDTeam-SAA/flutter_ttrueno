@@ -111,6 +111,9 @@ class _Auth {
   @protected
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
+  static const String googleLogin = '$_authRoute/google-login';
+  static const String appleLogin = '$_authRoute/apple-login';
+  static const String facebookLogin = '$_authRoute/facebook-login';
   static const String signup = '$_authRoute/register/init';
   static const String forgetPassword = '$_authRoute/forget-password';
   static const String refreshToken = '$_authRoute/refresh-access-token';

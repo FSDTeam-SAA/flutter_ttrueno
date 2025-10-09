@@ -5,7 +5,6 @@ base class _AuthStorage {
   late final _AuthManger _authManager;
   late final _CurrentAuthUidManger _currentAuthUidManager;
   _AuthStorage({FlutterSecureStorage? secureStorage}): _secureStorage = secureStorage ?? FlutterSecureStorage(){
-    _authStreamController.add(AuthLoading());
     _authManager = _AuthManger( _secureStorage, _authDebugger);
     _currentAuthUidManager = _CurrentAuthUidManger(_secureStorage);
   }
@@ -24,25 +23,15 @@ base class _AuthStorage {
   
   /// Initializes auth storage listening, updates auth stream on change in secure storage
   init() async{
-    await getCurrentAuth().then((currentAuth) async{
-      final AuthStatus authStatus = _AuthStatusDecider.get(currentAuth);
-      _authStreamController.add(authStatus);
-    });
+    _authStreamController.add(AuthLoading());
+    // Initial auth status
+    final authStatus = await currentAuthStatus();
+    _authStreamController.add(authStatus);
+    // register-function for listening to changes in current auth
     void onCurrentAuthChange(String? encodedAuth) async{
-      _authDebugger.dekhao("Current auth changed in AuthStorage...");
-      if(encodedAuth == null ) {
-        _authStreamController.add(UnAuthenticated());
-        return;
-      }
-        
-        final auth = await getCurrentAuth();
-        if(auth == null) {
-          _authStreamController.add(UnAuthenticated());
-          return;
-        }
-        _authStreamController.add(Authenticated(auth: auth));
-      }
-    _authDebugger.dekhao("Registering listeners in auth storage.");
+      final authStatus = await currentAuthStatus();
+      _authStreamController.add(authStatus);
+    }
     _secureStorage.registerListener(key: currentAuthKey, listener: onCurrentAuthChange);
   }
 

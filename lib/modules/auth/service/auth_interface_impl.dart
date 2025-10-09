@@ -2,8 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/failure.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_inerface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/create_new_password_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/login_entity.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
@@ -16,18 +17,14 @@ import '../model/forget_password_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {
   final AppPigeon appPigeon;
+  final OAuthService oAuthService;
 
-  AuthInterfaceImpl(this.appPigeon,);
+  AuthInterfaceImpl(this.appPigeon, this.oAuthService,);
 
   @override
+
   Stream<AuthStatus> authStream() {
     return appPigeon.authStream;
-  }
-
-  @override
-  bool isFirstTimeInstall() {
-    // TODO: implement isFirstTimeInstall
-    throw UnimplementedError();
   }
 
   @override
@@ -63,11 +60,6 @@ final class AuthInterfaceImpl extends AuthInterface {
         return Success(message: "Successful logout.");
       },
     );
-  }
-
-  @override
-  void setFirstTimeInstall() {
-    // TODO: implement setFirstTimeInstall
   }
 
   @override
@@ -137,5 +129,20 @@ final class AuthInterfaceImpl extends AuthInterface {
         return Success(message: extractSuccessMessage(response));
       },
     );
+  }
+  
+  @override
+  FutureRequest<Success<AuthStatus>> getCurrentAuth() async{
+    return await asyncTryCatch(tryFunc: ()async{
+      final authStatus = await appPigeon.currentAuth();
+      return Success(message: "", data: authStatus);
+    });
+  }
+  
+  @override
+  FutureRequest<Success> googleLogin() async{
+    return await asyncTryCatch(tryFunc: () async{
+      return oAuthService.loginWithGoogle();
+    });
   }
 }

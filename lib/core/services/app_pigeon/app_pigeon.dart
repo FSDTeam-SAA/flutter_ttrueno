@@ -74,6 +74,8 @@ class AppPigeon {
 
   Stream<AuthStatus> get authStream => _authService.authStream;
 
+  Future<AuthStatus> currentAuth() async=> _authService.currentAuth();
+
   Future<void> saveNewAuth({required SaveNewAuthParams saveAuthParams}) async {
     await _authService.saveNewAuth(saveNewAuthParams: saveAuthParams);
   }

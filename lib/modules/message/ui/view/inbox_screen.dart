@@ -63,9 +63,9 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
           skeleton: InboxChatSkeleton(), skeletonCount: 4, 
           builder: (index, rideChat) {
             return _ChatBriefWidget(
-                rideChat: rideChat,
-                participants: rideChat.participants,
-              );
+              rideChat: rideChat,
+              participants: rideChat.chat.participants,
+            );
           }
         ),
       )

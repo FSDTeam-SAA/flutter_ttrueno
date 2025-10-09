@@ -5,7 +5,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/create_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/create_new_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 
 import '../widget/location_input.dart';
@@ -19,12 +19,12 @@ class CreateRideView extends StatefulWidget {
 
 class _CreateRideViewState extends State<CreateRideView> {
 
-  late final PostRideController _createRideScreenController;
+  late final CreateNewRideController _createRideScreenController;
 
   @override
   void initState() {
     super.initState();
-    _createRideScreenController = PostRideController();
+    _createRideScreenController = CreateNewRideController();
   }
 
   @override
