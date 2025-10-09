@@ -135,6 +135,9 @@ class _BookedRideCardState extends State<BookedRideCard> {
                   allowJoin: widget.allowJoin,
                   riders: bookedRideCardController.riders,
                   joinRideController: bookedRideCardController.joinRideController,
+                  changeBaggageController: bookedRideCardController.changeBaggageController,
+                  leaveRideController: bookedRideCardController.leaveRideController,
+                  seatBooked: 1,
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
@@ -248,17 +251,19 @@ class _BookedRideCardState extends State<BookedRideCard> {
                   message: 'Are you sure?'.tr(),
                   confirmButtonText: 'Confirm'.tr(),
                   cancelButtonText: 'Cancel'.tr(),
-                  onConfirm: () {
-                    bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
-                    // Navigator.pop(
-                    //   context,
-                    // );
+                  onConfirm: () async{
+                    debugPrint("Leave Ride");
+                    await bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context)).then((_) {
+                      if(context.mounted) Navigator.pop(context);
+                    });
+                    
                   },
                   onCancel: () {
                     // Navigator.pop(
                     //   context,
                     // );
                   },
+                  confirmStn: bookedRideCardController.leaveStn,
                 ),
               );
             },

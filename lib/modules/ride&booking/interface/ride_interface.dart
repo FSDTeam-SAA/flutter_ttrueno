@@ -11,6 +11,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart
 
 import '../../../core/common/model/rider.dart';
 import '../model/booking.dart';
+import '../model/change_baggage_req_param.dart';
 import '../model/join_ride_req_response.dart';
 import '../model/update_ride_req_param.dart';
 import '../model/vote_for_kick_req_param.dart';
@@ -79,5 +80,7 @@ abstract base class RideInterface extends BaseRepository {
   Stream<RiderJoinedState> riderJoinedStream();
 
   Stream<RiderLeftState> riderLeftStream();
+
+  FutureRequest<Success> changeBaggage(ChangeBaggageReqParam param);
 
 }

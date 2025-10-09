@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/booking.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
+import '../../../modules/ride&booking/controller/change_baggage_controller.dart';
 import '../../../modules/ride&booking/controller/finish_ride_controller.dart';
 import '../../../modules/ride&booking/controller/join_ride_controller.dart';
 import '../../../modules/ride&booking/model/enum/status.dart';
@@ -17,9 +19,12 @@ class BookedRideCardActionController {
       if(rider.userId == currentUserId) eligibleForChat.value = true;
       riders.add(rider);
     }
+
     finishRideController = FinishRideController(rideId: booking.ride.id, onFinishRideSuccess: onFinishRideSuccess);
     leaveRideController = LeaveRideController(rideId: booking.ride.id, onLeaveSuccess: onLeaveSuccess);
     joinRideController = JoinRideController(rideId: booking.ride.id, onJoinSuccess: onJoinSuccess);
+    changeBaggageController = ChangeBaggageController(rideId: booking.ride.id, onBaggageChangeSuccess: onBaggageChangeSuccess); 
+
     // eligibility to finish, rate-ride
     if(booking.status == Status.active && booking.ride.departureTime.isBefore(DateTime.now())) {
       eligibleToFinish = true;
@@ -49,13 +54,14 @@ class BookedRideCardActionController {
   late final FinishRideController finishRideController;
   late final LeaveRideController leaveRideController;
   late final JoinRideController joinRideController;
+  late final ChangeBaggageController changeBaggageController;
 
   Future<void> leaveRide({
     required SnackbarNotifier? snackbarNotifier
   }) async{
-    eligibleToLeave.value = booking.ride.departureTime.isBefore(DateTime.now());
+    eligibleToLeave.value = booking.ride.departureTime.isAfter(DateTime.now());
     if(eligibleToLeave.value == false) return;
-    await leaveRideController.leaveRide(snackbarNotifier: snackbarNotifier);
+    return await leaveRideController.leaveRide(snackbarNotifier: snackbarNotifier);
   }
 
   Future<void> finishRide({
@@ -67,5 +73,14 @@ class BookedRideCardActionController {
   void onJoinSuccess(List<Rider> newRiders) {
     riders.addAll(newRiders);
     eligibleForChat.value = true;
+  }
+
+  void onBaggageChangeSuccess(BaggageType baggageType) {
+    for(int i = 0; i < riders.length; i++) {
+      if(riders[i].userId == Get.find<ProfileDataController>().userProfile.value?.id) {
+        riders[i] = riders[i].copyWith(baggageType: baggageType);
+      }
+    }
+    riders.refresh();
   }
 }

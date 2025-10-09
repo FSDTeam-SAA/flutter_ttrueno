@@ -5,6 +5,7 @@ import 'package:get/instance_manager.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
@@ -260,6 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onConfirm: () async {
                           serviceLocator<ProfileInterface>().logout();
                         },
+                        confirmStn: ProcessStatusNotifier(initialStatus: EnabledStatus()),
                         onCancel: () {},
                         confirmButtonText: 'Logout'.tr(),
                         cancelButtonText: 'Not Now'.tr(),

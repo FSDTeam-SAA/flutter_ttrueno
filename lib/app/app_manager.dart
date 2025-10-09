@@ -39,7 +39,7 @@ class AppManager extends GetxController {
       if(_authStatus is UnAuthenticated) {
         navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);
       } else if(_authStatus is Authenticated) {
-        initializeControllers();
+        await initializeControllers();
         await serviceLocator<AppPigeon>().socketInit(
           SocketConnetParamX(
             token: null,
@@ -62,19 +62,19 @@ class AppManager extends GetxController {
   AuthStatus _authStatus = AuthLoading();
   AuthStatus get authStatus => _authStatus;
 
-  initializeControllers() {
+  initializeControllers() async{
     if(Get.isRegistered<SearchRideController>()) {
-      Get.delete<SearchRideController>();
+      await Get.delete<SearchRideController>();
     }
     if(Get.isRegistered<ProfileDataController>()) {
-      Get.delete<ProfileDataController>();
+      await Get.delete<ProfileDataController>();
     }
     if(Get.isRegistered<InboxController>()) {
-      Get.delete<InboxController>();
+      await Get.delete<InboxController>();
     }
     if(Get.isRegistered<MyBookingControllers>()) {
-      Get.delete<MyBookingControllers>();
-    }
+      await Get.delete<MyBookingControllers>();
+    } 
     
     Get.put(SearchRideController());
     Get.put(ProfileDataController());

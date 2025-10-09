@@ -1,15 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/ride_card_action_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../theme/app_colors.dart';
-import '../../../modules/profile/controller/profile_data_controller.dart';
 
 /// Usecases: Search or filtered rides, Chat screen ride preview
 class RideCard extends StatefulWidget {
@@ -21,6 +18,7 @@ class RideCard extends StatefulWidget {
   final RideModel ride;
   final bool allowJoin;
   final bool showCompleteRideOption = false;
+  final int seatBooked;
   const RideCard({
     super.key,
     this.elevation = 2,
@@ -28,10 +26,10 @@ class RideCard extends StatefulWidget {
     required this.time,
     required this.fromLocation,
     required this.toLocation, required this.ride,
-    required this.allowJoin,
+    required this.allowJoin, required this.seatBooked,
   });
 
-  factory RideCard.fromRide(RideModel ride, {double? elevation, required bool allowJoin}) {
+  factory RideCard.fromRide(RideModel ride, {double? elevation, required bool allowJoin, required int seatBooked}) {
     return RideCard(
       date: DateFormat.yMd().format(ride.departureTime),
       time: DateFormat.Hm().format(ride.departureTime),
@@ -40,6 +38,7 @@ class RideCard extends StatefulWidget {
       ride: ride,
       elevation: elevation ?? 2,
       allowJoin: allowJoin,
+      seatBooked: seatBooked,
     );
   }
 
@@ -59,7 +58,6 @@ class _RideCardState extends State<RideCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentUserId = Get.find<ProfileDataController>().userProfile.value?.id ?? "";
     rideCardController = RideCardActionController(ride: widget.ride);
   }
 
@@ -128,6 +126,8 @@ class _RideCardState extends State<RideCard> {
                   allowJoin: rideCardController.ride.status != Status.completed,
                   riders: rideCardController.riders,
                   joinRideController: rideCardController.joinRideController,
+                  changeBaggageController: rideCardController.changeBaggageController,
+                  seatBooked: widget.seatBooked,
                 ),
               ],
             ),

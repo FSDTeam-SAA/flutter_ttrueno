@@ -1,7 +1,5 @@
 
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/pagination.dart';
@@ -9,6 +7,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
@@ -46,6 +45,15 @@ class InboxController extends GetxController{
   StreamSubscription<RiderLeftState>? _riderLeftStreamSubscription;
   StreamSubscription<Message?>? _messageStreamSubscription;
   StreamSubscription<ChatRoom?>? _chatRoomStreamSubscription;
+
+  Future<ActiveRideChatController?> getChatById(String chatId) async{
+    for(int i = 0; i < rideChatPages.value.data.length; i++) {
+      if(rideChatPages.value.data[i].chat.id == chatId) {
+        return rideChatPages.value.data[i];
+      }
+    }
+    return null;
+  }
   
   Future<void> getAllChat({bool? forceRefresh}) async{
     if(forceRefresh == true) {
@@ -105,9 +113,24 @@ class InboxController extends GetxController{
         rideChatPages.refresh();
       }
     });
-    _messageStreamSubscription = serviceLocator<MessageInterface>().messageStream().listen((message) {
+    _messageStreamSubscription = serviceLocator<MessageInterface>().messageStream().listen((message) async{
       if(message == null) return;
-      rideChatPages.value.data.firstWhere((e) => e.chat.id == message.chatId)._addMessage(message);
+      final int index = rideChatPages.value.data.indexWhere((e) => e.chat.id == message.chatId);
+      if(index != -1) {
+        rideChatPages.value.data[index]._addMessage(message);
+        if(message.type == MessageType.system) {
+          await serviceLocator<RideInterface>().getRideById(rideId: rideChatPages.value.data[index].rideId).then((lr) {
+            handleFold(
+              either: lr,
+              processStatusNotifier: null,
+              onSuccess: (data) {
+                rideChatPages.value.data[index].participants.value = data.participants;
+                rideChatPages.refresh();
+              },
+            );
+          });
+        }
+      }
     });
   }
 

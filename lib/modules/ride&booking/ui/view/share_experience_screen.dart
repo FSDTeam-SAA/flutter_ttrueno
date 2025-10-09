@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
@@ -24,10 +25,8 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
   late final RateRideController rateRideController;
 
   void handleSubmit() {
-    rateRideController.submitRatings();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Ratings submitted successfully!")),
-    );
+    rateRideController.submitRatings(snackbarNotifier: SnackbarNotifier(context: context));
+
   }
 
   @override

@@ -1,15 +1,16 @@
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 
-class JoinRideReqParam {
+class ChangeBaggageReqParam {
   final String rideId;
-  final int seatBooked;
-  BaggageType baggageType = BaggageType.small;
-  JoinRideReqParam({required this.rideId, required this.seatBooked, this.baggageType = BaggageType.small});
+  final String bookingId;
+  final BaggageType baggageType;
+
+  ChangeBaggageReqParam({required this.rideId, required this.bookingId, required this.baggageType});
 
   Map<String, dynamic> toJson() {
     return {
       'rideId': rideId,
-      'seatBooked': seatBooked,
+      'bookingId': bookingId,
       'baggageType': baggageType.name,
     };
   }

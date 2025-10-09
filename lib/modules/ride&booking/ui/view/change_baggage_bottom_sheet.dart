@@ -2,28 +2,28 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 
 /// This screen/bottomsheet does not close or pop itself,
 /// rather it uses the onJoinComplete callback and delegate that responsibility to the parent widget.
-class JoinRideBottomsheet extends StatefulWidget {
-  final int seatBooked;
-  final JoinRideController joinRideController;
-  const JoinRideBottomsheet({super.key, required this.joinRideController, required this.seatBooked});
+class ChangeBaggageBottomSheet extends StatefulWidget {
+  final BaggageType initialBaggageType;
+  final String riderId;
+  final ChangeBaggageController changeBaggageController;
+  const ChangeBaggageBottomSheet({super.key, required this.changeBaggageController, required this.riderId, required this.initialBaggageType});
 
   @override
-  State<JoinRideBottomsheet> createState() => _JoinRideBottomsheetState();
+  State<ChangeBaggageBottomSheet> createState() => _ChangeBaggageBottomSheetState();
 }
 
-class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
+class _ChangeBaggageBottomSheetState extends State<ChangeBaggageBottomSheet> {
 
   BaggageType? selectedBaggageType;
 
   @override
-
   void initState() {
     super.initState();
   }
@@ -53,7 +53,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                         onTap: () {
                           setState(() {
                             selectedBaggageType = baggageType;
-                            widget.joinRideController.baggageType.value = baggageType;
+                            widget.changeBaggageController.baggageType.value = baggageType;
                           });
                         },
                       );
@@ -72,7 +72,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                           width: 1.5,
                         ),
                       ),
-                      child: Text("Not Now".tr()),
+                      child: Text("Cancel".tr()),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -89,7 +89,10 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                           );
                           return;
                         }
-                        widget.joinRideController.joinRide(seatBooked: widget.seatBooked, snackbarNotifier: SnackbarNotifier(context: context));
+                        widget.changeBaggageController.changeBaggage(
+                          snackbarNotifier: SnackbarNotifier(context: context),
+                          riderId: widget.riderId,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -99,7 +102,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Join Ride".tr(),
+                            "Change".tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                           RIcon(
@@ -113,7 +116,7 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                                 color: Colors.white,
                               ),
                             ),
-                            processStatusNotifier: widget.joinRideController.stn,
+                            processStatusNotifier: widget.changeBaggageController.stn,
                             onDone: () {
                               Navigator.pop(context);
                             },
@@ -127,7 +130,6 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
             ],
           ),
         );
-      
       },
     );
   }

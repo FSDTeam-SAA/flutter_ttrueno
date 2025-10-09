@@ -68,6 +68,7 @@ base class ApiEndpoints {
   static String deleteRide(String id) => _Ride.deleteRide(id);
   static const String filterRide = _Ride.filterRide;
   static String rateRide(String rideId) => _Ride.rateRide(rideId);
+  static String changeBaggage(String rideId) => _Ride.changeBaggage(rideId);
 
   // ---------------------- Booking -----------------------------
   static String getAllBookingsForARide(String rideId) => _Booking.getAllBookingsForARide(rideId);
@@ -162,6 +163,7 @@ class _Ride {
   static String voteForKick(String id) => "$_rideRoute/$id/kick";
   static String deleteRide(String id) => "$_rideRoute/$id";
   static String rateRide(String rideId) => "$_rideRoute/$rideId/rate";
+  static String changeBaggage(String id) => "$_rideRoute/$id/baggage";
 }
 
 class _Booking {

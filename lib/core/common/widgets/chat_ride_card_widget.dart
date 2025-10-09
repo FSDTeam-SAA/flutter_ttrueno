@@ -11,7 +11,10 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_im
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import '../../../app/app_manager.dart';
+import '../../notifiers/snackbar_notifier.dart';
 import 'car_divider_widget.dart';
 import '../../../modules/message/ui/widget/alart_message_widget.dart';
 import '../../theme/app_colors.dart';
@@ -67,6 +70,8 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
           avatarSize: 50,
           riders: widget.activeRideChatController.participants,
           joinRideController: widget.activeRideChatController.joinRideController,
+          changeBaggageController: widget.activeRideChatController.changeBaggageController,
+          seatBooked: 1,
         ),
         // _UserAvatarsRow(
         //   joinedUsers: widget.activeRide.value.participants,
@@ -125,11 +130,15 @@ class _LocationHeader extends StatelessWidget {
 }
 
 class _UserAvatarsRow extends StatelessWidget {
+  final LeaveRideController leaveRideController;
+  final KickoutRiderController kickoutRiderController;
   final List<Rider> joinedUsers;
   //final Function(String userName, Set<String> baggage) onBaggageChange;
 
   const _UserAvatarsRow({
     required this.joinedUsers,
+    required this.leaveRideController,
+    required this.kickoutRiderController,
     //required this.onBaggageChange,
   });
 
@@ -145,6 +154,9 @@ class _UserAvatarsRow extends StatelessWidget {
                 (user) => SizedBox(
                   width: 70,
                   child: _UserAvatar(
+                    riderId: user.userId,
+                    leaveRideController: leaveRideController,
+                    kickoutRiderController: kickoutRiderController,
                     avatarSize: 50,
                     name: user.name,
                     rating: user.avgRating.toDouble(),
@@ -163,113 +175,29 @@ class _UserAvatarsRow extends StatelessWidget {
 
 class _UserAvatar extends StatelessWidget {
   final double avatarSize;
+  final String riderId;
   final String name;
   final double rating;
   final String imageAsset;
   final bool isCurrentUser;
   final Set<String> baggage;
+  final LeaveRideController leaveRideController;
+  final KickoutRiderController kickoutRiderController;
 
   const _UserAvatar({
+    required this.riderId,
     required this.avatarSize,
     required this.name,
     required this.rating,
     required this.imageAsset,
     this.isCurrentUser = false,
     required this.baggage,
+    required this.leaveRideController,
+    required this.kickoutRiderController,
   });
 
   void _onLongPress(BuildContext context) {
-    if (isCurrentUser) {
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Leave Ride'),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    builder: (context) {
-                      return ConfirmActionBottomSheet(
-                        message: 'Are you sure you want to leave the ride?',
-                        confirmButtonText: 'Leave',
-                        cancelButtonText: 'Not Now',
-                        onConfirm: () {
-                          Navigator.pop(context);
-                          // Add leave logic here
-                        },
-                        onCancel: () {
-                          // Add cancel logic here
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.work_outline),
-                title: const Text('Change Baggage'),
-                onTap: () async {
-                  // Navigator.pop(context);
-
-                  // final updatedBaggage =
-                  //     await showModalBottomSheet<Set<String>?>(
-                  //       context: context,
-                  //       isScrollControlled: true,
-                  //       shape: const RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.vertical(
-                  //           top: Radius.circular(20),
-                  //         ),
-                  //       ),
-                  //       builder: (context) => BaggageChangeSheet(
-                  //         initialSelectedBaggage: baggage,
-                  //         initialSelected: '',
-                  //       ),
-                  //     );
-
-                  // if (updatedBaggage != null) {
-                  //   onBaggageChange(name, updatedBaggage);
-                  // }
-                },
-              ),
-              SizedBox(height: 50),
-            ],
-          );
-        },
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) {
-          return ConfirmActionBottomSheet(
-            message: 'Are you sure you want to vote to kick out $name?',
-            confirmButtonText: 'Kick Out',
-            cancelButtonText: 'Not Now',
-            onConfirm: () {
-              Navigator.pop(context);
-              // Add kick out logic here
-            },
-            onCancel: () {
-              // Add cancel logic here
-            },
-          );
-        },
-      );
-    }
+    
   }
 
   @override

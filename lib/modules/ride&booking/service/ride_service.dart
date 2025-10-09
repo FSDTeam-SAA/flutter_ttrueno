@@ -5,6 +5,7 @@ import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/change_baggage_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_req_model.dart';
@@ -170,6 +171,19 @@ final class RideService extends RideInterface {
       tryFunc: () async{
         final response = await appPigeon.post(
           ApiEndpoints.rateRide(param.rideId),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> changeBaggage(ChangeBaggageReqParam param) async{
+    return asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.changeBaggage(param.rideId),
           data: param.toJson(),
         );
         return Success(message: extractSuccessMessage(response));

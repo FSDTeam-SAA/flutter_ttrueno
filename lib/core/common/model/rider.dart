@@ -47,6 +47,25 @@ class Rider {
     };
   }
 
+  // copyWith
+  Rider copyWith({
+    BaggageType? baggageType,
+    String? userId,
+    num? seatBooked,
+    num? avgRating,
+    String? name,
+    String? profileImage,
+  }) {
+    return Rider(
+      baggageType: baggageType ?? this.baggageType,
+      userId: userId ?? this.userId,
+      seatBooked: seatBooked ?? this.seatBooked,
+      avgRating: avgRating ?? this.avgRating,
+      name: name ?? this.name,
+      profileImage: profileImage ?? this.profileImage,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     return super == other &&

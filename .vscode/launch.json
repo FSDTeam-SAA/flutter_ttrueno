@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "name": "Debug HopLift",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define",
+        "GOOGLE_CLIENT_ID=903853613584-dfmsjo1g9h5raudvpn5hqeo1h2qh9dfk.apps.googleusercontent.com",
+        "--dart-define",
+        "REDIRECT_URL=com.hoplift.app:/",
+        "--dart-define",
+        "GOOGLE_MAPS_API_KEY=AIzaSyDVdr-zKz9jRGgq-Kxq_Cwu0RksmJlK1yE"
+      ]
+    },
+
+    {
+      "name": "Release HopLift",
+      "request": "launch", 
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define",
+        "GOOGLE_CLIENT_ID=903853613584-dfmsjo1g9h5raudvpn5hqeo1h2qh9dfk.apps.googleusercontent.com",
+        "--dart-define",
+        "REDIRECT_URL=com.hoplift.app:/",
+        "--dart-define",
+        "GOOGLE_MAPS_API_KEY=AIzaSyDVdr-zKz9jRGgq-Kxq_Cwu0RksmJlK1yE"
+      ]
+    }
+  ]
+}

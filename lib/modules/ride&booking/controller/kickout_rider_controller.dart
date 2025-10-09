@@ -1,27 +1,30 @@
 import 'package:flutter/widgets.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_req_param.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 import '../../../init_dependency.dart';
 import '../interface/ride_interface.dart';
 
-class LeaveRideController {
-  LeaveRideController({required this.rideId, required this.onLeaveSuccess});
+class KickoutRiderController {
+  KickoutRiderController({required this.rideId, required this.onKickSuccess});
   final String rideId;
-  final VoidCallback onLeaveSuccess;
+  final VoidCallback onKickSuccess;
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
 
-  /// Use stn to listen to thje state changes...
-  Future<void> leaveRide({
+  /// Make sure you have the [stn] to use the state changes.
+  Future<void> kickRider({
+    required String riderId,
     SnackbarNotifier? snackbarNotifier,
   }) async{
-    await serviceLocator<RideInterface>().leaveRide(rideId: rideId).then((lr){
+    await serviceLocator<RideInterface>().voteForKick(
+      param: VoteForKickReqParam(rideId, riderId)).then((lr){
       handleFold(
         either: lr,
         processStatusNotifier: stn,
         successSnackbarNotifier: snackbarNotifier,
         onSuccess: (data) {
-          onLeaveSuccess();
+          onKickSuccess();
         },
       );
 

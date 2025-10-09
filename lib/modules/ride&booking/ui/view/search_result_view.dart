@@ -218,6 +218,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                         return RideCard.fromRide(
                           ride,
                           allowJoin: true,
+                          seatBooked: searchRideController.passengers.value,
                         );
                       },
                     ),

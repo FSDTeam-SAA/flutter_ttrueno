@@ -4,6 +4,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/chat_ride_card_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
@@ -76,6 +77,18 @@ class _MessageScreenState extends State<MessageScreen> {
                     height: 28,
                     color: Colors.red,
                   ),
+                  RIcon(
+                    key: UniqueKey(),
+                    iconWidget: Container(),
+                    processStatusNotifier: leaveRideController.stn,
+                    loadingStateWidget: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

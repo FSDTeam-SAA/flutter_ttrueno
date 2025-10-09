@@ -102,6 +102,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 
 class ConfirmActionBottomSheet extends StatelessWidget {
@@ -111,6 +113,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
   final double height;
   final bool showTextField;
   final TextEditingController? controller;
+  final ProcessStatusNotifier confirmStn;
   final String? hintText;
   final double? textFieldHeight;
   final String confirmButtonText;
@@ -128,6 +131,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
     this.textFieldHeight,
     this.confirmButtonText = 'Confirm',
     this.cancelButtonText = 'Cancel',
+    required this.confirmStn,
   });
 
   @override
@@ -182,7 +186,6 @@ class ConfirmActionBottomSheet extends StatelessWidget {
                         foregroundColor: AppColors.primarybutton,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
                         onCancel();
                       },
                       child: Text(cancelButtonText),
@@ -200,10 +203,26 @@ class ConfirmActionBottomSheet extends StatelessWidget {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
                         onConfirm();
                       },
-                      child: Text(confirmButtonText.tr()),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(confirmButtonText.tr()),
+                          RIcon(
+                            key: UniqueKey(),
+                            iconWidget: Container(),
+                            processStatusNotifier: confirmStn,
+                            loadingStateWidget: SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
 
                     ),
                   ),

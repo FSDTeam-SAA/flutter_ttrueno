@@ -14,6 +14,7 @@ class ActiveRideChatController extends GetxController{
     joinRideController = JoinRideController(rideId: chat.id, onJoinSuccess: (rider) {
       
     });
+    changeBaggageController = ChangeBaggageController(rideId: chat.id, onBaggageChangeSuccess: onBaggageChangeSuccess);
   }
 
   final ChatRoom chat;
@@ -28,8 +29,11 @@ class ActiveRideChatController extends GetxController{
   bool _allLoaded = false;
   late final LeaveRideController _leaveRideController;
   late final JoinRideController joinRideController;
+  late final ChangeBaggageController changeBaggageController;
+
   ProcessStatusNotifier get leaveRideStn => _leaveRideController.stn;
   ProcessStatusNotifier get joinRideStn => joinRideController.stn;
+
 
   init() {
     getMessages();
@@ -105,5 +109,14 @@ class ActiveRideChatController extends GetxController{
       );
     });
     return state;
+  }
+
+  void onBaggageChangeSuccess(BaggageType baggageType) {
+    for(int i = 0; i < participants.length; i++) {
+      if(participants[i].userId == Get.find<ProfileDataController>().userProfile.value?.id) {
+        participants[i] = participants[i].copyWith(baggageType: baggageType);
+      }
+    }
+    participants.refresh();
   }
 }

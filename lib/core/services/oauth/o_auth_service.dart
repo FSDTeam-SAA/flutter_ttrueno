@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
@@ -10,11 +11,12 @@ class OAuthService {
   final AppPigeon appPigeon;
   final FlutterAppAuth _appAuth = FlutterAppAuth();
   final String backendBaseUrl = ApiEndpoints.baseUrl;
-  static String _googleClientId = String.fromEnvironment('GOOGLE_CLIENT_ID');
-  static String _redirectUrl = String.fromEnvironment('REDIRECT_URL');
+  final String _googleClientId = const String.fromEnvironment('GOOGLE_CLIENT_ID', defaultValue: "GOOGLE_CLIENT_ID is not set");
+  final String _redirectUrl = const String.fromEnvironment('REDIRECT_URL');
   
   /// Returns success message or throws error.
   Future<Success> loginWithGoogle() async {
+    debugPrint("Login with google clientId : $_googleClientId");
     final AuthorizationTokenResponse result = await _appAuth.authorizeAndExchangeCode(
       AuthorizationTokenRequest(
         _googleClientId,
