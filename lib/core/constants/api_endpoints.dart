@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
+
+  static const String socialLogin = _Auth.socialLogin;
 
   static const String signup = _Auth.signup;
 
@@ -102,9 +104,9 @@ class _RemoteServer {
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.46:5006';
+  static const String socketUrl = 'http://10.10.5.90:5006';
 
-  static const String baseUrl = 'http://10.10.5.46:5006/api/v1';
+  static const String baseUrl = 'http://10.10.5.90:5006/api/v1';
 }
 
 
@@ -112,7 +114,7 @@ class _Auth {
   @protected
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
-  static const String googleLogin = '$_authRoute/google-login';
+  static const String socialLogin = '$_authRoute/login/social';
   static const String appleLogin = '$_authRoute/apple-login';
   static const String facebookLogin = '$_authRoute/facebook-login';
   static const String signup = '$_authRoute/register/init';

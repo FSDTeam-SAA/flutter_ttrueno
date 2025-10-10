@@ -48,7 +48,7 @@ class LoginsScreenController extends ChangeNotifier {
   }) async {
     processStatusNotifier.setLoading();
     Future.delayed(const Duration(seconds: 1)).then((_) async {
-      await serviceLocator<AuthInterface>().login(LoginRequestParams(email: email, password: password)).then((lr) {
+      await serviceLocator<AuthInterface>().login(LoginRequestParams.emailLogin(email: email, password: password)).then((lr) {
             handleFold(
               either: lr,
               processStatusNotifier: processStatusNotifier,
@@ -60,6 +60,29 @@ class LoginsScreenController extends ChangeNotifier {
             );
           });
       });
+  }
 
+  Future<void> googleLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().googleLogin().then((lr) {
+        handleFold(
+          either: lr,
+          processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
+  }
+
+  Future<void> facebookLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().facebookLogin().then((lr) {
+        handleFold(
+          either: lr,
+          processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
   }
 }

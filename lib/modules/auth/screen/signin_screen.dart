@@ -270,18 +270,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: () => serviceLocator<AuthInterface>().googleLogin(),
+                                onTap: () => _loginsScreenController.googleLogin(),
                                 child: LoginScreen._socialIcon(
                                   'assets/images/google.png',
                                 ),
                               ),
                               Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/apple.png',
-                              ),
-                              Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/facebook.png',
+                              InkWell(
+                                onTap: () {
+                                  _loginsScreenController.facebookLogin();
+                                },
+                                child: LoginScreen._socialIcon(
+                                  'assets/images/facebook.png',
+                                ),
                               ),
                             ],
                           ),

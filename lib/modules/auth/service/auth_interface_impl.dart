@@ -145,4 +145,11 @@ final class AuthInterfaceImpl extends AuthInterface {
       return oAuthService.loginWithGoogle();
     });
   }
+  
+  @override
+  FutureRequest<Success> facebookLogin() async{
+    return await asyncTryCatch(tryFunc: () async{
+      return oAuthService.loginWithFacebook();
+    });
+  }
 }

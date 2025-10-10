@@ -16,6 +16,8 @@ import '../model/login_entity.dart';
 
   FutureRequest<Success> googleLogin();
 
+  FutureRequest<Success> facebookLogin();
+
   FutureRequest<Success> signup(SignupParam params);
   /// Verify account
   FutureRequest<Success> verifyAccount(VerifyAccountParam params);

@@ -102,31 +102,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     Gap.w16,
-                    Column(
-                      spacing: 4,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if((profileDataController.userProfile.value?.name ?? "").isNotEmpty) Text(
-                          profileDataController.userProfile.value?.name ?? "",
-                          style: AppText.xxlSemiBold_24_600.copyWith(
-                            color: AppColors.primaryTextblack,
+                    Flexible(
+                      child: Column(
+                        spacing: 4,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if((profileDataController.userProfile.value?.name ?? "").isNotEmpty) FittedBox(
+                            child: Text(
+                              profileDataController.userProfile.value?.name ?? "",
+                              style: AppText.xxlSemiBold_24_600.copyWith(
+                                color: AppColors.primaryTextblack,
+                              ),
+                            ),
                           ),
-                        ),
-                        
-                        if((profileDataController.userProfile.value?.number ?? "").isNotEmpty) Text(
-                          profileDataController.userProfile.value?.number ?? "",
-                          style: AppText.mdRegular_16_400.copyWith(
-                            color: AppColors.secondaryText,
+                          
+                          if((profileDataController.userProfile.value?.number ?? "").isNotEmpty) FittedBox(
+                            child: Text(
+                              profileDataController.userProfile.value?.number ?? "",
+                              style: AppText.mdRegular_16_400.copyWith(
+                                color: AppColors.secondaryText,
+                              ),
+                            ),
                           ),
-                        ),
-                        
-                        if((profileDataController.userProfile.value?.email ?? "").isNotEmpty) Text(
-                          profileDataController.userProfile.value?.email ?? "",
-                          style: AppText.mdRegular_16_400.copyWith(
-                            color: AppColors.secondaryText,
+                          
+                          if((profileDataController.userProfile.value?.email ?? "").isNotEmpty) FittedBox(
+                            child: Text(
+                              profileDataController.userProfile.value?.email ?? "",
+                              style: AppText.mdRegular_16_400.copyWith(
+                                color: AppColors.secondaryText,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

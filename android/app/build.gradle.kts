@@ -4,6 +4,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+
 }
 
 android {
@@ -48,4 +49,9 @@ secrets {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // ✅ Kotlin DSL uses double quotes, not single quotes
+    implementation("com.facebook.android:facebook-login:16.2.0")
 }

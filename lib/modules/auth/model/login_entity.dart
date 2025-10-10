@@ -1,14 +1,27 @@
 
 
 class LoginRequestParams {
-  final String email;
-  final String password;
+  final String provider;
+  final Map<String, dynamic> payload; // Map<String, dynamic>
 
-  LoginRequestParams({required this.email, required this.password});
+  LoginRequestParams._({
+    required this.provider,
+    required this.payload,
+  });
 
+  LoginRequestParams.emailLogin({required String email, required String password})
+      : this._(provider: 'email', payload: {'email': email, 'password': password});
+
+  LoginRequestParams.googleLogin({required String idToken})
+      : this._(provider: 'google', payload: {'idToken': idToken});
+
+  LoginRequestParams.facebookLogin({required String accessToken})
+      : this._(provider: 'facebook', payload: {'accessToken': accessToken});
+
+      
   Map<String, dynamic> toJson() => {
-        'email': email,
-        'password': password,
+        'provider': provider,
+        'payload': payload,
       };
 }
 
