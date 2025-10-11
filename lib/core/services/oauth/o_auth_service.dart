@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
@@ -46,30 +47,28 @@ class OAuthService {
   }
 
   Future<Success> loginWithFacebook() async {
-    final result = await _appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(
-        _facebookClientId,
-        _redirectUrl,
-        serviceConfiguration: const AuthorizationServiceConfiguration(
-          authorizationEndpoint: 'https://www.facebook.com/v18.0/dialog/oauth',
-          tokenEndpoint: 'https://graph.facebook.com/v18.0/oauth/access_token',
-        ),
-        scopes: ['public_profile', 'email'],
-      ),
+    final result = await FacebookAuth.instance.login(
+      permissions: ['email, public_profile'],
     );
 
-    final accessToken = result.accessToken;
-    final resp = await appPigeon.post(
-      ApiEndpoints.socialLogin,
-      data: LoginRequestParams.facebookLogin(accessToken: accessToken ?? "").toJson(),
-    );
+    if (result.status == LoginStatus.success) {
+      final userData = await FacebookAuth.instance.getUserData();
+      final accessToken = result.accessToken;
+      if(accessToken == null) {
+        throw Exception("Something went wrong with facebook login!");
+      }
+      final resp = await appPigeon.post(
+        ApiEndpoints.socialLogin,
+        data: LoginRequestParams.facebookLogin(accessToken: accessToken.tokenString).toJson(),
+      );
 
-    /// parse accessToken and refressToken
-    final body = extractBodyData(resp);
-    await _extractAndSaveAuth(body);
-    return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
+      final body = extractBodyData(resp);
+      await _extractAndSaveAuth(body);
+      return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
+    } else {
+      throw Exception('Facebook login failed: ${result.status}');
+    }
   }
-
   Future<void> _extractAndSaveAuth(dynamic body) async{
      await appPigeon.saveNewAuth(
       saveAuthParams: SaveNewAuthParams(

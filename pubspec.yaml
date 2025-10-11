@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.3.2
   shimmer: ^3.0.0
   flutter_appauth: ^10.0.0
+  flutter_facebook_auth: ^7.1.2
 
   
 dev_dependencies:

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/chat_ride_card_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
@@ -46,6 +47,7 @@ class _MessageScreenState extends State<MessageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Chat'.tr(), style: TextStyle(color: Colors.black)),
         centerTitle: true,
@@ -96,15 +98,41 @@ class _MessageScreenState extends State<MessageScreen> {
         ],
       ),
 
-      body: Column(
-        children: [
-          ChatRideCardWidget(activeRideChatController: widget.activeRideChatController),
-          //RideCard.fromRide(widget.activeRideChatController.ride.value, elevation: 0),
-          Gap.h20,
-          Divider(height: 4, color: AppColors.primarybutton),
-          Expanded(child: _ChatMessagesList(widget.activeRideChatController.messages)),
-          _InputMessageBox(widget.activeRideChatController),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+        final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+        return Stack(
+          fit: StackFit.loose,
+          children: [
+            Positioned(
+              bottom: 80,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: constraints.maxHeight - 80 - bottomInset,
+                child: Column(
+                  children: [
+                    ChatRideCardWidget(activeRideChatController: widget.activeRideChatController),
+                    const SizedBox(height: 20),
+                    const Divider(height: 4, color: AppColors.primarybutton),
+                    Expanded(
+                      child: _ChatMessagesList(widget.activeRideChatController.messages),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: _InputMessageBox(widget.activeRideChatController),
+            ),
+          ],
+        );
+      
+        }
       ),
     );
   }
@@ -159,7 +187,10 @@ class _ChatMessagesList extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(radius: 18, backgroundImage: AssetImage(avatarAsset)),
+            SmartNetworkImage.circle(
+              diameter: 36,
+              imageUrl: avatarAsset,
+            ),
             Gap.w8,
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 250),
@@ -276,43 +307,51 @@ class _InputMessageBoxState extends State<_InputMessageBox> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Colors.grey[300]!, width: 1.5),
-                ),
-                child: TextField(
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                    hintText: 'Type Message'.tr(),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        color: AppColors.background,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Flexible(
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 130, minHeight: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(color: Colors.grey[300]!, width: 1.5),
+                  ),
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: 6,
+                    minLines: 1,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: 'Type Message'.tr(),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Gap.w8,
-            InkWell(
-              onTap: () {
-                _sendMessage();
-              },
-              child: CircleAvatar(
-                radius: 22,
-                child: Image.asset(
-                  'assets/images/send.png',
-                  width: 48,
-                  height: 48,
+              Gap.w8,
+              InkWell(
+                onTap: () {
+                  _sendMessage();
+                },
+                child: CircleAvatar(
+                  radius: 22,
+                  child: Image.asset(
+                    'assets/images/send.png',
+                    width: 48,
+                    height: 48,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
