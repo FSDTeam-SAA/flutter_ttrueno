@@ -128,11 +128,11 @@ class _NotificationItemState extends State<NotificationItem> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              radius: 22,
-              backgroundImage: AssetImage("assets/images/profilepic.png"),
-            ),
-            const SizedBox(width: 12),
+            // const CircleAvatar(
+            //   radius: 22,
+            //   backgroundImage: AssetImage("assets/images/profilepic.png"),
+            // ),
+            // const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -395,5 +395,8 @@
   "Select Passengers": "Sélectionner des passagers",
   "Select Location": "Sélectionner une localisation",
   "No more rides.": "Plus de trajets.",
-  "No rides found!": "Aucun trajet trouvé!"
+  "No rides found!": "Aucun trajet trouvé!",
+  "No chats found!": "Aucun chat trouvé!",
+  "No bookings found!": "Aucune réservation trouvée!",
+  "No data found!": "Aucune données trouvées!"
 }

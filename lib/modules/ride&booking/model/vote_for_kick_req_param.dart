@@ -6,7 +6,7 @@ class VoteForKickReqParam {
   Map<String, dynamic> toJson() {
     return {
       'rideId': rideId,
-      'targetUserid': targetUserid,
+      'targetUserId': targetUserid,
     };
   }
 }

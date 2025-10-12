@@ -6,11 +6,12 @@ import '../../../base/pagination.dart';
 class PaginatedListWidget<T> extends StatefulWidget {
   final Rx<Pagination<T>> pagination;
   final Widget skeleton;
+  final String emptyMessage;
   /// How many skeletons to show, when there is no data
   final int skeletonCount;
   final VoidCallback onRefresh;
   final Widget Function(int index, T data) builder;
-  const PaginatedListWidget({super.key, required this.pagination, required this.onRefresh, required this.skeleton, required this.skeletonCount, required this.builder});
+  const PaginatedListWidget({super.key, required this.pagination, this.emptyMessage = "No data found!", required this.onRefresh, required this.skeleton, required this.skeletonCount, required this.builder});
 
   @override
   State<PaginatedListWidget<T>> createState() => _PaginatedListWidgetState<T>();
@@ -38,6 +39,15 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
         },
         child: ObxValue(
           (data) {
+            if(data.value is Loaded<T> && data.value.data.isEmpty) {
+              return Flexible(child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Text(widget.emptyMessage)),
+                  IconButton(onPressed: widget.onRefresh, icon: const Icon(Icons.refresh))
+                ],
+              ));
+            }
             return ListView.builder(
               itemCount: data.value.data.length + 1,
               itemBuilder: (context, index) {

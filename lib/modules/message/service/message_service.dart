@@ -34,6 +34,7 @@ base class MessageService extends MessageInterface{
       try {
         debugPrint("New message: $e");
         final message = Message.fromJson(e);
+        debugPrint("Parsed new message: $message");
         return message;
       } catch (e) {
         return null;

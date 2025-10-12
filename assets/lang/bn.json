@@ -388,8 +388,12 @@
   "Create": "তৈরি করুন",
   "Update": "পরিবর্তন করুন",
   "No more rides.": "আরো রাইড নেই।",
-  "No rides found!": "কোনো রাইড পাওয়া যায়নি!"
-
+  "No rides found!": "কোনো রাইড পাওয়া যায়নি!",
+  "No chats found!": "কোনো চ্যাট পাওয়া যায়নি!",
+  "No bookings found!": "কোনো বুকিং পাওয়া যায়নি!",
+  "No data found!": "কোনো ডাটা পাওয়া যায়নি!",
+  "Enter your start location": "আপনার বর্তমান অবস্থান প্রবেশ করুন",
+  "Enter your location": "আপনার অবস্থান প্রবেশ করুন"
   
 }
 

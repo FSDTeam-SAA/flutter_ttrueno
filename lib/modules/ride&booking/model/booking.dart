@@ -29,8 +29,8 @@ class Booking {
         ride: RideModel.fromJson(json['ride']),
         status: Status.fromString(json['status']),
         kicked: json['kicked'] as bool,
-        createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
+        createdAt: DateTime.parse(json['createdAt']).toLocal(),
+        updatedAt: DateTime.parse(json['updatedAt']).toLocal(),
       );
     } catch (e) {
       debugPrint("Booking.fromJson error: $e, json: $json");

@@ -41,7 +41,7 @@ class RidersListWidget extends StatefulWidget {
     required this.allowJoin,
     required this.riders,
     required this.joinRideController,
-    required this.changeBaggageController,
+    this.changeBaggageController,
     this.leaveRideController,
     this.kickoutRiderController,
     required this.seatBooked
@@ -129,6 +129,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
   }
 
   void _onLongPress(Rider rider) {
+    debugPrint("Long press on ${rider.name}");
     if (rider.userId == currentUserId) {
       showModalBottomSheet(
         context: context,
@@ -204,6 +205,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
                   );
                 },
               ),
+              
               SizedBox(height: 50),
             ],
           );

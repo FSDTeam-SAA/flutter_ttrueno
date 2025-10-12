@@ -182,7 +182,7 @@ final class RideService extends RideInterface {
   FutureRequest<Success> changeBaggage(ChangeBaggageReqParam param) async{
     return asyncTryCatch(
       tryFunc: () async{
-        final response = await appPigeon.post(
+        final response = await appPigeon.patch(
           ApiEndpoints.changeBaggage(param.rideId),
           data: param.toJson(),
         );

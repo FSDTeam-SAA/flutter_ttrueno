@@ -68,6 +68,7 @@ class _BookingScreenState extends State<BookingScreen>
         controller: _tabController,
         children: [
           PaginatedListWidget(
+            emptyMessage: "No bookings found!".tr(),
             pagination: bookingControllers.active.paginatedbookedRideControllers,
             skeleton: BookedRideCardSkeleton(),
             skeletonCount: 4,
@@ -85,6 +86,7 @@ class _BookingScreenState extends State<BookingScreen>
             },
           ),
           PaginatedListWidget(
+            emptyMessage: "No bookings found!".tr(),
             pagination: bookingControllers.completed.paginatedbookedRideControllers,
             skeleton: BookedRideCardSkeleton(),
             skeletonCount: 4,

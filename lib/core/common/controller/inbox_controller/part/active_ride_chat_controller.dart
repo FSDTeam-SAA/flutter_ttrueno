@@ -8,18 +8,24 @@ class ActiveRideChatController extends GetxController{
     ride = Rx<RideModel>(chat.ride);
     participants.addAll(chat.participants);
     eligibleToLeave.value = chat.participants.any((e) => e.userId == Get.find<ProfileDataController>().userProfile.value?.id);
-    _leaveRideController = LeaveRideController(rideId: chat.id, onLeaveSuccess: () {
+    
+    kickoutRiderController = KickoutRiderController(rideId: chat.ride.id, onKickSuccess: (){
+      Get.find<InboxController>().getAllChat(forceRefresh: true);
+    });
+    _leaveRideController = LeaveRideController(rideId: chat.ride.id, onLeaveSuccess: () {
       Get.find<InboxController>().getAllChat(forceRefresh: true);
     },);
-    joinRideController = JoinRideController(rideId: chat.id, onJoinSuccess: (rider) {
-      
+    joinRideController = JoinRideController(rideId: chat.ride.id, onJoinSuccess: (riders) {
+      onJoinSuccess(riders);
     });
-    changeBaggageController = ChangeBaggageController(rideId: chat.id, onBaggageChangeSuccess: onBaggageChangeSuccess);
+    leaveRideController = LeaveRideController(rideId: rideId, onLeaveSuccess: () {
+      Get.find<InboxController>().getAllChat(forceRefresh: true);
+    });
   }
 
   final ChatRoom chat;
   late Rx<RideModel> ride;
-  String get rideId => chat.id;
+  String get rideId => chat.ride.id;
   RxBool eligibleToLeave = RxBool(false);
   RxList<Rider> participants = RxList<Rider>([]);
   RxList<Message> messages = RxList<Message>([]);
@@ -29,7 +35,8 @@ class ActiveRideChatController extends GetxController{
   bool _allLoaded = false;
   late final LeaveRideController _leaveRideController;
   late final JoinRideController joinRideController;
-  late final ChangeBaggageController changeBaggageController;
+  late final LeaveRideController leaveRideController;
+  late final KickoutRiderController kickoutRiderController;
 
   ProcessStatusNotifier get leaveRideStn => _leaveRideController.stn;
   ProcessStatusNotifier get joinRideStn => joinRideController.stn;
@@ -38,6 +45,10 @@ class ActiveRideChatController extends GetxController{
   init() {
     getMessages();
     serviceLocator<MessageInterface>().joinRoom(chat.id);
+  }
+
+  void onJoinSuccess(List<Rider> newRiders) {
+    participants.addAll(newRiders);
   }
 
   leaveRide({SnackbarNotifier? snackbarNotifier}) async{

@@ -13,16 +13,22 @@ class LoginRequestParams {
       : this._(provider: 'email', payload: {'email': email, 'password': password});
 
   LoginRequestParams.googleLogin({required String idToken})
-      : this._(provider: 'google', payload: {'idToken': idToken});
+      : this._(provider: 'google', payload: {'token': idToken});
 
   LoginRequestParams.facebookLogin({required String accessToken})
-      : this._(provider: 'facebook', payload: {'accessToken': accessToken});
+      : this._(provider: 'facebook', payload: {'token': accessToken});
 
       
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    if(provider == 'email') {
+      return payload;
+    } else {
+      return {
         'provider': provider,
-        'payload': payload,
+        'token': payload['token'],
       };
+    }
+  }
 }
 
 class LoginResponse {

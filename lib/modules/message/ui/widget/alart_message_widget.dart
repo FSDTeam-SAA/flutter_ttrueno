@@ -146,11 +146,13 @@ class ConfirmActionBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            maxLines: 2,
-            message,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+          FittedBox(
+            child: Text(
+              maxLines: 1,
+              message,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
           if (showTextField)
             Padding(

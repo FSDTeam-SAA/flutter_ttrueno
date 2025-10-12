@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_docs_loader.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
 import '../core/common/controller/inbox_controller/inbox_controller.dart';
@@ -19,6 +20,8 @@ class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
   /// Initializes the stream to listen to auth status
   AppManager() {
+    Get.put<DescriptionDocsLoader>(DescriptionDocsLoader());
+    Get.find<DescriptionDocsLoader>().init();
     _init();
   }
 
@@ -74,12 +77,13 @@ class AppManager extends GetxController {
     }
     if(Get.isRegistered<MyBookingControllers>()) {
       await Get.delete<MyBookingControllers>();
-    } 
+    }
     
     Get.put(SearchRideController());
     Get.put(ProfileDataController());
     Get.put(InboxController());
     Get.put(MyBookingControllers());
+    
   }
 
   Stream<AuthStatus?> getAuthStream({SnackbarNotifier? snackbarNotifier}) {

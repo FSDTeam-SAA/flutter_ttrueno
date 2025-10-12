@@ -42,6 +42,7 @@ class OAuthService {
 
     /// parse accessToken and refressToken
     final body = extractBodyData(resp);
+    debugPrint(body.toString());
     await _extractAndSaveAuth(body);
     return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
   }
@@ -78,7 +79,7 @@ class OAuthService {
         data: {
           "userId": body["user"]["_id"] as String? ?? "",
         }
-      ),
+      )..toString(),
     );
   }
 }

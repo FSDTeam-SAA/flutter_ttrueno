@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/booking.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
@@ -23,8 +24,8 @@ class BookedRideCardActionController {
     finishRideController = FinishRideController(rideId: booking.ride.id, onFinishRideSuccess: onFinishRideSuccess);
     leaveRideController = LeaveRideController(rideId: booking.ride.id, onLeaveSuccess: onLeaveSuccess);
     joinRideController = JoinRideController(rideId: booking.ride.id, onJoinSuccess: onJoinSuccess);
-    changeBaggageController = ChangeBaggageController(rideId: booking.ride.id, onBaggageChangeSuccess: onBaggageChangeSuccess); 
-
+    changeBaggageController = ChangeBaggageController(bookingId: booking.id, onBaggageChangeSuccess: onBaggageChangeSuccess); 
+    kickoutRiderController = KickoutRiderController(rideId: booking.ride.id, onKickSuccess: () {});
     // eligibility to finish, rate-ride
     if(booking.status == Status.active && booking.ride.departureTime.isBefore(DateTime.now())) {
       eligibleToFinish = true;
@@ -55,6 +56,7 @@ class BookedRideCardActionController {
   late final LeaveRideController leaveRideController;
   late final JoinRideController joinRideController;
   late final ChangeBaggageController changeBaggageController;
+  late final KickoutRiderController kickoutRiderController;
 
   Future<void> leaveRide({
     required SnackbarNotifier? snackbarNotifier

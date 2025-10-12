@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 
@@ -81,7 +82,7 @@ class _LocationTextfieldState extends State<LocationTextfield> {
             },
             controller: controller,
             decoration: InputDecoration(
-              hintText:  widget.hint,
+              hintText:  widget.hint.tr(),
               hintStyle: TextStyle(color: Colors.grey.shade500),
               border: InputBorder.none,
               isDense: true,

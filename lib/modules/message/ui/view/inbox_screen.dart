@@ -58,6 +58,7 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PaginatedListWidget(
+          emptyMessage: "No chats found!".tr(),
           pagination: chatListController.rideChatPages,
           onRefresh: () => chatListController.getAllChat(forceRefresh: true), 
           skeleton: InboxChatSkeleton(), skeletonCount: 4, 

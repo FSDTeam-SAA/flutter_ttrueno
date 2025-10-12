@@ -18,7 +18,7 @@ class RideCardActionController {
     joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (newRiders) {
       riders.addAll(newRiders);
     },);
-    changeBaggageController = ChangeBaggageController(rideId: ride.id, onBaggageChangeSuccess: (changedBaggage) {
+    changeBaggageController = ChangeBaggageController(bookingId: ride.id, onBaggageChangeSuccess: (changedBaggage) {
       for(int i = 0; i < riders.length; i++) {
         if(riders[i].userId == currentUserId) {
           riders[i] = riders[i].copyWith(baggageType: changedBaggage);

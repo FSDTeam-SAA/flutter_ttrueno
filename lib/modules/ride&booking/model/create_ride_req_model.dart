@@ -24,7 +24,7 @@ class CreateRideReq {
     return {
       'startLocation': startLocation.toJson(),
       'endLocation': endLocation.toJson(),
-      'departureTime': departureTime.toIso8601String(),
+      'departureTime': departureTime.toUtc().toIso8601String(),
       'seatCount': 4,
       'availableSeats': availableSeats,
       'pinnedNote': pinnedNote,

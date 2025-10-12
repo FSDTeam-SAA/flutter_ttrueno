@@ -9,6 +9,7 @@ import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../../modules/message/interface/message_interface.dart';
@@ -49,6 +50,15 @@ class InboxController extends GetxController{
   Future<ActiveRideChatController?> getChatById(String chatId) async{
     for(int i = 0; i < rideChatPages.value.data.length; i++) {
       if(rideChatPages.value.data[i].chat.id == chatId) {
+        return rideChatPages.value.data[i];
+      }
+    }
+    return null;
+  }
+
+  Future<ActiveRideChatController?> getChatByRideId(String rideId) async{
+    for(int i = 0; i < rideChatPages.value.data.length; i++) {
+      if(rideChatPages.value.data[i].ride.value.id == rideId) {
         return rideChatPages.value.data[i];
       }
     }
@@ -96,13 +106,15 @@ class InboxController extends GetxController{
 
   _lisenToStreams() {
     // Rider join stream
-    _riderJoinedStreamSubscription = serviceLocator<RideInterface>().riderJoinedStream().listen((riderState) {
-      rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.rideId).addNewRider(riderState.rider);
-    });
-    // Rider left stream
-    _riderLeftStreamSubscription = serviceLocator<RideInterface>().riderLeftStream().listen((riderState) {
-      rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.riderId).removeRider(riderState.riderId);
-    });
+    // _riderJoinedStreamSubscription = serviceLocator<RideInterface>().riderJoinedStream().listen((riderState) {
+    //   rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.rideId).addNewRider(riderState.rider);
+    // });
+    // // Rider left stream
+    // _riderLeftStreamSubscription = serviceLocator<RideInterface>().riderLeftStream().listen((riderState) {
+    //   rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.riderId).removeRider(riderState.riderId);
+    // });
+
+
     _chatRoomStreamSubscription = serviceLocator<MessageInterface>().chatStream().listen((chatRoom) {
       if(chatRoom == null) return;
       final index = rideChatPages.value.data.indexWhere((e) => e.chat.id == chatRoom.id);
@@ -119,13 +131,16 @@ class InboxController extends GetxController{
       if(index != -1) {
         rideChatPages.value.data[index]._addMessage(message);
         if(message.type == MessageType.system) {
+          debugPrint("New system message: ${message.message}");
+          debugPrint("Updating ride");
           await serviceLocator<RideInterface>().getRideById(rideId: rideChatPages.value.data[index].rideId).then((lr) {
             handleFold(
               either: lr,
               processStatusNotifier: null,
               onSuccess: (data) {
                 rideChatPages.value.data[index].participants.value = data.participants;
-                rideChatPages.refresh();
+                rideChatPages.value.data[index].participants.refresh();
+                debugPrint("Ride chat updated");
               },
             );
           });

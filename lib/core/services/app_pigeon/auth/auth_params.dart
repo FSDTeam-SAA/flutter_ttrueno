@@ -13,7 +13,10 @@ class SaveNewAuthParams {
     required this.data,
   }): uid = uid ?? DateTime.now().microsecondsSinceEpoch.toString();
 
-  
+  @override
+  String toString() {
+    return 'SaveNewAuthParams(accessToken: $accessToken, refreshToken: $refreshToken, uid: $uid, data: $data)';
+  }
 }
 
 class UpdateAuthParams {

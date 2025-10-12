@@ -70,12 +70,11 @@ base class ApiEndpoints {
   static String deleteRide(String id) => _Ride.deleteRide(id);
   static const String filterRide = _Ride.filterRide;
   static String rateRide(String rideId) => _Ride.rateRide(rideId);
-  static String changeBaggage(String rideId) => _Ride.changeBaggage(rideId);
+  static String changeBaggage(String rideId) => _Booking.changeBaggage(rideId);
 
   // ---------------------- Booking -----------------------------
   static String getAllBookingsForARide(String rideId) => _Booking.getAllBookingsForARide(rideId);
   static const String getMyBookings = _Booking.getMyBookings;
-
 
   // ---------------------- Message -----------------------------
   /// ### Get
@@ -114,7 +113,8 @@ class _Auth {
   @protected
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
-  static const String socialLogin = '$_authRoute/login/social';
+  //static const String socialLogin = '$_authRoute/login/social';
+  static const String socialLogin = '$_authRoute/social-login';
   static const String appleLogin = '$_authRoute/apple-login';
   static const String facebookLogin = '$_authRoute/facebook-login';
   static const String signup = '$_authRoute/register/init';
@@ -165,13 +165,14 @@ class _Ride {
   static String voteForKick(String id) => "$_rideRoute/$id/kick";
   static String deleteRide(String id) => "$_rideRoute/$id";
   static String rateRide(String rideId) => "$_rideRoute/$rideId/rate";
-  static String changeBaggage(String id) => "$_rideRoute/$id/baggage";
+  
 }
 
 class _Booking {
   static const String _bookingRoute = '${ApiEndpoints.baseUrl}/booking';
   static const String getMyBookings = "$_bookingRoute/my";
   static String getAllBookingsForARide(String rideId) => "$_bookingRoute/ride/$rideId";
+  static String changeBaggage(String id) => "$_bookingRoute/$id";
 }
 
 // ---------------------- MESSAGE -----------------------------

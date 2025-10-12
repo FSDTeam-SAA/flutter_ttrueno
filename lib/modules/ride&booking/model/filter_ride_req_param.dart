@@ -32,7 +32,7 @@ class FilterRideReqParam {
       'fromLng': fromLng,
       'toLat': toLat,
       'toLng': toLng,
-      'departureTime': departureTime.toIso8601String(),
+      'departureTime': departureTime.toUtc().toIso8601String(),
       "passengers": passengers
     };
   }

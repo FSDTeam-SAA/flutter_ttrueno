@@ -114,8 +114,6 @@ class _MessageScreenState extends State<MessageScreen> {
                 child: Column(
                   children: [
                     ChatRideCardWidget(activeRideChatController: widget.activeRideChatController),
-                    const SizedBox(height: 20),
-                    const Divider(height: 4, color: AppColors.primarybutton),
                     Expanded(
                       child: _ChatMessagesList(widget.activeRideChatController.messages),
                     ),

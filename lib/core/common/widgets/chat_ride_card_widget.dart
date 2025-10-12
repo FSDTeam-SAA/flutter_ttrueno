@@ -32,51 +32,59 @@ class ChatRideCardWidget extends StatefulWidget {
 class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _LocationHeader(
-          fromLocation: widget.activeRideChatController.ride.value.startLocation.address ?? "",
-          toLocation: widget.activeRideChatController.ride.value.endLocation.address ?? "",
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Row(
-            children: [
-              Text(
-                DateFormat.yMMMMEEEEd().format(widget.activeRideChatController.ride.value.departureTime),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.primaryTextblack,
-                ),
-              ),
-              Gap.w12,
-              Text(
-                DateFormat.Hm().format(widget.activeRideChatController.ride.value.departureTime),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.primaryTextblack,
-                ),
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: _LocationHeader(
+              fromLocation: widget.activeRideChatController.ride.value.startLocation.address ?? "",
+              toLocation: widget.activeRideChatController.ride.value.endLocation.address ?? "",
+            ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: CarDivider(),
-        ),
-        Gap.h12,
-        RidersListWidget(
-          allowJoin: true,
-          avatarSize: 50,
-          riders: widget.activeRideChatController.participants,
-          joinRideController: widget.activeRideChatController.joinRideController,
-          changeBaggageController: widget.activeRideChatController.changeBaggageController,
-          seatBooked: 1,
-        ),
-        // _UserAvatarsRow(
-        //   joinedUsers: widget.activeRide.value.participants,
-        // ),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: Row(
+              children: [
+                Text(
+                  DateFormat.yMMMMEEEEd().format(widget.activeRideChatController.ride.value.departureTime),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.primaryTextblack,
+                  ),
+                ),
+                Gap.w12,
+                Text(
+                  DateFormat.Hm().format(widget.activeRideChatController.ride.value.departureTime),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.primaryTextblack,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: CarDivider(),
+          ),
+          Gap.h12,
+          RidersListWidget(
+            allowJoin: true,
+            avatarSize: 50,
+            riders: widget.activeRideChatController.participants,
+            kickoutRiderController: widget.activeRideChatController.kickoutRiderController,
+            joinRideController: widget.activeRideChatController.joinRideController,
+            leaveRideController: widget.activeRideChatController.leaveRideController,
+            seatBooked: 1,
+          ),
+          SizedBox(height: 10,),
+          // _UserAvatarsRow(
+          //   joinedUsers: widget.activeRide.value.participants,
+          // ),
+          const Divider(height: 4, color: AppColors.primarybutton),
+        ],
+      ),
     );
   }
 }
@@ -90,40 +98,52 @@ class _LocationHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'From'.tr(),
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: constraints.maxWidth * 0.45,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'From'.tr(),
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                    Flexible(
+                      child: Text(
+                        fromLocation,
+                        maxLines: 2,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  fromLocation,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              SizedBox(
+                width: constraints.maxWidth * 0.45,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'To'.tr(),
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                    Flexible(
+                      child: Text(
+                        toLocation,
+                        maxLines: 2,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'To'.tr(),
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
-                ),
-                Text(
-                  toLocation,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        }
       ),
     );
   }

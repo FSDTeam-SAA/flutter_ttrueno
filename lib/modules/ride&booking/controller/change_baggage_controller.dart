@@ -11,11 +11,11 @@ import '../../../core/notifiers/snackbar_notifier.dart';
 import '../model/join_ride_req_param.dart';
 
 class ChangeBaggageController {
-  ChangeBaggageController({required this.rideId, required this.onBaggageChangeSuccess});
+  ChangeBaggageController({required this.bookingId, required this.onBaggageChangeSuccess});
   
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   Rx<BaggageType?> baggageType = Rx<BaggageType?>(null);
-  final String rideId;
+  final String bookingId;
   final void Function(BaggageType changedBaggage) onBaggageChangeSuccess;
 
   Future<void> changeBaggage({
@@ -27,7 +27,7 @@ class ChangeBaggageController {
     }
     stn.setLoading();
     await serviceLocator<RideInterface>().changeBaggage(
-      ChangeBaggageReqParam(rideId: rideId, baggageType: baggageType.value!, bookingId: riderId,)
+      ChangeBaggageReqParam(rideId: bookingId, baggageType: baggageType.value!, bookingId: riderId,)
     ).then((lr){
       handleFold(
         either: lr,

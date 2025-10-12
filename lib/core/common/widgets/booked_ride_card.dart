@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/booked_ride_card_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
@@ -10,6 +11,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
+import '../../../modules/message/ui/view/message_screen.dart';
 import '../../../modules/ride&booking/ui/view/share_experience_screen.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/text_style.dart';
@@ -294,7 +296,22 @@ class _BookedRideCardState extends State<BookedRideCard> {
 
         TextButton.icon(
           onPressed: () {
-            
+            final rideId = bookedRideCardController.booking.ride.id;
+            Get.find<InboxController>().getChatByRideId(rideId).then((chatController) {
+              if(chatController != null && mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MessageScreen(
+                      activeRideChatController: chatController,
+                    ),
+                  ),
+                );
+              } else {
+                if(mounted) SnackbarNotifier(context: context).notify(message: "Chat for this ride is not available for now!".tr());
+                return;
+              }
+            });
           },
           icon: Image.asset(
             'assets/images/chat1.png',

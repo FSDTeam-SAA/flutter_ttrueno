@@ -1,6 +1,6 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../core/common/widgets/textfields/location_textfield.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../location/model/location_address.dart';
@@ -40,15 +40,15 @@ class LocationInputs extends StatelessWidget {
           child: Column(
             children: [
               LocationTextfield(
-                label: 'From',
-                hint: 'Enter your current location',
+                label: 'From'.tr(),
+                hint: 'Enter your current location'.tr(),
                 onselect: onSelectingFromLocation,
                 controller: fromController,
               ),
               const SizedBox(height: 15),
               LocationTextfield(
-                label: 'To',
-                hint: 'Enter your location',
+                label: 'To'.tr(),
+                hint: 'Enter your location'.tr(),
                 onselect: onSelectingToLocation,
                 controller: toController,
               ),
