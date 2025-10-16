@@ -163,30 +163,34 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       ),
                       Gap.h24,
 
-                      PinCodeTextField(
-                        appContext: context,
-                        controller: _otpController,
-                        length: 6,
-                        obscureText: false,
-                        animationType: AnimationType.fade,
-                        keyboardType: TextInputType.none,
-                        pinTheme: PinTheme(
-                          shape: PinCodeFieldShape.box,
-                          borderRadius: BorderRadius.circular(16),
-                          fieldHeight: 58,
-                          fieldWidth: 58,
-                          activeFillColor: Colors.grey.shade100,
-                          inactiveFillColor: Colors.grey.shade100,
-                          selectedFillColor: Colors.white,
-                          inactiveColor: Colors.grey.shade100,
-                          selectedColor: Colors.blue,
-                          activeColor: Colors.blue,
-                        ),
-                        animationDuration: const Duration(milliseconds: 300),
-                        enableActiveFill: true,
-                        onChanged: (value) {
-                          _verifyAccountViewController.otp = value;
-                        },
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return PinCodeTextField(
+                            appContext: context,
+                            controller: _otpController,
+                            length: 6,
+                            obscureText: false,
+                            animationType: AnimationType.fade,
+                            keyboardType: TextInputType.none,
+                            pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              borderRadius: BorderRadius.circular(16),
+                              fieldHeight: (constraints.maxWidth / 6) - 4,
+                              fieldWidth: (constraints.maxWidth / 6) - 4,
+                              activeFillColor: Colors.grey.shade100,
+                              inactiveFillColor: Colors.grey.shade100,
+                              selectedFillColor: Colors.white,
+                              inactiveColor: Colors.grey.shade100,
+                              selectedColor: Colors.blue,
+                              activeColor: Colors.blue,
+                            ),
+                            animationDuration: const Duration(milliseconds: 300),
+                            enableActiveFill: true,
+                            onChanged: (value) {
+                              _verifyAccountViewController.otp = value;
+                            },
+                          );
+                        }
                       ),
 
                       Gap.h8,

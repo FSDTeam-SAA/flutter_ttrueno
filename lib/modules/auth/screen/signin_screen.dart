@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/bottom_nab_bar_page.dart';
+import 'package:ttrueno_fo827e642a0c4/app/view/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/login_screen_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/forget_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
@@ -267,16 +269,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              LoginScreen._socialIcon(
-                                'assets/images/google.png',
+                              InkWell(
+                                onTap: () => _loginsScreenController.googleLogin(),
+                                child: LoginScreen._socialIcon(
+                                  'assets/images/google.png',
+                                ),
                               ),
                               Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/apple.png',
-                              ),
-                              Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/facebook.png',
+                              InkWell(
+                                onTap: () {
+                                  _loginsScreenController.facebookLogin();
+                                },
+                                child: LoginScreen._socialIcon(
+                                  'assets/images/facebook.png',
+                                ),
                               ),
                             ],
                           ),

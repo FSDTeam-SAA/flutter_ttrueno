@@ -2,15 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/chat_ride_card_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/message.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/send_message_req_param.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 
-import '../../../../app_manager.dart';
+import '../../../../app/app_manager.dart';
+import '../../../../core/notifiers/snackbar_notifier.dart';
 import '../../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../../core/theme/app_gap.dart';
 
@@ -24,10 +28,26 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
 
+  late final LeaveRideController leaveRideController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    leaveRideController = LeaveRideController(
+      rideId: widget.activeRideChatController.ride.value.id,
+      onLeaveSuccess: () {
+        Get.find<InboxController>().getAllChat(forceRefresh: true);
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Chat'.tr(), style: TextStyle(color: Colors.black)),
         centerTitle: true,
@@ -39,7 +59,7 @@ class _MessageScreenState extends State<MessageScreen> {
             child: GestureDetector(
               onTap: () {
                 if(widget.activeRideChatController.eligibleToLeave.value) {
-                  
+                  leaveRideController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
                 }
               },
               child: Row(
@@ -59,6 +79,18 @@ class _MessageScreenState extends State<MessageScreen> {
                     height: 28,
                     color: Colors.red,
                   ),
+                  RIcon(
+                    key: UniqueKey(),
+                    iconWidget: Container(),
+                    processStatusNotifier: leaveRideController.stn,
+                    loadingStateWidget: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -66,15 +98,39 @@ class _MessageScreenState extends State<MessageScreen> {
         ],
       ),
 
-      body: Column(
-        children: [
-          ChatRideCardWidget(activeRide: widget.activeRideChatController.ride),
-          //RideCard.fromRide(widget.activeRideChatController.ride.value, elevation: 0),
-          Gap.h20,
-          Divider(height: 4, color: AppColors.primarybutton),
-          Expanded(child: _ChatMessagesList(widget.activeRideChatController.messages)),
-          _InputMessageBox(widget.activeRideChatController),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+        final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+        return Stack(
+          fit: StackFit.loose,
+          children: [
+            Positioned(
+              bottom: 80,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: constraints.maxHeight - 80 - bottomInset,
+                child: Column(
+                  children: [
+                    ChatRideCardWidget(activeRideChatController: widget.activeRideChatController),
+                    Expanded(
+                      child: _ChatMessagesList(widget.activeRideChatController.messages),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: _InputMessageBox(widget.activeRideChatController),
+            ),
+          ],
+        );
+      
+        }
       ),
     );
   }
@@ -129,7 +185,10 @@ class _ChatMessagesList extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(radius: 18, backgroundImage: AssetImage(avatarAsset)),
+            SmartNetworkImage.circle(
+              diameter: 36,
+              imageUrl: avatarAsset,
+            ),
             Gap.w8,
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 250),
@@ -242,46 +301,55 @@ class _InputMessageBoxState extends State<_InputMessageBox> {
     );
     textEditingController.clear();
   }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Colors.grey[300]!, width: 1.5),
-                ),
-                child: TextField(
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                    hintText: 'Type Message'.tr(),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        color: AppColors.background,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Flexible(
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 130, minHeight: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(color: Colors.grey[300]!, width: 1.5),
+                  ),
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: 6,
+                    minLines: 1,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: 'Type Message'.tr(),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Gap.w8,
-            InkWell(
-              onTap: () {
-                _sendMessage();
-              },
-              child: CircleAvatar(
-                radius: 22,
-                child: Image.asset(
-                  'assets/images/send.png',
-                  width: 48,
-                  height: 48,
+              Gap.w8,
+              InkWell(
+                onTap: () {
+                  _sendMessage();
+                },
+                child: CircleAvatar(
+                  radius: 22,
+                  child: Image.asset(
+                    'assets/images/send.png',
+                    width: 48,
+                    height: 48,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

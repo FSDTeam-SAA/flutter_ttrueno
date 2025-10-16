@@ -1,25 +1,23 @@
-import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
+
+import 'dart:math';
 
 import '../../../core/common/model/rider.dart';
 
 class JoinRideReqResponse {
-  final Rider joinedRider;
-  final ChatRoom chatRoom;
+  final List<Rider> joinedRiders;
   JoinRideReqResponse({
-    required this.joinedRider,
-    required this.chatRoom,
+    required this.joinedRiders,
   });
 
   factory JoinRideReqResponse.fromJson(Map<String, dynamic> json) {
     return JoinRideReqResponse(
-      joinedRider: Rider.fromJson(json['joinedRider']),
-      chatRoom: ChatRoom.fromJson(json['chatRoom']),
+      joinedRiders: (json["ride"]['participants'] as List<dynamic>).map((e)=> Rider.fromJson(e)).toList(),
     );
   }
 
   @override
   String toString() {
-    return 'JoinRideReqResponse(joinedRide: ${joinedRider.toString()}, chatRoom: ${chatRoom.toString()})';
+    return 'JoinRideReqResponse(joinedRideResponse: ${joinedRiders.map((e) => e.toString()).join("\n ")})';
   }
 
 }

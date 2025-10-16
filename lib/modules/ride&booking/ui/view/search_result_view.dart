@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
@@ -40,6 +42,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
+            tooltip: "Filter Rides",
             icon: Image.asset(
               'assets/images/filter.png',
               width: 24,
@@ -55,7 +58,6 @@ class _SearchResultsViewState extends State<SearchResultsView> {
           ),
         ],
       ),
-
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SafeArea(
@@ -114,7 +116,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          searchRideController.selectedDateTime?.dmeAthm ?? '',
+                          searchRideController.selectedDateTime?.dmyAth24 ?? '',
                           style: AppText.smMedium_14_600.copyWith(
                             color: AppColors.secondaryTextblack,
                           ),
@@ -157,49 +159,72 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                 //     ),
                 //   ],
                 // ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      // Departure Flex Distance
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: SizedBox(
-                          height:
-                              48, // Adjust height as needed to fit your chip size
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                FilterChipWidget(
-                                  label: 'Departure Flex : 200 meters',
-                                ),
-                                SizedBox(width: 8),
-                                FilterChipWidget(label: 'Departure Flex : 30 min'),
-                                SizedBox(width: 8),
-                                FilterChipWidget(
-                                  label: 'Arrival Flex : 200 meters',
-                                ),
-                              ],
-                            ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(
+                      ()=> Row(
+                        spacing: 8,
+                        children: [
+                          FilterChipWidget(
+                            label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexKm} kilometres',
+                            toolTip: "Departure Flex(Km) set how much later or further from your chosen spot you’re willing to depart.".tr(),
                           ),
-                        ),
+                          FilterChipWidget(
+                            label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexMinutes} min',
+                            toolTip: "Departure Flex(Minutes) set how much later or further from your chosen time you’re willing to depart.".tr(),
+                          ),
+                          FilterChipWidget(
+                            label: 'Arrival Flex : ${searchRideController.filtered.value.arrivalFlexKm} kilometres',
+                            toolTip: "Arrival Flex set how much further from your chosen spot you’re willing to arrive.".tr(),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
           
                 Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: searchRideController.searchResults.length,
-                    itemBuilder: (context, index) {
-                      final ride = searchRideController.searchResults[index];
-                      return RideCard.fromRide(
-                        ride,
-                        allowJoin: true,
-                      );
-                    },
+                  child: Obx(
+                    ()=> 
+                    ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: searchRideController.searchResults.length + 1,
+                      itemBuilder: (context, index) {
+                        if(index == searchRideController.searchResults.length) {
+                          if(searchRideController.isSearching.value) {
+                            return Column(
+                              children: [
+                                ...List.generate(10, (_)=>
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: BookedRideCardSkeleton()
+                                  )
+                                )
+                              ],
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Center(
+                              child: searchRideController.isSearching.value ? CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primarybutton),
+                              ) : Text(
+                                searchRideController.searchResults.isEmpty ? "No rides found!".tr() : 'No more rides.'.tr(),
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          );
+                        }
+                        final ride = searchRideController.searchResults[index];
+                        return RideCard.fromRide(
+                          ride,
+                          allowJoin: true,
+                          seatBooked: searchRideController.passengers.value,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Padding(

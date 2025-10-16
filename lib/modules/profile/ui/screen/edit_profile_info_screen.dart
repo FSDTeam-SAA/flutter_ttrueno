@@ -60,8 +60,8 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
               Center(
                 child: Obx(() {
                   Widget avatar;
-
                   if (controller.profileImage.value?.path != null) {
+                    debugPrint("Has image");
                     avatar = CircleShape(
                       backgroundColor: Colors.black,
                       borderColor: Colors.black,
@@ -73,12 +73,19 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
                       )
                     );
                   } else if (controller.beforeUserProfile?.imageUrl != null) {
+                    debugPrint("Has image from cloud");
                     avatar = SmartNetworkImage.circle(
                       imageUrl: controller.beforeUserProfile!.imageUrl,
                       diameter: 96,
+                      errorWidget: Icon(
+                        Icons.person,
+                        size: 96,
+                      ),
                     );
                   } else {
+                    debugPrint("No image");
                     avatar = CircleShape(
+                      backgroundColor: Colors.grey,
                       child: SizedBox(
                         height: 96,
                         width: 96,

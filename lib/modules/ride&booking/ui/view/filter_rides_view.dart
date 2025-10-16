@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -22,7 +24,7 @@ class FilterRidesView extends StatefulWidget {
 
 class _FilterRidesViewState extends State<FilterRidesView> {
   final SearchRideController searchRideController = Get.find<SearchRideController>();
-
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
   @override
   void initState() {
     super.initState();
@@ -98,9 +100,22 @@ class _FilterRidesViewState extends State<FilterRidesView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Departure Flexibility".tr(),
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Tooltip(
+          message: "Departure Flex set how much later or further from your chosen spot you’re willing to depart.",
+          margin: EdgeInsets.all(8),
+          child: Row(
+            spacing: 6,
+            children: [
+              Text(
+                "Departure Flexibility".tr(),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              Icon(
+                Icons.info_outline,
+                color: AppColors.primaryTextblack,
+              )
+            ],
+          ),
         ),
         Gap.h16,
         _distanceSlider(searchRideController.departureFlexKm),
@@ -164,10 +179,24 @@ class _FilterRidesViewState extends State<FilterRidesView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Arrival Flexibility".tr(),
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Tooltip(
+          message: "Arrival Flex set how much farther from your chosen spot you’re willing to arrive.",
+          margin: EdgeInsets.all(8),
+          child: Row(
+            spacing: 6,
+            children: [
+              Text(
+                "Arrival Flexibility".tr(),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              Icon(
+                Icons.info_outline,
+                color: AppColors.primaryTextblack,
+              )
+            ],
+          ),
         ),
+        
         Gap.h16,
         _distanceSlider(searchRideController.arrivalFlexKm),
         Gap.h24,
@@ -282,7 +311,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "Seat Available".tr(),
+                  "Seats Available".tr(),
                   style: AppText.mdRegular_16_400.copyWith(
                     color: AppColors.primaryTextblack,
                   ),
@@ -291,7 +320,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 IconButton(
                   onPressed: () {
                     if (searchRideController.passengers > 1) {
-                      searchRideController.passengers--;
+                      searchRideController.decrementPassengers();
                     }
                   },
                   icon: const Icon(Icons.remove_circle_outline),
@@ -316,7 +345,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 ),
                 IconButton(
                   onPressed: () {
-                    searchRideController.incrementPassengers();
+                    if(searchRideController.passengers < 4) searchRideController.incrementPassengers();
                   },
                   icon: const Icon(Icons.add_circle_outline),
                 ),

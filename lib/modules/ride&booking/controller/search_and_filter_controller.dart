@@ -5,9 +5,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
@@ -18,7 +19,13 @@ class SearchRideController extends GetxController {
   SearchRideController() {
     _initializeDefaultValues();
   }
+  RxBool isSearching = RxBool(false);
   final RxList<RideModel> searchResults = RxList<RideModel>();
+  Rx<FilterModel> filtered = Rx(FilterModel(
+    arrivalFlexKm: .2,
+    departureFlexKm: .2,
+    departureFlexMinutes: 15,
+  ));
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
@@ -35,6 +42,7 @@ class SearchRideController extends GetxController {
   RxInt passengers = RxInt(1);
   RxDouble departureFlexKm = RxDouble(.2);
   RxDouble arrivalFlexKm = RxDouble(.2);
+  /// In minutes
   RxInt departureFlexMinutes = RxInt(15);
 
   Future<void> _initializeDefaultValues() async {
@@ -126,7 +134,7 @@ class SearchRideController extends GetxController {
   }
 
   void incrementPassengers() {
-    passengers++;
+    if (passengers < 4) passengers++;
   }
 
   void decrementPassengers() {
@@ -146,12 +154,18 @@ class SearchRideController extends GetxController {
     arrivalFlexKm.value = .2;
     departureFlexKm.value = .2;
     departureFlexMinutes.value = 15;
+    isSearching.value = false;
     await _setCurrentLocation();
   }
+
+  int _page = 1;
+  final int _limit = 20;
+  bool _allLoaded = false;
 
   Future<void> searchRide({
     SnackbarNotifier? snackbarNotifier,
     ProcessStatusNotifier? processStatusNotifier,
+    bool forceRefresh = false,
   }) async {
     // Validate inputs
     if (fromLocation == null || toLocation == null) {
@@ -163,7 +177,14 @@ class SearchRideController extends GetxController {
       return;
     }
     ControllerDebugger().dekhao("Searching Ride...");
+    // if(forceRefresh) {
+    //   _page = 1;
+    //   _allLoaded = false;
+    //   searchResults.clear();
+    // }
+    searchResults.clear();
     processStatusNotifier?.setLoading();
+    isSearching.value = true;
     await serviceLocator<RideInterface>().filterRide(
       params: FilterRideReqParam(
         arrivalFlexKm: arrivalFlexKm.value,
@@ -194,10 +215,16 @@ class SearchRideController extends GetxController {
             snackbarNotifier?.notify(message: 'No rides found'.tr());
           }
           searchResults.value = data;
-          searchResults.refresh();
+          filtered.value = FilterModel(
+            arrivalFlexKm: arrivalFlexKm.value,
+            departureFlexKm: departureFlexKm.value,
+            departureFlexMinutes: departureFlexMinutes.value,
+          );
+          
         },
       );
     });
+    isSearching.value = false;
     Future.delayed(Duration(seconds: 3)).then((_){processStatusNotifier?.setEnabled();});
   }
 

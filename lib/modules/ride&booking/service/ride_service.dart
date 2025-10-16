@@ -1,13 +1,14 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/change_baggage_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_req_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/update_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/vote_for_kick_req_param.dart';
@@ -16,11 +17,12 @@ import '../../../core/common/model/rider_joined_state.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/join_ride_req_response.dart';
+import '../model/rate_ride_req_param.dart';
 
 final class RideService extends RideInterface {
-  final AppPigeon appPigeon;
-
   RideService(this.appPigeon);
+
+  final AppPigeon appPigeon;
 
   @override
   FutureRequest<Success<RideModel>> createRide(CreateRideReq params) async {
@@ -155,17 +157,38 @@ final class RideService extends RideInterface {
 
   @override
   Stream<RiderJoinedState> riderJoinedStream() {
-    return appPigeon.listen("rider_joined").map((e) => RiderJoinedState.fromJson(e));
+    return appPigeon.listen("userJoined").map((e) => RiderJoinedState.fromJson(e));
   }
 
   @override
   Stream<RiderLeftState> riderLeftStream() {
     return appPigeon.listen("userLeft").map((e) => RiderLeftState.fromJson(e));
   }
+  
+  @override
+  FutureRequest<Success> rateRide({required RateRideReqParam param}) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.post(
+          ApiEndpoints.rateRide(param.rideId),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
 
-  // @override
-  // Stream<RiderStreamState> riderStream() {
-  //   return appPigeon.listen("rider_state").map((e) => RiderStreamState.fromJson(e));
-  // }
+  @override
+  FutureRequest<Success> changeBaggage(ChangeBaggageReqParam param) async{
+    return asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.patch(
+          ApiEndpoints.changeBaggage(param.rideId),
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
 }
 

@@ -1,16 +1,11 @@
 import 'package:get/get.dart';
-import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
 import '../../../modules/profile/controller/profile_data_controller.dart';
-import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
 import '../../../modules/ride&booking/model/enum/status.dart';
-import '../../notifiers/snackbar_notifier.dart';
 import '../model/rider.dart';
 
 class RideCardActionController {
@@ -20,10 +15,19 @@ class RideCardActionController {
       if(rider.userId == currentUserId) eligibleForChat.value = true;
       riders.add(rider);
     }
-    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (rider) {
-      riders.add(rider);
+    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (newRiders) {
+      riders.addAll(newRiders);
     },);
+    changeBaggageController = ChangeBaggageController(bookingId: ride.id, onBaggageChangeSuccess: (changedBaggage) {
+      for(int i = 0; i < riders.length; i++) {
+        if(riders[i].userId == currentUserId) {
+          riders[i] = riders[i].copyWith(baggageType: changedBaggage);
+        }
+      }
+      riders.refresh();
+    },); 
     // eligibility to finish, rate-ride
+    eligibleToJoin.value = DateTime.now().isBefore(ride.departureTime);
     if(currentUserId == ride.creator?.id) {
       eligibleToFinish = true;
     }
@@ -34,6 +38,7 @@ class RideCardActionController {
 
   final RideModel ride;
 
+  RxBool eligibleToJoin = RxBool(false);
   RxBool eligibleForChat = RxBool(false);
   bool eligibleToFinish = false;
   bool eligibleForRatingRide = false;
@@ -41,29 +46,14 @@ class RideCardActionController {
 
   ProcessStatusNotifier joinRideStn = ProcessStatusNotifier(initialStatus: EnabledStatus());
   late final JoinRideController joinRideController;
+  late final ChangeBaggageController changeBaggageController;
 
-
-  Future<void> joinRide({
-    required SnackbarNotifier? snackbarNotifier,
-    required BaggageType baggageType
-  }) async{
-    joinRideStn.setLoading();
-    await serviceLocator<RideInterface>().joinRide(
-      param: JoinRideReqParam(rideId: ride.id, baggageType: baggageType)
-    ).then((lr){
-      handleFold(
-        either: lr,
-        processStatusNotifier: joinRideStn,
-        errorSnackbarNotifier: snackbarNotifier,
-        onSuccess: (data) {
-          riders.add(data.joinedRider);
-          ride.participants.add(data.joinedRider);
-          riders.refresh();
-          snackbarNotifier?.notify(message: "You joined the ride successfully");
-        },
-      );
-    });
-  }
+  // Future<void> joinRide({
+  //   required SnackbarNotifier? snackbarNotifier,
+  //   required BaggageType baggageType
+  // }) async{
+  //   await joinRideController.joinRide(snackbarNotifier: snackbarNotifier);
+  // }
 
 }
 

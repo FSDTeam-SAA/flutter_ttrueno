@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ttrueno_fo827e642a0c4/bottom_nab_bar_page.dart';
+import 'package:ttrueno_fo827e642a0c4/app/view/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
-import 'app_manager.dart';
+import 'app/app_manager.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/theme/app_theme.dart';
 import 'app/widget/background_image.dart';
 import 'modules/onboarding/splash_screen.dart';
-import 'init_dependency.dart';
-import 'routing/route_names.dart';
+import 'app/init_dependency.dart';
+import 'app/routing/route_names.dart';
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -77,10 +77,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     debugPrint("App started");
-    
-     WidgetsBinding.instance.addPostFrameCallback((x){
-      
-    });
   }
 
   @override
@@ -93,17 +89,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() async {
     super.dispose();
-    
-   
   }
-
   
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Hoplift',
       theme: AppTheme.light,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

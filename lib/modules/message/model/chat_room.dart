@@ -42,15 +42,13 @@ class ChatRoom {
     }
   }
 
-  
-
   Map<String, dynamic> toJson() => {
-        '_id': id,
-        'rideId': ride,
-        'name': name,
-        'isGroup': isGroup,
-        'participants': participants.map((x) => x.toJson()).toList(),
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    '_id': id,
+    'rideId': ride,
+    'name': name,
+    'isGroup': isGroup,
+    'participants': participants.map((x) => x.toJson()).toList(),
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 }

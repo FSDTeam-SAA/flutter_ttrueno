@@ -14,13 +14,12 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Notification",
+          "Notifications",
           style: AppText.xlSemiBold_20_600.copyWith(
             color: AppColors.primaryTextblack,
           ),
@@ -36,12 +35,15 @@ class NotificationScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
                 ),
-                child: const Text(
-                  "read all",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "Read all",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
@@ -125,11 +127,11 @@ class _NotificationItemState extends State<NotificationItem> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              radius: 22,
-              backgroundImage: AssetImage("assets/images/profilepic.png"),
-            ),
-            const SizedBox(width: 12),
+            // const CircleAvatar(
+            //   radius: 22,
+            //   backgroundImage: AssetImage("assets/images/profilepic.png"),
+            // ),
+            // const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

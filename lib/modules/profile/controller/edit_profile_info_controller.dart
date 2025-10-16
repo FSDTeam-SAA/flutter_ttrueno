@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ttrueno_fo827e642a0c4/app_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/app/app_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
@@ -10,7 +10,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/model/update_profile_model
 
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
-import '../../../init_dependency.dart';
+import '../../../app/init_dependency.dart';
 import '../interface/profile_interface.dart';
 import '../model/update_profile_avatar_param.dart';
 import 'profile_data_controller.dart';

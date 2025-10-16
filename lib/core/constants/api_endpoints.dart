@@ -8,6 +8,8 @@ base class ApiEndpoints {
   /// ### post
   static const String login = _Auth.login;
 
+  static const String socialLogin = _Auth.socialLogin;
+
   static const String signup = _Auth.signup;
 
   static const String verifyCode = _Auth.verifyCode;
@@ -67,11 +69,12 @@ base class ApiEndpoints {
   static String voteForKick(String id) => _Ride.voteForKick(id);
   static String deleteRide(String id) => _Ride.deleteRide(id);
   static const String filterRide = _Ride.filterRide;
+  static String rateRide(String rideId) => _Ride.rateRide(rideId);
+  static String changeBaggage(String rideId) => _Booking.changeBaggage(rideId);
 
   // ---------------------- Booking -----------------------------
   static String getAllBookingsForARide(String rideId) => _Booking.getAllBookingsForARide(rideId);
   static const String getMyBookings = _Booking.getMyBookings;
-
 
   // ---------------------- Message -----------------------------
   /// ### Get
@@ -93,16 +96,16 @@ base class ApiEndpoints {
 
 class _RemoteServer {
   static const String socketUrl =
-      'https://ttrueno-backend-5nhs.onrender.com';
+      'https://api.hopliftapp.com';
 
   static const String baseUrl =
-      'https://ttrueno-backend-5nhs.onrender.com/api/v1';
+      'https://api.hopliftapp.com/api/v1';
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.46:5006';
+  static const String socketUrl = 'http://10.10.5.90:5006';
 
-  static const String baseUrl = 'http://10.10.5.46:5006/api/v1';
+  static const String baseUrl = 'http://10.10.5.90:5006/api/v1';
 }
 
 
@@ -110,6 +113,10 @@ class _Auth {
   @protected
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
+  //static const String socialLogin = '$_authRoute/login/social';
+  static const String socialLogin = '$_authRoute/social-login';
+  static const String appleLogin = '$_authRoute/apple-login';
+  static const String facebookLogin = '$_authRoute/facebook-login';
   static const String signup = '$_authRoute/register/init';
   static const String forgetPassword = '$_authRoute/forget-password';
   static const String refreshToken = '$_authRoute/refresh-access-token';
@@ -157,12 +164,15 @@ class _Ride {
   static String joinRide(String id) => "$_rideRoute/$id/join";
   static String voteForKick(String id) => "$_rideRoute/$id/kick";
   static String deleteRide(String id) => "$_rideRoute/$id";
+  static String rateRide(String rideId) => "$_rideRoute/$rideId/rate";
+  
 }
 
 class _Booking {
   static const String _bookingRoute = '${ApiEndpoints.baseUrl}/booking';
   static const String getMyBookings = "$_bookingRoute/my";
   static String getAllBookingsForARide(String rideId) => "$_bookingRoute/ride/$rideId";
+  static String changeBaggage(String id) => "$_bookingRoute/$id";
 }
 
 // ---------------------- MESSAGE -----------------------------

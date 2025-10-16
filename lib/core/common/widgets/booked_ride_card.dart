@@ -1,15 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/controller/booked_ride_card_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/ride_card_action_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
+import '../../../modules/message/ui/view/message_screen.dart';
 import '../../../modules/ride&booking/ui/view/share_experience_screen.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/text_style.dart';
@@ -18,8 +21,7 @@ import '../../../modules/profile/controller/profile_data_controller.dart';
 
 class BookedRideCard extends StatefulWidget {
   final double elevation;
-  final String date;
-  final String time;
+  final DateTime date;
   final String fromLocation;
   final String toLocation;
   final RideModel ride;
@@ -30,7 +32,6 @@ class BookedRideCard extends StatefulWidget {
     super.key,
     this.elevation = 2,
     required this.date,
-    required this.time,
     required this.fromLocation,
     required this.toLocation, required this.ride,
     required this.allowJoin,
@@ -39,8 +40,7 @@ class BookedRideCard extends StatefulWidget {
 
   factory BookedRideCard.fromRide(RideModel ride, BookedRideCardActionController bookedRideCardActionController, {double? elevation, required bool allowJoin}) {
     return BookedRideCard(
-      date: DateFormat.yMd().format(ride.departureTime),
-      time: DateFormat.Hm().format(ride.departureTime),
+      date: ride.departureTime,
       fromLocation: ride.startLocation.address ?? "..",
       toLocation: ride.endLocation.address ?? "..",
       ride: ride,
@@ -132,23 +132,27 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 const CarDivider(),
                 Gap.h20,
                 RidersListWidget(
-                  allowJoin: widget.allowJoin,
+                  allowJoin: bookedRideCardController.eligibleToJoin.value,
                   riders: bookedRideCardController.riders,
+                  joinRideController: bookedRideCardController.joinRideController,
+                  changeBaggageController: bookedRideCardController.changeBaggageController,
+                  leaveRideController: bookedRideCardController.leaveRideController,
+                  seatBooked: 1,
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
-                if(widget.ride.status != Status.completed && widget.ride.participants.any((e)=> e.userId == currentUserId)) SizedBox(
+                if(bookedRideCardController.booking.ride.status == Status.active) SizedBox(
                   width: double.infinity,
                   height: 120,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildLeaveAndChatOption(),
-                      if(bookedRideCardController.eligibleToFinish) _buildFinishRideOption(),
+                      _buildFinishRideOption(),
                     ],
                   ),
                 ),
-                if(bookedRideCardController.eligibleForRatingRide) _buildRateRideWidget(),
+                if(bookedRideCardController.eligibleForRatingRide) _buildRateRideWidget(bookedRideCardController.booking.ride),
               ],
             ),
           ),
@@ -166,7 +170,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
               ),
               child: Text(
-                "${widget.date} at ${widget.time}",
+                widget.date.dmyAth24,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -182,104 +186,130 @@ class _BookedRideCardState extends State<BookedRideCard> {
   }
 
   Widget _buildFinishRideOption() {
+    
     return Expanded(
-      child: OutlinedButton.icon(
-        onPressed: () {
-          bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
-        },
-        style: OutlinedButton.styleFrom(
-          side: BorderSide.none,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-        ),
-        icon: RIcon(
-          key: UniqueKey(),
-          iconWidget: Icon(
-            Icons.check_box_outlined,
-            size: 24,
-            color: Colors.green,
-          ),
-          loadingStateWidget: SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(
-              color: Colors.black,
+      child: Opacity(
+          opacity: bookedRideCardController.eligibleToFinish ? 1.0 : 0.3,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
+            },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide.none,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+            ),
+            icon: RIcon(
+              key: UniqueKey(),
+              iconWidget: Icon(
+                Icons.check_box_outlined,
+                size: 24,
+                color: Colors.green,
+              ),
+              loadingStateWidget: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              ),
+              processStatusNotifier: bookedRideCardController.finishRideStn,
+            ),
+            label: Text(
+              'Finish Ride'.tr(),
+              style: AppText.xl2Medium_22_500.copyWith(
+                color: Colors.green,
+              ),
             ),
           ),
-          processStatusNotifier: bookedRideCardController.finishRideStn,
         ),
-        label: Text(
-          'Finish Ride'.tr(),
-          style: AppText.xl2Medium_22_500.copyWith(
-            color: Colors.green,
-          ),
-        ),
-      ),
     );
   }
 
   Widget _buildLeaveAndChatOption() {
+    final opacityValue = bookedRideCardController.booking.ride.departureTime.isAfter(DateTime.now()) ? 1 : 0.5;
+    debugPrint(opacityValue.toString());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        TextButton.icon(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
+        Opacity(
+          opacity: opacityValue.toDouble(),
+          child: TextButton.icon(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                ),
+                builder: (context) => ConfirmActionBottomSheet(
+                  message: 'Are you sure?'.tr(),
+                  confirmButtonText: 'Confirm'.tr(),
+                  cancelButtonText: 'Cancel'.tr(),
+                  onConfirm: () async{
+                    debugPrint("Leave Ride");
+                    await bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context)).then((_) {
+                      if(context.mounted) Navigator.pop(context);
+                    });
+                    
+                  },
+                  onCancel: () {
+                    // Navigator.pop(
+                    //   context,
+                    // );
+                  },
+                  confirmStn: bookedRideCardController.leaveStn,
+                ),
+              );
+            },
+            icon: RIcon(
+              key: UniqueKey(),
+              iconWidget: Image.asset(
+                'assets/images/leave.png',
+                width: 24,
+                height: 24,
+              ),
+              loadingStateWidget: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
                 ),
               ),
-              builder: (context) => ConfirmActionBottomSheet(
-                message: 'Are you sure?'.tr(),
-                confirmButtonText: 'Confirm'.tr(),
-                cancelButtonText: 'Cancel'.tr(),
-                onConfirm: () {
-                  bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-                onCancel: () {
-                  // Navigator.pop(
-                  //   context,
-                  // );
-                },
-              ),
-            );
-          },
-          icon: RIcon(
-            key: UniqueKey(),
-            iconWidget: Image.asset(
-              'assets/images/leave.png',
-              width: 24,
-              height: 24,
+              processStatusNotifier: bookedRideCardController.leaveStn,
             ),
-            loadingStateWidget: SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.black,
+            label: Text(
+              'Leave'.tr(),
+              style: AppText.xl2Medium_22_300.copyWith(
+                color: Colors.red,
               ),
-            ),
-            processStatusNotifier: bookedRideCardController.leaveStn,
-          ),
-          label: Text(
-            'Leave'.tr(),
-            style: AppText.xl2Medium_22_300.copyWith(
-              color: Colors.red,
             ),
           ),
         ),
 
         TextButton.icon(
           onPressed: () {
-            
+            final rideId = bookedRideCardController.booking.ride.id;
+            Get.find<InboxController>().getChatByRideId(rideId).then((chatController) {
+              if(chatController != null && mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MessageScreen(
+                      activeRideChatController: chatController,
+                    ),
+                  ),
+                );
+              } else {
+                if(mounted) SnackbarNotifier(context: context).notify(message: "Chat for this ride is not available for now!".tr());
+                return;
+              }
+            });
           },
           icon: Image.asset(
             'assets/images/chat1.png',
@@ -297,7 +327,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
     );
   }
 
-  Widget _buildRateRideWidget() {
+  Widget _buildRateRideWidget(RideModel ride) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return TextButton.icon(
@@ -305,7 +335,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ShareExperienceScreen(),
+                  builder: (context) => ShareExperienceScreen(ride: ride,),
                 ), 
             );},
             icon: Image.asset(

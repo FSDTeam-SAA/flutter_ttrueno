@@ -4,10 +4,11 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+
 }
 
 android {
-    namespace = "com.example.ttrueno_fo827e642a0c4"
+    namespace = "com.hoplift.app"
     compileSdk = 36
 
     ndkVersion = "27.0.12077973"
@@ -22,7 +23,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.ttrueno_fo827e642a0c4"
+        applicationId = "com.hoplift.app"
+        manifestPlaceholders.put("appAuthRedirectScheme", "com.hoplift.app")
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = project.properties["flutter.versionCode"]?.toString()?.toInt() ?: 1
@@ -47,4 +49,9 @@ secrets {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // ✅ Kotlin DSL uses double quotes, not single quotes
+    implementation("com.facebook.android:facebook-login:16.2.0")
 }

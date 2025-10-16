@@ -2,9 +2,9 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_ty
 
 class JoinRideReqParam {
   final String rideId;
-  int seatBooked = 1;
+  final int seatBooked;
   BaggageType baggageType = BaggageType.small;
-  JoinRideReqParam({required this.rideId, this.baggageType = BaggageType.small});
+  JoinRideReqParam({required this.rideId, required this.seatBooked, this.baggageType = BaggageType.small});
 
   Map<String, dynamic> toJson() {
     return {

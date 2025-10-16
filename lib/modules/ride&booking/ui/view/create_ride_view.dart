@@ -5,7 +5,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/create_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/create_new_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 
 import '../widget/location_input.dart';
@@ -19,12 +19,12 @@ class CreateRideView extends StatefulWidget {
 
 class _CreateRideViewState extends State<CreateRideView> {
 
-  late final PostRideController _createRideScreenController;
+  late final CreateNewRideController _createRideScreenController;
 
   @override
   void initState() {
     super.initState();
-    _createRideScreenController = PostRideController();
+    _createRideScreenController = CreateNewRideController();
   }
 
   @override
@@ -51,6 +51,29 @@ class _CreateRideViewState extends State<CreateRideView> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 58,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+          child: RSaveButton(
+            height: 50,
+            borderRadius: BorderRadius.circular(20),
+            key: UniqueKey(),
+            buttonStatusNotifier:
+                _createRideScreenController.processStatusNotifier,
+            saveText: 'Create'.tr(),
+            loadingText: "Creating.....".tr(),
+            onSaveTap: () async {
+              _createRideScreenController.submitRide(
+                snackbarNotifier: SnackbarNotifier(context: context)
+              );
+            },
+            onDone: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -130,7 +153,7 @@ class _CreateRideViewState extends State<CreateRideView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "seats available".tr(),
+                  "Seats Available".tr(),
                   style: AppText.lgMedium_18_500.copyWith(
                     color: AppColors.primaryTextblack,
                   ),
@@ -194,26 +217,7 @@ class _CreateRideViewState extends State<CreateRideView> {
             //     ),
             //   ),
             // ),
-            SizedBox(
-              height: 52,
-              child: RSaveButton(
-                height: 50,
-                borderRadius: BorderRadius.circular(20),
-                key: UniqueKey(),
-                buttonStatusNotifier:
-                    _createRideScreenController.processStatusNotifier,
-                saveText: 'Create'.tr(),
-                loadingText: "Creating.....".tr(),
-                onSaveTap: () async {
-                  _createRideScreenController.submitRide(
-                    snackbarNotifier: SnackbarNotifier(context: context)
-                  );
-                },
-                onDone: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+            
           ],
         ),
       ),

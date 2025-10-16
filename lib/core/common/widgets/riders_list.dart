@@ -2,82 +2,244 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
-
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
+import '../../../modules/message/ui/widget/alart_message_widget.dart';
+import '../../../modules/message/ui/widget/change_baggage_type.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
+import '../../../modules/ride&booking/ui/view/change_baggage_bottom_sheet.dart';
 import '../../../modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
+import '../../notifiers/snackbar_notifier.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_gap.dart';
 import '../model/rider.dart';
 import 'cache/smart_network_image.dart';
 
+/// This widget is used to display a list of riders in a ride.
+/// 
+/// If you want to allow users to join the ride, set [allowJoin] to true and provide
+/// a callback function [onJoin] to handle the join action. You should also provide a
+/// [joinRideController] to manage the state of the join
+
 class RidersListWidget extends StatefulWidget {
-  final Function(BaggageType)? onJoin;
-  final ProcessStatusNotifier? joinRideStn;
+  final JoinRideController joinRideController;
+  final LeaveRideController? leaveRideController;
+  final KickoutRiderController? kickoutRiderController;
+  final ChangeBaggageController? changeBaggageController;
   final bool allowJoin;
+  final double avatarSize;
   final RxList<Rider> riders;
-  const RidersListWidget({super.key, required this.allowJoin, required this.riders, this.onJoin, this.joinRideStn});
+  final int seatBooked;
+  const RidersListWidget({
+    super.key,
+    this.avatarSize = 55,
+    required this.allowJoin,
+    required this.riders,
+    required this.joinRideController,
+    this.changeBaggageController,
+    this.leaveRideController,
+    this.kickoutRiderController,
+    required this.seatBooked
+  });
 
   @override
   State<RidersListWidget> createState() => _RidersListWidgetState();
 }
 
 class _RidersListWidgetState extends State<RidersListWidget> {
+
   String currentUserId = "";
+  final int maxUsers = 4;
+  late double avatarSize;
+  double containerWidth = 80;
+  double spacing = 8;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentUserId = Get.find<ProfileDataController>().userProfile.value?.id ?? "";
+    avatarSize = widget.avatarSize;
+  }
+
+  calculateSpace(BoxConstraints constraints) {
+    containerWidth = max(0, min(containerWidth, (constraints.maxWidth - ((maxUsers - 1) * spacing)) / maxUsers));
+    spacing = max(spacing, (constraints.maxWidth - ((containerWidth * (maxUsers)))) / (maxUsers - 1));
+    avatarSize = min(avatarSize, containerWidth);
   }
   
   @override
   Widget build(BuildContext context) {
-    
-
     return LayoutBuilder(
       builder: (context, constraints) {
-        List<Widget> slots = [];
-          int maxUsers = 4;
-
-          for (var rider in widget.riders) {
-            slots.add(
-              SizedBox(
-                width: min(80, constraints.maxWidth / 4),
-                child: _buildProfile(
-                  rider.profileImage,
-                  rider.userId == currentUserId ? "You" : rider.name,
-                  rider.avgRating.toString(),
-                  {rider.baggageType},
+        
+        // return Row(
+        //     mainAxisAlignment: MainAxisAlignment.start,
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     spacing: spacing,
+        //     children: [
+        //       ...slots
+        //     ],
+        //   );
+        return ObxValue(
+          (data){
+            List<Widget> slots = [];
+            calculateSpace(constraints);
+            for (var rider in widget.riders) {
+              slots.add(
+                SizedBox(
+                  width: containerWidth,
+                  child: _buildProfile(
+                    rider,
+                    rider.profileImage,
+                    rider.userId == currentUserId ? "You" : rider.name,
+                    rider.avgRating.toString(),
+                    {rider.baggageType},
+                  ),
                 ),
-              ),
-            );
-          }
-
-          int totalUsers = widget.riders.length;
-          int remainingSlots = maxUsers - totalUsers;
-
-          if(widget.allowJoin) {
-            for (int i = 0; i < remainingSlots; i++) {
-              slots.add(SizedBox(width: min(80, constraints.maxWidth / 4), child: _buildAddButton()));
+              );
             }
-          }
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: max(4, min(16, (constraints.maxWidth - (slots.length * 80)) / widget.riders.length)),
-          children: [
-            ...slots
-          ],
+      
+            int totalUsers = widget.riders.length;
+            int remainingSlots = maxUsers - totalUsers;
+      
+            if(widget.allowJoin) {
+              for (int i = 0; i < remainingSlots; i++) {
+                slots.add(SizedBox(width: containerWidth, child: _buildAddButton()));
+              }
+            }
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: spacing,
+              children: [
+                ...slots
+              ],
+            );
+
+          },
+          widget.riders
         );
       }
     );
   }
 
+  void _onLongPress(Rider rider) {
+    debugPrint("Long press on ${rider.name}");
+    if (rider.userId == currentUserId) {
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if(widget.leaveRideController != null) ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Leave Ride'),
+                onTap: () {
+                  Navigator.pop(context);
+                  if(widget.leaveRideController == null) {
+                    return;
+                  }
+                  showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (context) {
+                      return ConfirmActionBottomSheet(
+                        message: 'Are you sure you want to leave the ride?',
+                        confirmButtonText: 'Leave',
+                        cancelButtonText: 'Not Now',
+                        onConfirm: () async{
+                          
+                            widget.leaveRideController
+                                ?.leaveRide(
+                                  snackbarNotifier: SnackbarNotifier(
+                                    context: context,
+                                  ),
+                                )
+                                .then((_) {
+                            if(context.mounted) Navigator.pop(context);
+                          });
+                          // Add leave logic here
+                        },
+                        onCancel: () {
+                          // Add cancel logic here
+                        },
+                        confirmStn: widget.leaveRideController!.stn,
+                      );
+                    },
+                  );
+                },
+              ),
+               ListTile(
+                leading: const Icon(Icons.work_outline),
+                title: const Text('Change Baggage'),
+                onTap: () async {
+
+                  Navigator.pop(context);
+                  if(widget.changeBaggageController == null) return;
+                  await showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (context) {
+                      return ChangeBaggageBottomSheet(
+                        changeBaggageController: widget.changeBaggageController!,
+                        riderId: rider.userId,
+                        initialBaggageType: rider.baggageType,
+                      );
+                    },
+                  );
+                },
+              ),
+              
+              SizedBox(height: 50),
+            ],
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) {
+          return ConfirmActionBottomSheet(
+            message: 'Are you sure you want to vote to kick out ${rider.name}',
+            confirmButtonText: 'Kick Out',
+            cancelButtonText: 'Not Now',
+            onConfirm: () async{
+              await widget.kickoutRiderController?.kickRider(riderId: rider.userId, snackbarNotifier: SnackbarNotifier(context: context)).then((_) {
+                if(context.mounted) Navigator.pop(context);
+              });
+            },
+            onCancel: () {
+              // Add cancel logic here
+              Navigator.pop(context);
+            },
+            confirmStn: widget.kickoutRiderController!.stn,
+          );
+        },
+      );
+    }
+  }
+
   void _showJoinBottomSheet() {
-    if(widget.joinRideStn == null) return;
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -85,12 +247,8 @@ class _RidersListWidgetState extends State<RidersListWidget> {
       ),
       builder: (context) {
         return JoinRideBottomsheet(
-          onJoin: (baggageType) {
-            if (widget.onJoin != null) {
-              widget.onJoin!(baggageType);
-            }
-          },
-          pstn: widget.joinRideStn!,
+          joinRideController: widget.joinRideController,
+          seatBooked: widget.seatBooked,
         );
       },
     );
@@ -99,6 +257,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
   Widget _buildAddButton() {
     return InkWell(
       onTap: () {
+        debugPrint("Join Ride tapped >> ${widget.allowJoin}");
         if (widget.allowJoin) {
           _showJoinBottomSheet();
         }
@@ -106,8 +265,8 @@ class _RidersListWidgetState extends State<RidersListWidget> {
       child: Column(
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: avatarSize,
+            height: avatarSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: Colors.grey.shade400, width: 2),
@@ -121,8 +280,8 @@ class _RidersListWidgetState extends State<RidersListWidget> {
     );
   }
 
-
   Widget _buildProfile(
+    Rider rider,
     String imagePath,
     String name,
     String rating,
@@ -130,10 +289,15 @@ class _RidersListWidgetState extends State<RidersListWidget> {
   ) {
     return Column(
       children: [
-        SmartNetworkImage.circle(
-          imageUrl: imagePath,
-          diameter: 36,
-          fit: BoxFit.cover,
+        InkWell(
+          onLongPress: () {
+            _onLongPress(rider);
+          },
+          child: SmartNetworkImage.circle(
+            imageUrl: imagePath,
+            diameter: avatarSize,
+            fit: BoxFit.cover,
+          ),
         ),
         Gap.h4,
         Text(

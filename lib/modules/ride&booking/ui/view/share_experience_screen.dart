@@ -1,57 +1,39 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/rate_ride_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
 import '../../../../core/theme/app_gap.dart';
 
 class ShareExperienceScreen extends StatefulWidget {
-  const ShareExperienceScreen({super.key});
+  final RideModel ride;
+  const ShareExperienceScreen({super.key, required this.ride});
 
   @override
   State<ShareExperienceScreen> createState() => _ShareExperienceScreenState();
 }
 
 class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
-  final Map<String, double> ratings = {
-    'John': 4.0,
-    'Smith': 3.0,
-    'Alex': 5.0,
-    'Anna': 4.0,
-  };
 
-  final passengers = [
-    {
-      'name': 'John',
-      'image': 'assets/images/user1.png',
-      'icon2': 'assets/images/largebaggage.png',
-    },
-    {
-      'name': 'Smith',
-      'image': 'assets/images/user2.png',
-      'icon1': null,
-      'icon2': 'assets/images/largebaggage.png',
-    },
-    {
-      'name': 'Alex',
-      'image': 'assets/images/user3.png',
-      'icon1': null,
-      'icon2': 'assets/images/empty.png',
-    },
-    {
-      'name': 'Anna',
-      'image': 'assets/images/user4.png',
-      'icon1': 'assets/images/smallbaggage.png',
-      'icon2': null,
-    },
-  ];
+  late final RateRideController rateRideController;
 
   void handleSubmit() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Ratings submitted successfully!")),
-    );
+    rateRideController.submitRatings(snackbarNotifier: SnackbarNotifier(context: context));
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    rateRideController = RateRideController(ride: widget.ride);
   }
 
   @override
@@ -84,24 +66,25 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
             Gap.h16,
             Expanded(
               child: ListView.separated(
-                itemCount: passengers.length,
+                itemCount: rateRideController.riders.length,
                 separatorBuilder: (_, __) => Gap.h12,
                 itemBuilder: (context, index) {
-                  final passenger = passengers[index];
-                  final name = passenger['name']!;
-                  final ratingValue = ratings[name]!;
-                  final icon1 = passenger['icon1'];
-                  final icon2 = passenger['icon2'];
-
+                  final rider = rateRideController.riders[index];
+                  final name = rider.name;
+                  final ratingValue = rider.avgRating;
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundImage: AssetImage(passenger['image']!),
+                          SmartNetworkImage.circle(
+                            diameter: 24 * 2,
+                            imageUrl: rider.profileImage,
                           ),
+                          // CircleAvatar(
+                          //   radius: 24,
+                          //   backgroundImage: AssetImage(rider.profileImage),
+                          // ),
                           Gap.h4,
                           Text(
                             name,
@@ -130,22 +113,12 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (icon1 != null)
-                                Image.asset(
-                                  icon1,
-                                  width: 14,
-                                  height: 14,
-                                  color: AppColors.primaryTextblack,
-                                ),
-                              if (icon1 != null && icon2 != null)
-                                Gap.w4,
-                              if (icon2 != null)
-                                Image.asset(
-                                  icon2,
-                                  width: 14,
-                                  height: 14,
-                                  color: AppColors.primaryTextblack,
-                                ),
+                              Image.asset(
+                                rider.baggageType.assetImagePath(),
+                                width: 14,
+                                height: 14,
+                                color: AppColors.primaryTextblack,
+                              ),
                             ],
                           ),
                         ],
@@ -153,7 +126,7 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: RatingBar.builder(
-                          initialRating: ratingValue,
+                          initialRating: rider.avgRating.toDouble(),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: false,
@@ -162,8 +135,9 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
                           itemBuilder: (context, _) =>
                               const Icon(Icons.star, color: Colors.amber),
                           onRatingUpdate: (rating) {
+                            /// TODO::
                             setState(() {
-                              ratings[name] = rating;
+                              rateRideController.rateRider(rider.userId, rating);
                             });
                           },
                         ),
@@ -215,7 +189,7 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              "23 Feb 2025 at 10:00 AM",
+              widget.ride.departureTime.dmyAth24,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -231,7 +205,7 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
                         style: TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
-                        text: "Dublin Airport T1",
+                        text: widget.ride.startLocation.address ?? "",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -249,7 +223,7 @@ class _ShareExperienceScreenState extends State<ShareExperienceScreen> {
                           style: TextStyle(color: Colors.grey),
                         ),
                         TextSpan(
-                          text: "Connell St 175",
+                          text: widget.ride.endLocation.address ?? "",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],

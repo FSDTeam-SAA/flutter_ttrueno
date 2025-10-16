@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 
-import '../../service_handler/failure.dart';
-import '../../service_handler/success.dart';
+import '../../base/failure.dart';
+import '../../base/success.dart';
 import '../../notifiers/button_status_notifier.dart';
 import '../../notifiers/snackbar_notifier.dart';
 

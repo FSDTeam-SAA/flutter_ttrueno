@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/core/constants/assets.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +42,7 @@ class HelpCenterPage extends StatelessWidget {
 
   Widget buildButton({
     required BuildContext context,
-    required IconData icon,
+    required Widget icon,
     required String title,
     required Color color,
   }) {
@@ -57,7 +58,7 @@ class HelpCenterPage extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: color),
+            icon,
             SizedBox(width: 16),
             Text(
               title,
@@ -94,19 +95,25 @@ class HelpCenterPage extends StatelessWidget {
           children: [
             buildButton(
               context: context,
-              icon: Icons.camera_alt_outlined,
+              icon: Image.asset(
+                Assets.instagram,
+                width: 24, height: 24,
+              ),
               title: 'Instagram',
               color: AppColors.primarybutton,
             ),
             buildButton(
               context: context,
-              icon: Icons.tiktok,
+              icon: Icon(Icons.tiktok),
               title: 'TikTok',
               color: AppColors.primarybutton,
             ),
             buildButton(
               context: context,
-              icon: Icons.alternate_email,
+              icon: Image.asset(
+                Assets.twitter,
+                width: 24, height: 24,
+              ),
               title: 'Twitter',
               color: AppColors.primarybutton,
             ),

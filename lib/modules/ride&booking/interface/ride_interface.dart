@@ -1,20 +1,22 @@
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/success.dart';
-import 'package:ttrueno_fo827e642a0c4/core/service_handler/error_catcher.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/base_repository.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_joined_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider_left_state.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/join_ride_req_param.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_req_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/rate_ride_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
 import '../../../core/common/model/rider.dart';
 import '../model/booking.dart';
+import '../model/change_baggage_req_param.dart';
 import '../model/join_ride_req_response.dart';
 import '../model/update_ride_req_param.dart';
 import '../model/vote_for_kick_req_param.dart';
 
-abstract base class RideInterface extends ErrorCatcher {
+abstract base class RideInterface extends BaseRepository {
   /// Create a ride
   ///
   /// [params] - The ride parameters
@@ -73,8 +75,12 @@ abstract base class RideInterface extends ErrorCatcher {
 
   FutureRequest<Success> deleteRide({required String rideId});
 
+  FutureRequest<Success> rateRide({required RateRideReqParam param});
+
   Stream<RiderJoinedState> riderJoinedStream();
 
   Stream<RiderLeftState> riderLeftStream();
+
+  FutureRequest<Success> changeBaggage(ChangeBaggageReqParam param);
 
 }

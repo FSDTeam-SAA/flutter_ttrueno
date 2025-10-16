@@ -74,6 +74,8 @@ class AppPigeon {
 
   Stream<AuthStatus> get authStream => _authService.authStream;
 
+  Future<AuthStatus> currentAuth() async=> _authService.currentAuth();
+
   Future<void> saveNewAuth({required SaveNewAuthParams saveAuthParams}) async {
     await _authService.saveNewAuth(saveNewAuthParams: saveAuthParams);
   }
@@ -120,11 +122,6 @@ class AppPigeon {
 
   /// Listen to socket event
   Stream<dynamic> listen(String channelName) {
-
-    // if (_socketService.isConnected == false) {
-    //   throw Exception("Socket is not connected!. Make sure to call socketInit first.");
-    // }
-    
     return _socketService.listen(channelName); // forward events, not just yield the stream object
   }
   /// Emit an event through socket
