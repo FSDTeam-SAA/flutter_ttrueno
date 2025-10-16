@@ -2,7 +2,7 @@ import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 
 import '../../../../core/utils/helpers/handle_fold.dart';
-import '../../../../init_dependency.dart';
+import '../../../app/init_dependency.dart';
 import '../model/description_docs.dart';
 
 class DescriptionDocsLoader extends GetxController{

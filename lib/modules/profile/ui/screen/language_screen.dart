@@ -18,9 +18,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   final List<Map<String, String>> languages = [
     {"label": "English", "flag": "🇺🇸", "locale": "en"},
-    {"label": "Français (French)", "flag": "🇫🇷", "locale": "fr"},
-    {"label": "Español (Spanish)", "flag": "🇪🇸", "locale": "es"},
-    {"label": "বাংলা (Bangla)", "flag": "🇧🇩", "locale": "bn"},
   ];
 
   @override
@@ -82,13 +79,16 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Choose your language".tr(),),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Choose your language".tr(), style: AppText.xlSemiBold_20_700),
+              
               Gap.h16,
               Align(
                 alignment: Alignment.center,

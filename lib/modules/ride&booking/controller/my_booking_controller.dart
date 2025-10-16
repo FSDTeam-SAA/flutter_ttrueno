@@ -6,7 +6,7 @@ import '../../../core/notifiers/snackbar_notifier.dart';
 import '../model/get_my_bookings_req_param.dart';
 import '../../../core/common/controller/booked_ride_card_controller.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
-import '../../../init_dependency.dart';
+import '../../../app/init_dependency.dart';
 import '../interface/booking_interface.dart';
 import '../model/enum/status.dart';
 

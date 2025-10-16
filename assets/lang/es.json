@@ -398,5 +398,7 @@
   "No rides found!": "¡No se encontraron viajes!",
   "No chats found!": "¡No se encontraron chats!",
   "No bookings found!": "¡No se encontraron reservas!",
-  "No data found!": "¡No se encontraron datos!"
+  "No data found!": "¡No se encontraron datos!",
+  "Enter your arrival location": "Ingresa tu ubicación de llegada",
+  "Enter your departure location": "Ingresa tu ubicación de salida"
 }

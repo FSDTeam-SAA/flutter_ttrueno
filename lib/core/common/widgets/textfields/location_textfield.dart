@@ -82,7 +82,8 @@ class _LocationTextfieldState extends State<LocationTextfield> {
             },
             controller: controller,
             decoration: InputDecoration(
-              hintText:  widget.hint.tr(),
+              //hintText:  
+              hint: Text(widget.hint.tr(), style: TextStyle(color: Colors.grey.shade500, fontSize: 16)),
               hintStyle: TextStyle(color: Colors.grey.shade500),
               border: InputBorder.none,
               isDense: true,

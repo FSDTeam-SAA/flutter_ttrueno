@@ -9,8 +9,8 @@ import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/theme/app_theme.dart';
 import 'app/widget/background_image.dart';
 import 'modules/onboarding/splash_screen.dart';
-import 'init_dependency.dart';
-import 'routing/route_names.dart';
+import 'app/init_dependency.dart';
+import 'app/routing/route_names.dart';
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();

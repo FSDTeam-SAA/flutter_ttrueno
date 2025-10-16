@@ -20,7 +20,7 @@ class NotificationScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Notification",
+          "Notifications",
           style: AppText.xlSemiBold_20_600.copyWith(
             color: AppColors.primaryTextblack,
           ),

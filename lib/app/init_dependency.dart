@@ -16,10 +16,10 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/booking_int
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/booking_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/service/ride_service.dart';
-import 'core/constants/api_endpoints.dart';
-import 'core/services/app_pigeon/app_pigeon.dart';
-import 'core/services/app_pigeon/refresh_token_manager.dart';
-import 'modules/auth/interface/auth_interface.dart';
+import '../core/constants/api_endpoints.dart';
+import '../core/services/app_pigeon/app_pigeon.dart';
+import '../core/services/app_pigeon/refresh_token_manager.dart';
+import '../modules/auth/interface/auth_interface.dart';
 
 final serviceLocator = GetIt.instance;
 

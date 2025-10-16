@@ -4,6 +4,7 @@ import 'package:ttrueno_fo827e642a0c4/core/common/controller/ride_card_action_co
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../theme/app_colors.dart';
@@ -11,8 +12,7 @@ import '../../theme/app_colors.dart';
 /// Usecases: Search or filtered rides, Chat screen ride preview
 class RideCard extends StatefulWidget {
   final double elevation;
-  final String date;
-  final String time;
+  final DateTime date;
   final String fromLocation;
   final String toLocation;
   final RideModel ride;
@@ -23,7 +23,6 @@ class RideCard extends StatefulWidget {
     super.key,
     this.elevation = 2,
     required this.date,
-    required this.time,
     required this.fromLocation,
     required this.toLocation, required this.ride,
     required this.allowJoin, required this.seatBooked,
@@ -31,8 +30,7 @@ class RideCard extends StatefulWidget {
 
   factory RideCard.fromRide(RideModel ride, {double? elevation, required bool allowJoin, required int seatBooked}) {
     return RideCard(
-      date: DateFormat.yMd().format(ride.departureTime),
-      time: DateFormat.Hm().format(ride.departureTime),
+      date: ride.departureTime,
       fromLocation: ride.startLocation.address ?? "..",
       toLocation: ride.endLocation.address ?? "..",
       ride: ride,
@@ -123,7 +121,7 @@ class _RideCardState extends State<RideCard> {
                 const CarDivider(),
                 Gap.h20,
                 RidersListWidget(
-                  allowJoin: rideCardController.ride.status != Status.completed,
+                  allowJoin: rideCardController.eligibleToJoin.value,
                   riders: rideCardController.riders,
                   joinRideController: rideCardController.joinRideController,
                   changeBaggageController: rideCardController.changeBaggageController,
@@ -146,7 +144,7 @@ class _RideCardState extends State<RideCard> {
                 ),
               ),
               child: Text(
-                "${widget.date} at ${widget.time}",
+                widget.date.dmyAth24,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,

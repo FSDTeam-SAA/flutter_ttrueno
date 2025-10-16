@@ -27,6 +27,7 @@ class BookedRideCardActionController {
     changeBaggageController = ChangeBaggageController(bookingId: booking.id, onBaggageChangeSuccess: onBaggageChangeSuccess); 
     kickoutRiderController = KickoutRiderController(rideId: booking.ride.id, onKickSuccess: () {});
     // eligibility to finish, rate-ride
+    eligibleToJoin.value = DateTime.now().isBefore(booking.ride.departureTime);
     if(booking.status == Status.active && booking.ride.departureTime.isBefore(DateTime.now())) {
       eligibleToFinish = true;
     }
@@ -45,6 +46,7 @@ class BookedRideCardActionController {
   final VoidCallback onFinishRideSuccess;
 
   RxBool eligibleForChat = RxBool(false);
+  RxBool eligibleToJoin = RxBool(false);
   RxBool eligibleToLeave = RxBool(false);
   bool eligibleToFinish = false;
   bool eligibleForRatingRide = false;

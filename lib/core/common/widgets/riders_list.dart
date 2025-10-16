@@ -144,6 +144,10 @@ class _RidersListWidgetState extends State<RidersListWidget> {
                 leading: const Icon(Icons.logout),
                 title: const Text('Leave Ride'),
                 onTap: () {
+                  Navigator.pop(context);
+                  if(widget.leaveRideController == null) {
+                    return;
+                  }
                   showModalBottomSheet(
                     context: context,
                     shape: const RoundedRectangleBorder(
@@ -157,10 +161,7 @@ class _RidersListWidgetState extends State<RidersListWidget> {
                         confirmButtonText: 'Leave',
                         cancelButtonText: 'Not Now',
                         onConfirm: () async{
-                          if(widget.leaveRideController == null) {
-                            Navigator.pop(context);
-                            return;
-                          }
+                          
                             widget.leaveRideController
                                 ?.leaveRide(
                                   snackbarNotifier: SnackbarNotifier(
