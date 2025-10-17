@@ -169,12 +169,15 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                         children: [
                           FilterChipWidget(
                             label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexKm} kilometres',
+                            toolTip: "Departure Flex(Km) set how much later or further from your chosen spot you’re willing to depart.".tr(),
                           ),
                           FilterChipWidget(
                             label: 'Departure Flex : ${searchRideController.filtered.value.departureFlexMinutes} min',
+                            toolTip: "Departure Flex(Minutes) set how much later or further from your chosen time you’re willing to depart.".tr(),
                           ),
                           FilterChipWidget(
                             label: 'Arrival Flex : ${searchRideController.filtered.value.arrivalFlexKm} kilometres',
+                            toolTip: "Arrival Flex set how much further from your chosen spot you’re willing to arrive.".tr(),
                           ),
                         ],
                       ),

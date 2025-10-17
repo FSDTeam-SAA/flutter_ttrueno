@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 

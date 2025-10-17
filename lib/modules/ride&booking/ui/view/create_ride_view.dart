@@ -52,6 +52,29 @@ class _CreateRideViewState extends State<CreateRideView> {
           ),
         ],
       ),
+      bottomNavigationBar: SizedBox(
+        height: 58,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+          child: RSaveButton(
+            height: 50,
+            borderRadius: BorderRadius.circular(20),
+            key: UniqueKey(),
+            buttonStatusNotifier:
+                _createRideScreenController.processStatusNotifier,
+            saveText: 'Create'.tr(),
+            loadingText: "Creating.....".tr(),
+            onSaveTap: () async {
+              _createRideScreenController.submitRide(
+                snackbarNotifier: SnackbarNotifier(context: context)
+              );
+            },
+            onDone: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -194,26 +217,7 @@ class _CreateRideViewState extends State<CreateRideView> {
             //     ),
             //   ),
             // ),
-            SizedBox(
-              height: 52,
-              child: RSaveButton(
-                height: 50,
-                borderRadius: BorderRadius.circular(20),
-                key: UniqueKey(),
-                buttonStatusNotifier:
-                    _createRideScreenController.processStatusNotifier,
-                saveText: 'Create'.tr(),
-                loadingText: "Creating.....".tr(),
-                onSaveTap: () async {
-                  _createRideScreenController.submitRide(
-                    snackbarNotifier: SnackbarNotifier(context: context)
-                  );
-                },
-                onDone: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+            
           ],
         ),
       ),

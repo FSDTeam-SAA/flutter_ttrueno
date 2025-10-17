@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/filter_model.dart';

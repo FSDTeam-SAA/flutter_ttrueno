@@ -70,7 +70,7 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
           ),
           Gap.h12,
           RidersListWidget(
-            allowJoin: true,
+            allowJoin: widget.activeRideChatController.eligibleToJoin.value,
             avatarSize: 50,
             riders: widget.activeRideChatController.participants,
             kickoutRiderController: widget.activeRideChatController.kickoutRiderController,

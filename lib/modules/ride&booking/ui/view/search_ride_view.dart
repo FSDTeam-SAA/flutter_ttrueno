@@ -120,203 +120,199 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
           Align(
             alignment: Alignment.bottomCenter,
             child: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.62,
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 0,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.62,
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 0,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(32),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Gap.h32,
+                      LocationInputs(
+                        fromController: searchRideController.fromController,
+                        toController: searchRideController.toController,
+                        onSelectingFromLocation: (locationAddress) {
+                          searchRideController.fromLocation = locationAddress;
+                        },
+                        onSelectingToLocation: (locationAddress) {
+                          searchRideController.toLocation = locationAddress;
+                        },
                       ),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(32),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Gap.h24,
+                      Row(
                         children: [
-                          Gap.h32,
-                          LocationInputs(
-                            fromController: searchRideController.fromController,
-                            toController: searchRideController.toController,
-                            onSelectingFromLocation: (locationAddress) {
-                              searchRideController.fromLocation = locationAddress;
-                            },
-                            onSelectingToLocation: (locationAddress) {
-                              searchRideController.toLocation = locationAddress;
-                            },
-                          ),
-                          Gap.h24,
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: searchRideController.dateController,
-                                  readOnly: true,
-                                  onTap:() => searchRideController.selectDate(context),
-                                  decoration: InputDecoration(
-                                    prefixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.calendar_today_outlined,
-                                      ),
-                                      onPressed:() => searchRideController.selectDate(context),
-                                    ),
-                                    hintText: 'Date'.tr(),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: AppColors.primarybutton,
-                                        width: 2,
-                                      ),
-                                    ),
+                          Expanded(
+                            child: TextField(
+                              controller: searchRideController.dateController,
+                              readOnly: true,
+                              onTap:() => searchRideController.selectDate(context),
+                              decoration: InputDecoration(
+                                prefixIcon: IconButton(
+                                  icon: const Icon(
+                                    Icons.calendar_today_outlined,
+                                  ),
+                                  onPressed:() => searchRideController.selectDate(context),
+                                ),
+                                hintText: 'Date'.tr(),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
                                   ),
                                 ),
-                              ),
-                              Gap.w8,
-                              Expanded(
-                                child: TextField(
-                                  controller: searchRideController.timeController,
-                                  readOnly: true,
-                                  onTap:()async => searchRideController.selectTime(context),
-                                  decoration: InputDecoration(
-                                    prefixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.watch_later_outlined,
-                                      ),
-                                      onPressed:()async => searchRideController.selectTime(context),
-                                    ),
-                                    hintText: 'Time'.tr(),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 20,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color: AppColors.primarybutton,
-                                        width: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Gap.h16,
-                          Row(
-                            children: [
-                              const Icon(Icons.person_outline, size: 28),
-                              Gap.w12,
-                              Text(
-                                "Passengers".tr(),
-                                style: AppText.mdRegular_16_400.copyWith(
-                                  color: AppColors.primaryTextblack,
-                                ),
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: () {
-                                  searchRideController.decrementPassengers();
-                                },
-                                icon: const Icon(Icons.remove_circle_outline),
-                              ),
-                              Container(
-                                height: 35,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey[200]!,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primarybutton,
                                     width: 2,
                                   ),
-                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                alignment: Alignment.center,
-                                child: Obx(
-                                  ()=> Text(
-                                    '${searchRideController.passengers.value}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                              ),
+                            ),
+                          ),
+                          Gap.w8,
+                          Expanded(
+                            child: TextField(
+                              controller: searchRideController.timeController,
+                              readOnly: true,
+                              onTap:()async => searchRideController.selectTime(context),
+                              decoration: InputDecoration(
+                                prefixIcon: IconButton(
+                                  icon: const Icon(
+                                    Icons.watch_later_outlined,
+                                  ),
+                                  onPressed:()async => searchRideController.selectTime(context),
+                                ),
+                                hintText: 'Time'.tr(),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primarybutton,
+                                    width: 2,
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  searchRideController.incrementPassengers();
-                                },
-                                icon: const Icon(Icons.add_circle_outline),
-                              ),
-                            ],
-                          ),
-                          Gap.h24,
-                          ///////////
-                          RSaveButton(
-                            key: UniqueKey(),
-                            saveText: 'Search'.tr(),
-                            loadingText: "Search".tr(),
-                            buttonStatusNotifier: processStatusNotifier,
-                            onSaveTap: () => searchRideController.searchRide(
-                              snackbarNotifier: SnackbarNotifier(context: context),
-                              processStatusNotifier: processStatusNotifier,
-                            ),
-                            onDone: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SearchResultsView(),
-                                ),
-                              );
-                            },
-                          ),
-                          
-                          Gap.h16,
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CreateRideView(),
-                                ),
-                              );
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: const Size.fromHeight(50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              side: BorderSide(color: AppColors.primarybutton),
-                            ),
-                            child: Text(
-                              'Create Ride'.tr(),
-                              style: AppText.lgMedium_18_500.copyWith(
-                                color: AppColors.primarybutton,
-                              ),
                             ),
                           ),
-                          Gap.h24,
                         ],
                       ),
-                    ),
-                  ],
+                      Gap.h16,
+                      Row(
+                        children: [
+                          const Icon(Icons.person_outline, size: 28),
+                          Gap.w12,
+                          Text(
+                            "Passengers".tr(),
+                            style: AppText.mdRegular_16_400.copyWith(
+                              color: AppColors.primaryTextblack,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              searchRideController.decrementPassengers();
+                            },
+                            icon: const Icon(Icons.remove_circle_outline),
+                          ),
+                          Container(
+                            height: 35,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey[200]!,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            alignment: Alignment.center,
+                            child: Obx(
+                              ()=> Text(
+                                '${searchRideController.passengers.value}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              searchRideController.incrementPassengers();
+                            },
+                            icon: const Icon(Icons.add_circle_outline),
+                          ),
+                        ],
+                      ),
+                      Gap.h24,
+                      ///////////
+                      RSaveButton(
+                        key: UniqueKey(),
+                        saveText: 'Search'.tr(),
+                        loadingText: "Search".tr(),
+                        buttonStatusNotifier: processStatusNotifier,
+                        onSaveTap: () => searchRideController.searchRide(
+                          snackbarNotifier: SnackbarNotifier(context: context),
+                          processStatusNotifier: processStatusNotifier,
+                        ),
+                        onDone: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SearchResultsView(),
+                            ),
+                          );
+                        },
+                      ),
+                      
+                      Gap.h16,
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateRideView(),
+                            ),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          side: BorderSide(color: AppColors.primarybutton),
+                        ),
+                        child: Text(
+                          'Create Ride'.tr(),
+                          style: AppText.lgMedium_18_500.copyWith(
+                            color: AppColors.primarybutton,
+                          ),
+                        ),
+                      ),
+                      Gap.h24,
+                    ],
+                  ),
                 ),
               ),
             ),

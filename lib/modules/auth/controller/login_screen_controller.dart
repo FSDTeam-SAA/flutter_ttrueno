@@ -3,7 +3,7 @@ import 'package:ttrueno_fo827e642a0c4/core/base/failure.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/validation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../interface/auth_interface.dart';

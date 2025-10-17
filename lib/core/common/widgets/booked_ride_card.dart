@@ -9,6 +9,7 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_ico
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 import '../../../modules/message/ui/view/message_screen.dart';
@@ -20,8 +21,7 @@ import '../../../modules/profile/controller/profile_data_controller.dart';
 
 class BookedRideCard extends StatefulWidget {
   final double elevation;
-  final String date;
-  final String time;
+  final DateTime date;
   final String fromLocation;
   final String toLocation;
   final RideModel ride;
@@ -32,7 +32,6 @@ class BookedRideCard extends StatefulWidget {
     super.key,
     this.elevation = 2,
     required this.date,
-    required this.time,
     required this.fromLocation,
     required this.toLocation, required this.ride,
     required this.allowJoin,
@@ -41,8 +40,7 @@ class BookedRideCard extends StatefulWidget {
 
   factory BookedRideCard.fromRide(RideModel ride, BookedRideCardActionController bookedRideCardActionController, {double? elevation, required bool allowJoin}) {
     return BookedRideCard(
-      date: DateFormat.yMd().format(ride.departureTime),
-      time: DateFormat.Hm().format(ride.departureTime),
+      date: ride.departureTime,
       fromLocation: ride.startLocation.address ?? "..",
       toLocation: ride.endLocation.address ?? "..",
       ride: ride,
@@ -134,7 +132,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 const CarDivider(),
                 Gap.h20,
                 RidersListWidget(
-                  allowJoin: widget.allowJoin,
+                  allowJoin: bookedRideCardController.eligibleToJoin.value,
                   riders: bookedRideCardController.riders,
                   joinRideController: bookedRideCardController.joinRideController,
                   changeBaggageController: bookedRideCardController.changeBaggageController,
@@ -143,7 +141,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
                 Gap.h8,
                 Divider(color: Colors.grey.shade300, thickness: 1),
-                SizedBox(
+                if(bookedRideCardController.booking.ride.status == Status.active) SizedBox(
                   width: double.infinity,
                   height: 120,
                   child: Column(
@@ -172,7 +170,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
               ),
               child: Text(
-                "${widget.date} at ${widget.time}",
+                widget.date.dmyAth24,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,

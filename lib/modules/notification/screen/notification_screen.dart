@@ -14,13 +14,12 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Notification",
+          "Notifications",
           style: AppText.xlSemiBold_20_600.copyWith(
             color: AppColors.primaryTextblack,
           ),

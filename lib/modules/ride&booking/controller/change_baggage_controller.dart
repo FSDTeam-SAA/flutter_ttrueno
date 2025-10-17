@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/change_baggage_req_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
@@ -14,7 +14,7 @@ class ChangeBaggageController {
   ChangeBaggageController({required this.bookingId, required this.onBaggageChangeSuccess});
   
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
-  Rx<BaggageType?> baggageType = Rx<BaggageType?>(null);
+  Rx<BaggageType> baggageType = Rx<BaggageType>(BaggageType.small);
   final String bookingId;
   final void Function(BaggageType changedBaggage) onBaggageChangeSuccess;
 

@@ -17,7 +17,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/change_password_
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/faq_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/help_center_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/language_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'edit_profile_info_screen.dart';
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -47,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'en': 'English',
       'fr': 'Français (French)',
       'es': 'Español (Spanish)',
-      'bn': 'বাংলা (Bangla)',
     };
 
     setState(() {

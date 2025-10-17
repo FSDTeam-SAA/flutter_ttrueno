@@ -10,11 +10,11 @@ import '../core/common/controller/inbox_controller/inbox_controller.dart';
 import '../core/constants/api_endpoints.dart';
 import '../core/notifiers/snackbar_notifier.dart';
 import '../core/services/app_pigeon/app_pigeon.dart';
-import '../init_dependency.dart';
+import 'init_dependency.dart';
 import '../main.dart';
 import '../modules/auth/interface/auth_interface.dart';
 import '../modules/ride&booking/controller/my_booking_controller.dart';
-import '../routing/route_names.dart';
+import 'routing/route_names.dart';
 
 class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
@@ -65,7 +65,7 @@ class AppManager extends GetxController {
   AuthStatus _authStatus = AuthLoading();
   AuthStatus get authStatus => _authStatus;
 
-  initializeControllers() async{
+  Future<void> initializeControllers() async{
     if(Get.isRegistered<SearchRideController>()) {
       await Get.delete<SearchRideController>();
     }

@@ -27,6 +27,7 @@ class RideCardActionController {
       riders.refresh();
     },); 
     // eligibility to finish, rate-ride
+    eligibleToJoin.value = DateTime.now().isBefore(ride.departureTime);
     if(currentUserId == ride.creator?.id) {
       eligibleToFinish = true;
     }
@@ -37,6 +38,7 @@ class RideCardActionController {
 
   final RideModel ride;
 
+  RxBool eligibleToJoin = RxBool(false);
   RxBool eligibleForChat = RxBool(false);
   bool eligibleToFinish = false;
   bool eligibleForRatingRide = false;

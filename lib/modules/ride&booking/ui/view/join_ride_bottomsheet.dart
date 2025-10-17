@@ -20,8 +20,6 @@ class JoinRideBottomsheet extends StatefulWidget {
 
 class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
 
-  BaggageType? selectedBaggageType;
-
   @override
 
   void initState() {
@@ -48,11 +46,10 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                     ...BaggageType.values.map((baggageType) {
                       return _buildBaggageImageIcon(
                         imagePath: baggageType.assetImagePath(),
-                        isSelected: selectedBaggageType == baggageType,
+                        isSelected: widget.joinRideController.baggageType.value == baggageType,
                         label: baggageType.name.tr(),
                         onTap: () {
                           setState(() {
-                            selectedBaggageType = baggageType;
                             widget.joinRideController.baggageType.value = baggageType;
                           });
                         },
@@ -79,16 +76,6 @@ class _JoinRideBottomsheetState extends State<JoinRideBottomsheet> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (selectedBaggageType == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Please select a baggage type.".tr(),
-                              ),
-                            ),
-                          );
-                          return;
-                        }
                         widget.joinRideController.joinRide(seatBooked: widget.seatBooked, snackbarNotifier: SnackbarNotifier(context: context));
                       },
                       style: ElevatedButton.styleFrom(

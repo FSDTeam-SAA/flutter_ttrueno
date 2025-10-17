@@ -7,6 +7,7 @@ class ActiveRideChatController extends GetxController{
   ActiveRideChatController({required this.chat}){
     ride = Rx<RideModel>(chat.ride);
     participants.addAll(chat.participants);
+    eligibleToJoin.value = DateTime.now().isBefore(ride.value.departureTime);
     eligibleToLeave.value = chat.participants.any((e) => e.userId == Get.find<ProfileDataController>().userProfile.value?.id);
     
     kickoutRiderController = KickoutRiderController(rideId: chat.ride.id, onKickSuccess: (){
@@ -26,6 +27,7 @@ class ActiveRideChatController extends GetxController{
   final ChatRoom chat;
   late Rx<RideModel> ride;
   String get rideId => chat.ride.id;
+  RxBool eligibleToJoin = RxBool(false);
   RxBool eligibleToLeave = RxBool(false);
   RxList<Rider> participants = RxList<Rider>([]);
   RxList<Message> messages = RxList<Message>([]);

@@ -47,7 +47,15 @@ class _BottomNabBarScreenState extends State<BottomNabBarScreen> with SingleTick
       ),
       bottomNavigationBar: SafeArea(
         
-        child: _BottomTabBar(tabController: _tabController),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey.shade300
+              )
+            )
+          ),
+          child: _BottomTabBar(tabController: _tabController)),
       )
     );
   }
@@ -78,7 +86,8 @@ class __BottomTabBarState extends State<_BottomTabBar> {
         return TabBar(
           
           controller: widget.tabController,
-          dividerColor: Colors.transparent,
+          labelStyle: TextStyle(fontSize: 12),
+          unselectedLabelStyle: TextStyle(fontSize: 12),
           // backgroundColor: AppColors.background,
           // selectedItemColor: AppColors.primarybutton,
           // unselectedItemColor: Colors.grey,
@@ -91,8 +100,8 @@ class __BottomTabBarState extends State<_BottomTabBar> {
                 _selectedIndex == 0
                     ? 'assets/images/searchpng.png'
                     : 'assets/images/search-normal.png',
-                height: 24,
-                width: 24,
+                height: 22,
+                width: 22,
               ),
               text: 'Search'.tr(),
             ),
@@ -101,8 +110,8 @@ class __BottomTabBarState extends State<_BottomTabBar> {
                 _selectedIndex == 1
                     ? 'assets/images/inbobxblue.png'
                     : 'assets/images/Inbox.png',
-                height: 24,
-                width: 24,
+                height: 22,
+                width: 22,
               ),
               text: 'Inbox'.tr(),
             ),
@@ -111,8 +120,8 @@ class __BottomTabBarState extends State<_BottomTabBar> {
                 _selectedIndex == 2
                     ? 'assets/images/booking.png'
                     : 'assets/images/bookingnormal.png',
-                height: 24,
-                width: 24,
+                height: 22,
+                width: 22,
               ),
               text: 'Booking'.tr(),
             ),
@@ -121,8 +130,8 @@ class __BottomTabBarState extends State<_BottomTabBar> {
                 _selectedIndex == 3
                     ? 'assets/images/profileblue.png'
                     : 'assets/images/profilenormal.png',
-                height: 24,
-                width: 24,
+                height: 22,
+                width: 22,
               ),
               text: 'My Profile'.tr(),
             ),

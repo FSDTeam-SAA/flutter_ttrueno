@@ -41,14 +41,14 @@ class LocationInputs extends StatelessWidget {
             children: [
               LocationTextfield(
                 label: 'From'.tr(),
-                hint: 'Enter your current location'.tr(),
+                hint: 'Enter your departure location'.tr(),
                 onselect: onSelectingFromLocation,
                 controller: fromController,
               ),
               const SizedBox(height: 15),
               LocationTextfield(
                 label: 'To'.tr(),
-                hint: 'Enter your location'.tr(),
+                hint: 'Enter your arrival location'.tr(),
                 onselect: onSelectingToLocation,
                 controller: toController,
               ),

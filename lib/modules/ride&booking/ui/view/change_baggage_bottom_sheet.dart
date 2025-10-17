@@ -21,7 +21,6 @@ class ChangeBaggageBottomSheet extends StatefulWidget {
 
 class _ChangeBaggageBottomSheetState extends State<ChangeBaggageBottomSheet> {
 
-  BaggageType? selectedBaggageType;
 
   @override
   void initState() {
@@ -30,6 +29,7 @@ class _ChangeBaggageBottomSheetState extends State<ChangeBaggageBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("selectedBaggageType: ${widget.changeBaggageController.baggageType.value}"); 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Padding(
@@ -48,11 +48,10 @@ class _ChangeBaggageBottomSheetState extends State<ChangeBaggageBottomSheet> {
                     ...BaggageType.values.map((baggageType) {
                       return _buildBaggageImageIcon(
                         imagePath: baggageType.assetImagePath(),
-                        isSelected: selectedBaggageType == baggageType,
+                        isSelected: widget.changeBaggageController.baggageType.value == baggageType,
                         label: baggageType.name.tr(),
                         onTap: () {
                           setState(() {
-                            selectedBaggageType = baggageType;
                             widget.changeBaggageController.baggageType.value = baggageType;
                           });
                         },
@@ -79,16 +78,6 @@ class _ChangeBaggageBottomSheetState extends State<ChangeBaggageBottomSheet> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (selectedBaggageType == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Please select a baggage type.".tr(),
-                              ),
-                            ),
-                          );
-                          return;
-                        }
                         widget.changeBaggageController.changeBaggage(
                           snackbarNotifier: SnackbarNotifier(context: context),
                           riderId: widget.riderId,
