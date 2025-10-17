@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 
@@ -126,15 +129,21 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SelectSigninMethodScreen._socialIcon(
-                              'assets/images/google.png',
-                            ),
-                            Gap.w32,
-                            SelectSigninMethodScreen._socialIcon('assets/images/apple.png'),
-                            Gap.w32,
-                            SelectSigninMethodScreen._socialIcon(
-                              'assets/images/facebook.png',
-                            ),
+                            InkWell(
+                                onTap: () => serviceLocator<AuthInterface>().googleLogin(),
+                                child: SelectSigninMethodScreen._socialIcon(
+                                  'assets/images/google.png',
+                                ),
+                              ),
+                              Gap.w32,
+                              InkWell(
+                                onTap: () {
+                                  serviceLocator<AuthInterface>().facebookLogin();
+                                },
+                                child: SelectSigninMethodScreen._socialIcon(
+                                  'assets/images/facebook.png',
+                                ),
+                              ),
                           ],
                         ),
                         Gap.h120,

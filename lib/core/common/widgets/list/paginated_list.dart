@@ -40,13 +40,13 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
         child: ObxValue(
           (data) {
             if(data.value is Loaded<T> && data.value.data.isEmpty) {
-              return Flexible(child: Column(
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(child: Text(widget.emptyMessage)),
                   IconButton(onPressed: widget.onRefresh, icon: const Icon(Icons.refresh))
                 ],
-              ));
+              );
             }
             return ListView.builder(
               itemCount: data.value.data.length + 1,

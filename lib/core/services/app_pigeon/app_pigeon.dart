@@ -34,6 +34,7 @@ class AppPigeon {
   final FlutterSecureStorage _secureStorage;
   final RefreshTokenManagerInterface refreshTokenManager;
   final String baseUrl;
+  
   AppPigeon(
     this._dio,
     this._secureStorage,
