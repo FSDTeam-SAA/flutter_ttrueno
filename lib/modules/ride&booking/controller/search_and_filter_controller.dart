@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
@@ -16,9 +14,8 @@ import '../../../main.dart';
 import '../model/filter_ride_req_param.dart';
 
 class SearchRideController extends GetxController {
-  SearchRideController() {
-    _initializeDefaultValues();
-  }
+  SearchRideController();
+  
   RxBool isSearching = RxBool(false);
   final RxList<RideModel> searchResults = RxList<RideModel>();
   Rx<FilterModel> filtered = Rx(FilterModel(
@@ -45,7 +42,7 @@ class SearchRideController extends GetxController {
   /// In minutes
   RxInt departureFlexMinutes = RxInt(15);
 
-  Future<void> _initializeDefaultValues() async {
+  Future<void> initializeDefaultValues() async {
     final now = DateTime.now();
     selectedDate = now;
     selectedTime = TimeOfDay.fromDateTime(now);
@@ -53,41 +50,8 @@ class SearchRideController extends GetxController {
         "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     timeController.text = selectedTime!.format(navigatorKey.currentContext!);
     passengers.value = 1;
-    await _setCurrentLocation();
   }
 
-  Future<void> _setCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
-    }
-    if (permission == LocationPermission.deniedForever) return;
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
-    if (placemarks.isNotEmpty) {
-      final place = placemarks.first;
-      String address =
-          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}";
-      fromController.text = address;
-      fromLocation = LocationAdress(
-        lat: position.latitude,
-        lng: position.longitude,
-        address: address,
-      );
-    }
-  }
 
   Future<void> selectDate(BuildContext context) async {
     debugPrint("Selecting date");
@@ -155,7 +119,6 @@ class SearchRideController extends GetxController {
     departureFlexKm.value = .2;
     departureFlexMinutes.value = 15;
     isSearching.value = false;
-    await _setCurrentLocation();
   }
 
   int _page = 1;

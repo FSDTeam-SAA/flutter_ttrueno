@@ -3,13 +3,16 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
 import 'package:ttrueno_fo827e642a0c4/core/constants/api_endpoints.dart';
+import 'package:ttrueno_fo827e642a0c4/core/constants/hive_keys.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/cache/i_cache_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/login_entity.dart';
 
 import '../../utils/helpers/format_response_data.dart';
 
 class OAuthService {
-  OAuthService(this.appPigeon);
+  OAuthService(this.appPigeon,);
+  //final ICacheService cacheService;
   final AppPigeon appPigeon;
   final FlutterAppAuth _appAuth = FlutterAppAuth();
   final String backendBaseUrl = ApiEndpoints.baseUrl;
@@ -44,6 +47,7 @@ class OAuthService {
     final body = extractBodyData(resp);
     debugPrint(body.toString());
     await _extractAndSaveAuth(body);
+    //await cacheService.put<bool>(HiveCacheKeys.isFirstTimeLogin, false);
     return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
   }
 
@@ -65,11 +69,13 @@ class OAuthService {
 
       final body = extractBodyData(resp);
       await _extractAndSaveAuth(body);
+      //await cacheService.put<bool>(HiveCacheKeys.isFirstTimeLogin, false);
       return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
     } else {
       throw Exception('Facebook login failed: ${result.status}');
     }
   }
+
   Future<void> _extractAndSaveAuth(dynamic body) async{
      await appPigeon.saveNewAuth(
       saveAuthParams: SaveNewAuthParams(

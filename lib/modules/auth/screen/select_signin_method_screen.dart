@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/button/button_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';

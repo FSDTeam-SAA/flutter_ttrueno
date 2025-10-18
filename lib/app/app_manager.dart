@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ttrueno_fo827e642a0c4/core/constants/hive_keys.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/cache/hive_cache_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_docs_loader.dart';
@@ -41,6 +43,13 @@ class AppManager extends GetxController {
       _authStatus = authStatus; 
       if(_authStatus is UnAuthenticated) {
         navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);
+        // final isFirstTimeLogin = await HiveCacheService.onboarding().get<bool>(HiveCacheKeys.isFirstTimeLogin) ?? true;
+        // debugPrint("isFirstTimeLogin: $isFirstTimeLogin");
+        // if(isFirstTimeLogin == true) {
+        //   navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.onboarding, (route) => false);
+        // } else {
+        //   navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);
+        // }
       } else if(_authStatus is Authenticated) {
         await initializeControllers();
         await serviceLocator<AppPigeon>().socketInit(

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
@@ -24,6 +26,11 @@ import '../modules/auth/interface/auth_interface.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+    // Get app's document directory
+  final dir = await getApplicationDocumentsDirectory();
+
+  // Initialize Hive manually
+  Hive.init(dir.path);
 
   DebugService.instance(allowsOnly: {DebugLabel.service, DebugLabel.auth, DebugLabel.controller});
   final Dio _dio = Dio();
@@ -37,6 +44,9 @@ Future<void> initDependencies() async {
   serviceLocator.registerFactory<Dio>(()=> _dio);
 
   serviceLocator.registerFactory<AppPigeon>(()=> appPigeon);
+
+  // final profileCacheService = HiveCacheService.profile();
+  // final onboardingCacheService = HiveCacheService.onboarding();
 
   serviceLocator.registerFactory<OAuthService>(()=> OAuthService(serviceLocator<AppPigeon>()));
   // Dependencies

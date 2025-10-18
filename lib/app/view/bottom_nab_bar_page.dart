@@ -88,10 +88,7 @@ class __BottomTabBarState extends State<_BottomTabBar> {
           controller: widget.tabController,
           labelStyle: TextStyle(fontSize: 12),
           unselectedLabelStyle: TextStyle(fontSize: 12),
-          // backgroundColor: AppColors.background,
-          // selectedItemColor: AppColors.primarybutton,
-          // unselectedItemColor: Colors.grey,
-          // currentIndex: _selectedIndex,
+          //dividerColor: Colors.transparent,
           onTap: _onItemTapped,
           //type: BottomNavigationBarType.fixed,
           tabs: [

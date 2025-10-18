@@ -1,7 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
@@ -9,6 +8,13 @@ import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.da
 import '../../../../core/common/model/coordinate.dart';
 import '../../../../core/utils/helpers/handle_fold.dart';
 import '../../model/place_prediction.dart';
+
+class LatLng {
+  final double latitude;
+  final double longitude;
+
+  LatLng(this.latitude, this.longitude);
+}
 
 extension LocationExt on Coordinate {
   LatLng toLatLng() {
@@ -45,14 +51,12 @@ class LocationPickerController {
   Rx<LocationAdress?> selectedCoordinateAndAddress = Rx<LocationAdress?>(null);
 
   // Map state
-  Rx<Marker?> selectedMarker = Rx<Marker?>(null);
 
   dispose() {
     // TODO: implement dispose
     query.close();
     predictions.close();
     selectedCoordinateAndAddress.close();
-    selectedMarker.close();
    // mapController?.dispose();
   }
 

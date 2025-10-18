@@ -39,7 +39,8 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
   void initState() {
     super.initState();
     debugPrint('SearchScreenView initState');
-    searchRideController = Get.find<SearchRideController>();    
+    searchRideController = Get.find<SearchRideController>();   
+    searchRideController.initializeDefaultValues(); 
     Get.find<ProfileDataController>().getCurrentUserProfile();
   }
 

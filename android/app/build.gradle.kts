@@ -11,10 +11,7 @@ val localProperties = Properties().apply {
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-
 }
 
 val keystoreProperties = Properties()
@@ -43,8 +40,8 @@ android {
         manifestPlaceholders.put("appAuthRedirectScheme", "com.hoplift.app")
         minSdk = flutter.minSdkVersion
         targetSdk = 35
-        versionCode = project.properties["flutter.versionCode"]?.toString()?.toInt() ?: 5
-        versionName = project.properties["flutter.versionName"]?.toString() ?: "1.0.1"
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     signingConfigs {
@@ -57,19 +54,13 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             signingConfig = signingConfigs.getByName("release")
+            // Disable code shrinking and resource shrinking
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
-}
-
-// Secrets Gradle Plugin configuration
-secrets {
-    // This is your secrets file containing your real keys (should NOT be checked into git)
-    propertiesFileName = "secrets.properties"
-
-    // Optional default secrets file (can be checked in, with dummy/fallback keys)
-    defaultPropertiesFileName = "local.defaults.properties"
 }
 
 flutter {
@@ -77,6 +68,5 @@ flutter {
 }
 
 dependencies {
-    // ✅ Kotlin DSL uses double quotes, not single quotes
     implementation("com.facebook.android:facebook-login:16.2.0")
 }

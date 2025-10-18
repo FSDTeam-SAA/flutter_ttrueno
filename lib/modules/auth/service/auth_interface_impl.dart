@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/failure.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/success.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/cache/hive_cache_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/typedefs.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
@@ -11,6 +12,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/auth/model/signup_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_account_param.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/model/verify_otp_param.dart';
 import '../../../core/constants/api_endpoints.dart';
+import '../../../core/constants/hive_keys.dart';
 import '../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../core/utils/helpers/format_response_data.dart';
 import '../model/forget_password_param.dart';
@@ -18,8 +20,9 @@ import '../model/forget_password_param.dart';
 final class AuthInterfaceImpl extends AuthInterface {
   final AppPigeon appPigeon;
   final OAuthService oAuthService;
+  // final HiveCacheService hiveCacheService;
 
-  AuthInterfaceImpl(this.appPigeon, this.oAuthService,);
+  AuthInterfaceImpl(this.appPigeon, this.oAuthService);
 
   @override
 
@@ -47,6 +50,7 @@ final class AuthInterfaceImpl extends AuthInterface {
             }
           ),
         );
+        //await hiveCacheService.put<bool>(HiveCacheKeys.isFirstTimeLogin, false);
         return Success(message: extractSuccessMessage(response));
       },
     );
@@ -151,5 +155,14 @@ final class AuthInterfaceImpl extends AuthInterface {
     return await asyncTryCatch(tryFunc: () async{
       return oAuthService.loginWithFacebook();
     });
+  }
+  
+  @override
+  FutureRequest<Success<bool>> isFirstTimeLogin() async{
+    throw UnimplementedError();
+    // return asyncTryCatch(tryFunc: () async{
+    //   //final isFirstTimeLogin = await hiveCacheService.get<bool>("isFirstTimeLogin");
+    //   return Success(message: "", data: isFirstTimeLogin ?? true);
+    // });
   }
 }

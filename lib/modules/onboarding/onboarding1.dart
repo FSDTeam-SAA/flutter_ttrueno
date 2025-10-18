@@ -19,147 +19,150 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/1.png',
-              fit: BoxFit.cover,
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/1.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 28,
-                        height: 8,
-                        decoration: BoxDecoration(
+            SafeArea(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 28,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: AppColors.primarybutton,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        Gap.w4,
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        Gap.w4,
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    ),
+        
+                    // Skip button
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectSigninMethodScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Skip'.tr(),
+                        style: AppText.mdSemiBold_16_700.copyWith(
                           color: AppColors.primarybutton,
-                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                      Gap.w4,
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      Gap.w4,
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 220,
+                    left: 0,
+                    right: 0,
+                    //height: 250,
+                    child: Image.asset(
+                      'assets/images/Slide 1.jpeg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
-
-                  // Skip button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectSigninMethodScreen(),
+        
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 16,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    child: Text(
-                      'Skip'.tr(),
-                      style: AppText.mdSemiBold_16_700.copyWith(
-                        color: AppColors.primarybutton,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'High Fares\nLong Queues'.tr(),
+                              textAlign: TextAlign.center,
+                              // style: AppText.xxxlSemiBold_40_700.copyWith(
+                              //   color: AppColors.primaryTextblack,
+                              //   height: 1
+                              // ),
+                              style: TextStyle(
+                                color: AppColors.primaryTextblack,
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                                letterSpacing: -2,
+                              ),
+                            ),
+                            Gap.h32,
+                            context.primaryButton(
+                              width: double.infinity,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OnboardingScreen2(),
+                                  ),
+                                );
+                              },
+                              text: "Next".tr(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          SafeArea(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 220,
-                  left: 0,
-                  right: 0,
-                  //height: 250,
-                  child: Image.asset(
-                    'assets/images/Slide 1.jpeg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 16,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'High Fares\nLong Queues'.tr(),
-                            textAlign: TextAlign.center,
-                            // style: AppText.xxxlSemiBold_40_700.copyWith(
-                            //   color: AppColors.primaryTextblack,
-                            //   height: 1
-                            // ),
-                            style: TextStyle(
-                              color: AppColors.primaryTextblack,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              height: 1,
-                              letterSpacing: -2,
-                            ),
-                          ),
-                          Gap.h32,
-                          context.primaryButton(
-                            width: double.infinity,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OnboardingScreen2(),
-                                ),
-                              );
-                            },
-                            text: "Next".tr(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
