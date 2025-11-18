@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/bottomsheets/own_rider_long_press_options.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/bottomsheets/other_rider_long_press_options.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
-import '../../../modules/message/ui/widget/alart_message_widget.dart';
-import '../../../modules/message/ui/widget/change_baggage_type.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
-import '../../../modules/ride&booking/ui/view/change_baggage_bottom_sheet.dart';
 import '../../../modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
-import '../../notifiers/snackbar_notifier.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_gap.dart';
 import '../model/rider.dart';
@@ -35,6 +33,7 @@ class RidersListWidget extends StatefulWidget {
   final double avatarSize;
   final RxList<Rider> riders;
   final int seatBooked;
+  final bool showLongPressOptions;
   const RidersListWidget({
     super.key,
     this.avatarSize = 55,
@@ -44,7 +43,8 @@ class RidersListWidget extends StatefulWidget {
     this.changeBaggageController,
     this.leaveRideController,
     this.kickoutRiderController,
-    required this.seatBooked
+    required this.seatBooked,
+    this.showLongPressOptions = true,
   });
 
   @override
@@ -129,113 +129,23 @@ class _RidersListWidgetState extends State<RidersListWidget> {
   }
 
   void _onLongPress(Rider rider) {
+    if(widget.showLongPressOptions == false) return;
     debugPrint("Long press on ${rider.name}");
     if (rider.userId == currentUserId) {
-      showModalBottomSheet(
+      showOwnRiderLongPressOptions(
         context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if(widget.leaveRideController != null) ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Leave Ride'),
-                onTap: () {
-                  Navigator.pop(context);
-                  if(widget.leaveRideController == null) {
-                    return;
-                  }
-                  showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    builder: (context) {
-                      return ConfirmActionBottomSheet(
-                        message: 'Are you sure you want to leave the ride?',
-                        confirmButtonText: 'Leave',
-                        cancelButtonText: 'Not Now',
-                        onConfirm: () async{
-                          
-                            widget.leaveRideController
-                                ?.leaveRide(
-                                  snackbarNotifier: SnackbarNotifier(
-                                    context: context,
-                                  ),
-                                )
-                                .then((_) {
-                            if(context.mounted) Navigator.pop(context);
-                          });
-                          // Add leave logic here
-                        },
-                        onCancel: () {
-                          // Add cancel logic here
-                        },
-                        confirmStn: widget.leaveRideController!.stn,
-                      );
-                    },
-                  );
-                },
-              ),
-               ListTile(
-                leading: const Icon(Icons.work_outline),
-                title: const Text('Change Baggage'),
-                onTap: () async {
-
-                  Navigator.pop(context);
-                  if(widget.changeBaggageController == null) return;
-                  await showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    builder: (context) {
-                      return ChangeBaggageBottomSheet(
-                        changeBaggageController: widget.changeBaggageController!,
-                        riderId: rider.userId,
-                        initialBaggageType: rider.baggageType,
-                      );
-                    },
-                  );
-                },
-              ),
-              
-              SizedBox(height: 50),
-            ],
-          );
-        },
+        rider: rider,
+        leaveRideController: widget.leaveRideController,
+        changeBaggageController: widget.changeBaggageController,
       );
     } else {
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) {
-          return ConfirmActionBottomSheet(
-            message: 'Are you sure you want to vote to kick out ${rider.name}',
-            confirmButtonText: 'Kick Out',
-            cancelButtonText: 'Not Now',
-            onConfirm: () async{
-              await widget.kickoutRiderController?.kickRider(riderId: rider.userId, snackbarNotifier: SnackbarNotifier(context: context)).then((_) {
-                if(context.mounted) Navigator.pop(context);
-              });
-            },
-            onCancel: () {
-              // Add cancel logic here
-              Navigator.pop(context);
-            },
-            confirmStn: widget.kickoutRiderController!.stn,
-          );
-        },
-      );
+      if(widget.kickoutRiderController != null) {
+        showOtherRiderLongPressOptions(
+          context: context,
+          rider: rider,
+          kickoutRiderController: widget.kickoutRiderController!,
+        );
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
+import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
@@ -14,6 +15,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/widget/slider_widg
 
 import '../../../../core/common/widgets/reactive_buttons/save_button.dart';
 import '../../../../core/notifiers/snackbar_notifier.dart';
+import '../widget/passenger_increment_decrement_widget.dart';
 
 class FilterRidesView extends StatefulWidget {
   const FilterRidesView({super.key});
@@ -80,7 +82,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
       int minutes = 60;
       value -= 5;
       minutes += (value / 1.25).floor() * 60;
-      debugPrint("Minutes: $minutes");
+      ControllerDebugger().dekhao("Minutes: $minutes");
       return minutes;
     }
   }
@@ -311,43 +313,16 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "Seats Available".tr(),
-                  style: AppText.mdRegular_16_400.copyWith(
+                  "Passengers".tr(),
+                  style: AppText.lgMedium_18_500.copyWith(
                     color: AppColors.primaryTextblack,
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    if (searchRideController.passengers > 1) {
-                      searchRideController.decrementPassengers();
-                    }
-                  },
-                  icon: const Icon(Icons.remove_circle_outline),
-                ),
-                Container(
-                  height: 35,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[200]!, width: 2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  alignment: Alignment.center,
-                  child: Obx(
-                    () => Text(
-                      '${searchRideController.passengers}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if(searchRideController.passengers < 4) searchRideController.incrementPassengers();
-                  },
-                  icon: const Icon(Icons.add_circle_outline),
+                PassengerIncrementDecrementWidget(
+                  count: searchRideController.passengers,
+                  onDecrement: searchRideController.decrementPassengers,
+                  onIncrement: searchRideController.incrementPassengers,
                 ),
               ],
             ),

@@ -6,8 +6,11 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
-  const LanguageSelectionScreen({super.key});
+  final bool fromOnboarding;
+  const LanguageSelectionScreen._({super.key, required this.fromOnboarding});
 
+  factory LanguageSelectionScreen.fromOnboarding({bool fromOnboarding = false}) => LanguageSelectionScreen._(fromOnboarding: fromOnboarding);
+  factory LanguageSelectionScreen.general() => LanguageSelectionScreen._(fromOnboarding: false);
   @override
   State<LanguageSelectionScreen> createState() =>
       _LanguageSelectionScreenState();
@@ -90,17 +93,22 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             children: [
               
               Gap.h16,
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "You can change this later in settings".tr(),
-                  style: AppText.smRegular_14_400.copyWith(
-                    color: AppColors.secondaryText,
+              if(widget.fromOnboarding) Column(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "You can change this later in settings".tr(),
+                      style: AppText.smRegular_14_400.copyWith(
+                        color: AppColors.secondaryText,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  Gap.h24,
+                ],
               ),
-              Gap.h24,
+              
               Expanded(
                 child: ListView.separated(
                   itemCount: languages.length,
@@ -138,25 +146,27 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          height: 52,
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: _saveLanguage,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primarybutton,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            height: 52,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _saveLanguage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primarybutton,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            ),
-            child: Text(
-              'Save'.tr(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              child: Text(
+                'Save'.tr(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

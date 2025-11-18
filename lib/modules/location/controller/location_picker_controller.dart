@@ -5,9 +5,9 @@ import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/interface/location_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 
-import '../../../../core/common/model/coordinate.dart';
-import '../../../../core/utils/helpers/handle_fold.dart';
-import '../../model/place_prediction.dart';
+import '../../../core/common/model/coordinate.dart';
+import '../../../core/utils/helpers/handle_fold.dart';
+import '../model/place_prediction.dart';
 
 class LatLng {
   final double latitude;
@@ -81,11 +81,15 @@ class LocationPickerController {
 
   // When user taps on prediction
   Future<void> selectPrediction(PlacePrediction prediction) async {
+    debugPrint("Selected prediction >> ${prediction.description}");
     final details = await serviceLocator<LocationInterface>().getPlaceDetails.call(prediction.placeId);
     handleFold(
       either: details,
-      onError: (failure) {},
+      onError: (failure) {
+        debugPrint("Error >> ${failure.fullError}");
+      },
       onSuccess: (place) {
+        debugPrint("Selected place >> ${place.description}");
         _setSelectedLocation(
           LocationAdress(
             lat: place.coordinate.latitude,
@@ -113,8 +117,9 @@ class LocationPickerController {
   }
 
   void _setSelectedLocation(LocationAdress coordinateAndAddress) {
-  selectedCoordinateAndAddress.value = coordinateAndAddress;
-  onSelect(coordinateAndAddress);
-}
+    selectedCoordinateAndAddress.value = coordinateAndAddress;
+    debugPrint("Selected location >> ${coordinateAndAddress.address}");
+    onSelect(coordinateAndAddress);
+  }
 
 }

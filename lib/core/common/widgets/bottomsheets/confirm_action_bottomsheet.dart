@@ -109,10 +109,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 class ConfirmActionBottomSheet extends StatelessWidget {
   final String message;
   final VoidCallback onConfirm;
-  final VoidCallback onCancel;
   final double height;
-  final bool showTextField;
-  final TextEditingController? controller;
   final ProcessStatusNotifier confirmStn;
   final String? hintText;
   final double? textFieldHeight;
@@ -123,10 +120,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
     super.key,
     required this.message,
     required this.onConfirm,
-    required this.onCancel,
     this.height = 150,
-    this.showTextField = false,
-    this.controller,
     this.hintText,
     this.textFieldHeight,
     this.confirmButtonText = 'Confirm',
@@ -137,7 +131,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: showTextField ? height + 60 : height,
+      height: height,
       padding: const EdgeInsets.all(24),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -154,26 +148,6 @@ class ConfirmActionBottomSheet extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          if (showTextField)
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(
-                height: textFieldHeight ?? 50,
-                child: TextField(
-                  controller: controller,
-                  expands: false,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: hintText ?? 'Optional reason...',
-                    border: OutlineInputBorder(),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                ),
-              ),
-            ),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -188,7 +162,7 @@ class ConfirmActionBottomSheet extends StatelessWidget {
                         foregroundColor: AppColors.primarybutton,
                       ),
                       onPressed: () {
-                        onCancel();
+                        Navigator.pop(context);
                       },
                       child: Text(cancelButtonText),
 

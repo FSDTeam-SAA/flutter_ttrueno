@@ -2,9 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/widgets/chat_ride_card_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/components/chat_ride_card/chat_ride_card_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
@@ -35,7 +36,7 @@ class _MessageScreenState extends State<MessageScreen> {
     // TODO: implement initState
     super.initState();
     leaveRideController = LeaveRideController(
-      rideId: widget.activeRideChatController.ride.value.id,
+      ride: widget.activeRideChatController.ride.value,
       onLeaveSuccess: () {
         Get.find<InboxController>().getAllChat(forceRefresh: true);
         Navigator.of(context).pop();
@@ -58,7 +59,7 @@ class _MessageScreenState extends State<MessageScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: GestureDetector(
               onTap: () {
-                if(widget.activeRideChatController.eligibleToLeave.value) {
+                if(widget.activeRideChatController.eligibleToLeave) {
                   leaveRideController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
                 }
               },
@@ -121,7 +122,19 @@ class _MessageScreenState extends State<MessageScreen> {
                 ),
               ),
             ),
-            Positioned(
+            widget.activeRideChatController.canFinishNow
+            ? RSaveButton(
+              key: UniqueKey(), 
+              buttonStatusNotifier: widget.activeRideChatController.finishRideController.stn,
+              onSaveTap: () async{
+                widget.activeRideChatController.finishRideController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
+              }, 
+              onDone: () {
+                Navigator.pop(context);
+              },
+              loadingText: "Finishing...",
+            )
+            : Positioned(
               bottom: 0,
               left: 0,
               right: 0,

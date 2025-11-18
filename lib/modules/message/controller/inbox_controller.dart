@@ -7,30 +7,30 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/model/chat_room.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/finish_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
-import '../../../../modules/message/interface/message_interface.dart';
-import '../../../../modules/message/model/get_chats_req_param.dart';
-import '../../../../modules/message/model/get_messages_param.dart';
-import '../../../../modules/message/model/message.dart';
-import '../../../../modules/message/model/send_message_req_param.dart';
-import '../../../../modules/profile/controller/profile_data_controller.dart';
-import '../../../../modules/ride&booking/interface/ride_interface.dart';
-import '../../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
-import '../../../utils/helpers/handle_fold.dart';
-import '../../model/rider.dart';
-import '../../model/rider_joined_state.dart';
-import '../../model/rider_left_state.dart';
-part 'part/active_ride_chat_controller.dart';
+import '../interface/message_interface.dart';
+import '../model/get_chats_req_param.dart';
+import '../model/get_messages_param.dart';
+import '../model/message.dart';
+import '../model/send_message_req_param.dart';
+import '../../profile/controller/profile_data_controller.dart';
+import '../../ride&booking/interface/ride_interface.dart';
+import '../../ride&booking/model/enum/baggage_type_enum.dart';
+import '../../../core/utils/helpers/handle_fold.dart';
+import '../../../core/common/model/rider.dart';
+import '../../../core/common/model/rider_joined_state.dart';
+import '../../../core/common/model/rider_left_state.dart';
+part '../../../core/common/components/chat_ride_card/active_ride_chat_controller.dart';
 
 
 class InboxController extends GetxController{
 
   InboxController();
-  int _limit = 10;
+  final int _limit = 10;
   Rx<Pagination<ActiveRideChatController>> rideChatPages =
       Rx<Pagination<ActiveRideChatController>>(
         NotInitialized<ActiveRideChatController>([]),
@@ -88,8 +88,7 @@ class InboxController extends GetxController{
         onSuccess: (data) {
           List<ActiveRideChatController> page = [];
           for(final chat in data) {
-            debugPrint("Chat Room: ${chat.id}, participants: ${chat.participants.length}");
-            final activeRideChat = ActiveRideChatController(chat: chat);
+            final activeRideChat = ActiveRideChatController(_refresh, _refresh, _refresh, chat: chat);
             page.add(activeRideChat);
             activeRideChat.init();
           }
@@ -104,35 +103,37 @@ class InboxController extends GetxController{
     });
   }
 
+  void _refresh() async{
+    await getAllChat(forceRefresh: true);
+  }
+
   _lisenToStreams() {
-    // Rider join stream
-    // _riderJoinedStreamSubscription = serviceLocator<RideInterface>().riderJoinedStream().listen((riderState) {
-    //   rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.rideId).addNewRider(riderState.rider);
-    // });
-    // // Rider left stream
-    // _riderLeftStreamSubscription = serviceLocator<RideInterface>().riderLeftStream().listen((riderState) {
-    //   rideChatPages.value.data.firstWhere((e) => e.rideId == riderState.riderId).removeRider(riderState.riderId);
-    // });
-
-
+    // When chat room is created/updated   ----- excluding the delete functionality
     _chatRoomStreamSubscription = serviceLocator<MessageInterface>().chatStream().listen((chatRoom) {
       if(chatRoom == null) return;
+      // find the existing chat
       final index = rideChatPages.value.data.indexWhere((e) => e.chat.id == chatRoom.id);
       if(index != -1) {
-        rideChatPages.value.data.add(ActiveRideChatController(chat: chatRoom));
+        // Yet not exists? 
+        //Add new [ActiveRideChatController] to the list
+        rideChatPages.value.data.add(ActiveRideChatController(_refresh, _refresh, _refresh, chat: chatRoom));
       } else {
-        rideChatPages.value.data[index] = ActiveRideChatController(chat: chatRoom);
+        // Update the existing
+        rideChatPages.value.data[index] = ActiveRideChatController(_refresh, _refresh, _refresh, chat: chatRoom);
         rideChatPages.refresh();
       }
     });
+
+    // When message is created/updated   ----- excluding the delete functionality
     _messageStreamSubscription = serviceLocator<MessageInterface>().messageStream().listen((message) async{
       if(message == null) return;
+      // find the existing chat
       final int index = rideChatPages.value.data.indexWhere((e) => e.chat.id == message.chatId);
       if(index != -1) {
         rideChatPages.value.data[index]._addMessage(message);
+        // logic to update participants [if its a system message like ride joined/ride left]
         if(message.type == MessageType.system) {
           debugPrint("New system message: ${message.message}");
-          debugPrint("Updating ride");
           await serviceLocator<RideInterface>().getRideById(rideId: rideChatPages.value.data[index].rideId).then((lr) {
             handleFold(
               either: lr,
@@ -156,6 +157,8 @@ class InboxController extends GetxController{
     _riderLeftStreamSubscription?.cancel();
     _chatRoomStreamSubscription?.cancel();
     _messageStreamSubscription?.cancel();
+    rideChatPages.value.data.clear();
+    rideChatPages.close();
   }
 }
 

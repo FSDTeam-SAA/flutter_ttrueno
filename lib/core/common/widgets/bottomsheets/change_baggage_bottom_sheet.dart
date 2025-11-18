@@ -4,8 +4,8 @@ import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_ico
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_baggage_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_gap.dart';
 
 /// This screen/bottomsheet does not close or pop itself,
 /// rather it uses the onJoinComplete callback and delegate that responsibility to the parent widget.

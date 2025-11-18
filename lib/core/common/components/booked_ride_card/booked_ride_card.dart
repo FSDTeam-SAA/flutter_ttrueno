@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/booked_ride_card_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/components/booked_ride_card/booked_ride_card_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/car_divider_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/r_icon.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
@@ -12,12 +11,12 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
-import '../../../modules/message/ui/view/message_screen.dart';
-import '../../../modules/ride&booking/ui/view/share_experience_screen.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/text_style.dart';
-import '../../../modules/message/ui/widget/alart_message_widget.dart';
-import '../../../modules/profile/controller/profile_data_controller.dart';
+import '../../../../modules/message/ui/view/message_screen.dart';
+import '../../../../modules/ride&booking/ui/view/share_experience_screen.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/text_style.dart';
+import '../../widgets/bottomsheets/confirm_action_bottomsheet.dart';
+import '../../../../modules/profile/controller/profile_data_controller.dart';
 
 class BookedRideCard extends StatefulWidget {
   final double elevation;
@@ -57,14 +56,12 @@ class BookedRideCard extends StatefulWidget {
 class _BookedRideCardState extends State<BookedRideCard> {
   late final BookedRideCardActionController bookedRideCardController;
   late final String currentUserId;
-  final List<Map<String, dynamic>> joinedUsers = [];
   final int maxUsers = 4;
 
   
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentUserId = Get.find<ProfileDataController>().userProfile.value?.id ?? "";
     bookedRideCardController = widget.bookedRideCardActionController;
@@ -87,12 +84,15 @@ class _BookedRideCardState extends State<BookedRideCard> {
               children: [
                 const SizedBox(height: 20),
                 Gap.h12,
+                
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Text(
                             "From",
@@ -132,7 +132,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 const CarDivider(),
                 Gap.h20,
                 RidersListWidget(
-                  allowJoin: bookedRideCardController.eligibleToJoin.value,
+                  allowJoin: bookedRideCardController.eligibleToJoin,
                   riders: bookedRideCardController.riders,
                   joinRideController: bookedRideCardController.joinRideController,
                   changeBaggageController: bookedRideCardController.changeBaggageController,
@@ -248,20 +248,14 @@ class _BookedRideCardState extends State<BookedRideCard> {
                   ),
                 ),
                 builder: (context) => ConfirmActionBottomSheet(
-                  message: 'Are you sure?'.tr(),
+                  message: 'Are you sure to leave this ride?'.tr(),
                   confirmButtonText: 'Confirm'.tr(),
                   cancelButtonText: 'Cancel'.tr(),
                   onConfirm: () async{
-                    debugPrint("Leave Ride");
                     await bookedRideCardController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context)).then((_) {
                       if(context.mounted) Navigator.pop(context);
                     });
                     
-                  },
-                  onCancel: () {
-                    // Navigator.pop(
-                    //   context,
-                    // );
                   },
                   confirmStn: bookedRideCardController.leaveStn,
                 ),

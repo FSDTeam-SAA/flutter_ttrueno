@@ -1,52 +1,52 @@
 
-part of '../inbox_controller.dart';
+part of '../../../../modules/message/controller/inbox_controller.dart';
 
 
 class ActiveRideChatController extends GetxController{
   
-  ActiveRideChatController({required this.chat}){
+  ActiveRideChatController(this.onLeaveSuccess, this.onFinishRideSuccess, this.onKickSuccess, {required this.chat}){
     ride = Rx<RideModel>(chat.ride);
     participants.addAll(chat.participants);
-    eligibleToJoin.value = DateTime.now().isBefore(ride.value.departureTime);
-    eligibleToLeave.value = chat.participants.any((e) => e.userId == Get.find<ProfileDataController>().userProfile.value?.id);
     
-    kickoutRiderController = KickoutRiderController(rideId: chat.ride.id, onKickSuccess: (){
-      Get.find<InboxController>().getAllChat(forceRefresh: true);
-    });
-    _leaveRideController = LeaveRideController(rideId: chat.ride.id, onLeaveSuccess: () {
-      Get.find<InboxController>().getAllChat(forceRefresh: true);
-    },);
-    joinRideController = JoinRideController(rideId: chat.ride.id, onJoinSuccess: (riders) {
+    kickoutRiderController = KickoutRiderController(rideId: chat.ride.id, onKickSuccess: onKickSuccess);
+    leaveRideController = LeaveRideController(ride: chat.ride, onLeaveSuccess: onLeaveSuccess);
+    joinRideController = JoinRideController(ride: chat.ride, onJoinSuccess: (riders) {
       onJoinSuccess(riders);
     });
-    leaveRideController = LeaveRideController(rideId: rideId, onLeaveSuccess: () {
-      Get.find<InboxController>().getAllChat(forceRefresh: true);
-    });
+    finishRideController = FinishRideController(ride: chat.ride, onFinishRideSuccess: onFinishRideSuccess);
   }
 
   final ChatRoom chat;
+  final VoidCallback onLeaveSuccess;
+  final VoidCallback onFinishRideSuccess;
+  final VoidCallback onKickSuccess;
+
   late Rx<RideModel> ride;
   String get rideId => chat.ride.id;
-  RxBool eligibleToJoin = RxBool(false);
-  RxBool eligibleToLeave = RxBool(false);
+  bool eligibleToJoin = false;
+  bool eligibleToLeave = false;
+  bool eligibleForChat = false;
   RxList<Rider> participants = RxList<Rider>([]);
   RxList<Message> messages = RxList<Message>([]);
   RxString notification = RxString("");
   int _page = 1;
   int _limit = 20;
   bool _allLoaded = false;
-  late final LeaveRideController _leaveRideController;
   late final JoinRideController joinRideController;
   late final LeaveRideController leaveRideController;
   late final KickoutRiderController kickoutRiderController;
+  late final FinishRideController finishRideController;
 
-  ProcessStatusNotifier get leaveRideStn => _leaveRideController.stn;
+  ProcessStatusNotifier get leaveRideStn => leaveRideController.stn;
   ProcessStatusNotifier get joinRideStn => joinRideController.stn;
-
 
   init() {
     getMessages();
     serviceLocator<MessageInterface>().joinRoom(chat.id);
+  }
+
+  bool get canFinishNow {
+    return ride.value.departureTime.add(Duration(hours: 2)).isBefore(DateTime.now());
   }
 
   void onJoinSuccess(List<Rider> newRiders) {
@@ -54,7 +54,7 @@ class ActiveRideChatController extends GetxController{
   }
 
   leaveRide({SnackbarNotifier? snackbarNotifier}) async{
-    await _leaveRideController.leaveRide(snackbarNotifier: snackbarNotifier);
+    await leaveRideController.leaveRide(snackbarNotifier: snackbarNotifier);
   }
   
   _addMessage(Message message) {

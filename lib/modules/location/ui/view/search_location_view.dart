@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/textfields/search_textfield.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/location/ui/controller/location_picker_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/location/controller/location_picker_controller.dart';
 
 import '../../model/place_prediction.dart';
 
@@ -104,6 +104,7 @@ class _SearchLocationViewState extends State<SearchLocationView> {
                   ),
                 );
               }),
+            
             ],
           ),
         ),

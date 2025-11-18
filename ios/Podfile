@@ -30,6 +30,9 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
 
+  # We don't need google maps view in the app for now.
+  # This is client's concern and request to exclude the google maps and gps feature.
+  # pod 'GoogleMaps'
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
     inherit! :search_paths

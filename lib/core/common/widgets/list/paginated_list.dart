@@ -64,7 +64,7 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
                         )
                       ],
                     );
-                  }else {
+                  } else {
                     return Container();
                   }
 

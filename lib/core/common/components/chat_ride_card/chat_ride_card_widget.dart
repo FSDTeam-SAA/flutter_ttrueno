@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:ttrueno_fo827e642a0c4/core/common/controller/inbox_controller/inbox_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/riders_list.dart';
@@ -13,12 +13,10 @@ import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/auth_role.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/app_pigeon/app_pigeon.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_rider_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
-import '../../../app/app_manager.dart';
-import '../../notifiers/snackbar_notifier.dart';
-import 'car_divider_widget.dart';
-import '../../../modules/message/ui/widget/alart_message_widget.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_gap.dart';
+import '../../../../app/app_manager.dart';
+import '../../widgets/car_divider_widget.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_gap.dart';
 
 class ChatRideCardWidget extends StatefulWidget {
   final ActiveRideChatController activeRideChatController;
@@ -70,7 +68,7 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
           ),
           Gap.h12,
           RidersListWidget(
-            allowJoin: widget.activeRideChatController.eligibleToJoin.value,
+            allowJoin: widget.activeRideChatController.eligibleToJoin,
             avatarSize: 50,
             riders: widget.activeRideChatController.participants,
             kickoutRiderController: widget.activeRideChatController.kickoutRiderController,

@@ -4,7 +4,7 @@ class UserProfile {
   final String id;
   final String name;
   final String email;
-  final String number;
+  final String phoneNumber;
   final String imageUrl;
   final num rating;
 
@@ -12,7 +12,7 @@ class UserProfile {
     required this.id,
     required this.name,
     required this.email,
-    required this.number,
+    required this.phoneNumber,
     required this.imageUrl,
     required this.rating, 
   });
@@ -23,7 +23,7 @@ class UserProfile {
         id: json['_id'] ?? '',
         name: json['name'] ?? '',
         email: json['email'] ?? '',
-        number: json['number'] ?? '',
+        phoneNumber: json['phoneNumber'] ?? '',
         imageUrl: json['profileImage'] ?? '',
         rating: json["rating"] ?? 0,
       );
@@ -37,7 +37,7 @@ class UserProfile {
         'id': id,
         'name': name,
         'email': email,
-        'number': number,
+        'number': phoneNumber,
         'profileImage': imageUrl,
         'rating': rating
       };
@@ -54,7 +54,7 @@ class UserProfile {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      number: number ?? this.number,
+      phoneNumber: number ?? this.phoneNumber,
       imageUrl: imageUrl ?? this.imageUrl,
       rating: rating ?? this.rating
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
@@ -49,7 +51,7 @@ class FaqScreen extends StatelessWidget {
             "Yes. If you created a ride and no one has joined yet, you can tap 'Leave Ride' to delete it. If you've joined an existing ride, or if others have joined the ride you created, you can leave by tapping the icon in the top right corner of the chat screen.",
       },
       {
-        'question': 'How Can I delete a ride',
+        'question': 'How can I delete a ride',
         'answer':
             "You can only delete a ride you've created if no one else has joined. To do so, tap the'Leave Ride' button in the chat. If others have joined, you can no longer delete theride, but you can leave the group.",
       },
@@ -73,15 +75,15 @@ class FaqScreen extends StatelessWidget {
         'answer':
             'Go to your "Profile," tap "Settings," and then select "Log Out" at the bottom of the screen.',
       },
-      {
-        'question': 'How do I delete my account?',
-        'answer':
-            'In "Settings, " select "Delete Account. " Please note that this action is permanent and will remove your profile and all associated data.',
-      },
-      {
+      // {
+      //   'question': 'How do I delete my account?',
+      //   'answer':
+      //       'In "Settings, " select "Delete Account. " Please note that this action is permanent and will remove your profile and all associated data.',
+      // },
+       {
         'question': 'Is my personal data safe?',
         'answer':
-            "We are committed to protecting your personal data. We collect information necessary to provide our service, such as your name, contact information, and ride history. This data is used to improve your experience, ensure your safety, and for communication purposes. We have security measures in place to protect your information, and we do not sell your personal data to third parties. For more detailed information, please review our full Privacy Policy in the app's settings.",
+            'We are committed to protecting your personal data. For more detailed information, please review our full [Privacy Policy](https://privacy.hopliftapp.com/).',
       },
       {
         'question': 'What should I do if I have a problem with another user?',
@@ -90,7 +92,7 @@ class FaqScreen extends StatelessWidget {
       },
     ];
 
-    return Scaffold(
+   return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
@@ -100,7 +102,7 @@ class FaqScreen extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
@@ -108,57 +110,75 @@ class FaqScreen extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Container(
-        color: AppColors.white,
-        child: ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: faqs.length,
-          itemBuilder: (context, index) {
-            final item = faqs[index];
-            return Container(
-              margin: EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: faqs.length,
+        itemBuilder: (context, index) {
+          final item = faqs[index];
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade300),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.06),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ExpansionTile(
+              tilePadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade300),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.06),
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
-              child: ExpansionTile(
-                tilePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+              collapsedIconColor: Colors.blue,
+              iconColor: Colors.blue,
+              title: Text(
+                item['question']!,
+                style: AppText.mdSemiBold_16_600.copyWith(
+                  color: AppColors.primaryTextblack,
                 ),
-                collapsedIconColor: Colors.blue,
-                iconColor: Colors.blue,
-                title: Text(
-                  item['question']!,
-                  style: AppText.mdSemiBold_16_600.copyWith(
-                    color: AppColors.primaryTextblack,
-                  ),
-                ),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(
-                      item['answer']!,
-                      style: TextStyle(
+              ),
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: MarkdownBody(
+                    data: item['answer']!,
+                    selectable: true,
+                    styleSheet: MarkdownStyleSheet(
+                      
+                      p: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.black54,
+                        height: 1.4,
+                      ),
+                      a: const TextStyle(
+                        color: AppColors.primarybutton,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w600,
+                        decorationColor: AppColors.primarybutton
                       ),
                     ),
+                    onTapLink: (text, href, title) async {
+                      if (href == null) return;
+                      final uri = Uri.parse(href);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri,
+                            mode: LaunchMode.externalApplication);
+                      }
+                    },
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

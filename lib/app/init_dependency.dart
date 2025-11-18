@@ -26,11 +26,10 @@ import '../modules/auth/interface/auth_interface.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-    // Get app's document directory
-  final dir = await getApplicationDocumentsDirectory();
 
   // Initialize Hive manually
-  Hive.init(dir.path);
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
 
   DebugService.instance(allowsOnly: {DebugLabel.service, DebugLabel.auth, DebugLabel.controller});
   final Dio _dio = Dio();

@@ -4,18 +4,17 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/change_bag
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/join_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
 
-import '../../../modules/profile/controller/profile_data_controller.dart';
-import '../../../modules/ride&booking/model/enum/status.dart';
-import '../model/rider.dart';
+import '../../../../modules/profile/controller/profile_data_controller.dart';
+import '../../../../modules/ride&booking/model/enum/status.dart';
+import '../../model/rider.dart';
 
-class RideCardActionController {
-  RideCardActionController({required this.ride}){
+class SearchRideCardController {
+  SearchRideCardController({required this.ride}){
     final String currentUserId = Get.find<ProfileDataController>().userProfile.value?.id ?? "";
     for(final rider in ride.participants){
-      if(rider.userId == currentUserId) eligibleForChat.value = true;
       riders.add(rider);
     }
-    joinRideController = JoinRideController(rideId: ride.id, onJoinSuccess: (newRiders) {
+    joinRideController = JoinRideController(ride: ride, onJoinSuccess: (newRiders) {
       riders.addAll(newRiders);
     },);
     changeBaggageController = ChangeBaggageController(bookingId: ride.id, onBaggageChangeSuccess: (changedBaggage) {
@@ -26,20 +25,12 @@ class RideCardActionController {
       }
       riders.refresh();
     },); 
-    // eligibility to finish, rate-ride
-    eligibleToJoin.value = DateTime.now().isBefore(ride.departureTime);
-    if(currentUserId == ride.creator?.id) {
-      eligibleToFinish = true;
-    }
-    if(ride.status == Status.completed) {
-      eligibleForRatingRide = true;
-    }
   }
 
   final RideModel ride;
 
-  RxBool eligibleToJoin = RxBool(false);
-  RxBool eligibleForChat = RxBool(false);
+  bool get eligibleToJoin => joinRideController.eligibleToJoin;
+  bool get eligibleForChat => ride.status == Status.active;
   bool eligibleToFinish = false;
   bool eligibleForRatingRide = false;
   RxList<Rider> riders = RxList([]);

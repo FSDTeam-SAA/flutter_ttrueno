@@ -4,7 +4,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:ttrueno_fo827e642a0c4/core/base/pagination.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 import '../model/get_my_bookings_req_param.dart';
-import '../../../core/common/controller/booked_ride_card_controller.dart';
+import '../../../core/common/components/booked_ride_card/booked_ride_card_controller.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../app/init_dependency.dart';
 import '../interface/booking_interface.dart';
@@ -26,11 +26,15 @@ class BookingController extends GetxController{
   int _page = 0;
 
   _onLeaveSuccess() {
-    getBookings();
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      getBookings();
+    });
   }
 
   _onFinishRideSuccess() {
-    getBookings();
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      getBookings();
+    });
   }
 
   Future<void> getBookings({
@@ -52,7 +56,7 @@ class BookingController extends GetxController{
           for (var element in data) {
             if(element.status == bookingsType) {
               bookedControllers.add(
-                BookedRideCardActionController(booking: element, onLeaveSuccess: _onLeaveSuccess, onFinishRideSuccess: _onFinishRideSuccess)
+                BookedRideCardActionController(booking: element, onLeaveSuccess: _onLeaveSuccess, onFinishRideSuccess: _onFinishRideSuccess, )
               );
             }
           }

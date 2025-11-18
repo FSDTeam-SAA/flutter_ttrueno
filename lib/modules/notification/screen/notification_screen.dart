@@ -8,7 +8,7 @@ import '../model/notification_model.dart';
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});
 
-  final NotificationController controller = Get.put(NotificationController());
+  final NotificationController controller = Get.find<NotificationController>();
 
   @override
   Widget build(BuildContext context) {
