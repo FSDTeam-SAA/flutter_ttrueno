@@ -15,7 +15,7 @@ class FinishRideController {
 
   final ProcessStatusNotifier stn = ProcessStatusNotifier(initialStatus: EnabledStatus());
 
-  bool get eligibleToFinish => ride.departureTime.isAfter(DateTime.now());
+  bool get eligibleToFinish => ride.departureTime.isBefore(DateTime.now());
   Future<void> finishRide({
     required SnackbarNotifier? snackbarNotifier,
   }) async{

@@ -188,7 +188,7 @@ class SearchRideController extends GetxController {
       );
     });
     isSearching.value = false;
-    Future.delayed(Duration(seconds: 3)).then((_){processStatusNotifier?.setEnabled();});
+    Future.delayed(Duration(seconds: 1)).then((_){processStatusNotifier?.setEnabled();});
   }
 
   

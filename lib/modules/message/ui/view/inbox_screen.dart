@@ -12,7 +12,7 @@ import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/messaging_screen.dart';
 
 import '../../../../core/base/pagination.dart';
 import '../../controller/inbox_controller.dart';
@@ -106,7 +106,7 @@ class _ChatBriefWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MessageScreen(
+          MaterialPageRoute(builder: (context) => MessagingScreen(
             activeRideChatController: rideChat,
           )),
         );

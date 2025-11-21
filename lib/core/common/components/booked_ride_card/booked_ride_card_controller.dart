@@ -34,10 +34,10 @@ class BookedRideCardActionController {
   final VoidCallback onLeaveSuccess;
   final VoidCallback onFinishRideSuccess;
 
-  bool get eligibleForChat => booking.ride.status == Status.active;
+  bool get eligibleForChat => booking.ride.status == Status.active && booking.ride.participants.where((rider) => rider.userId != Get.find<ProfileDataController>().userProfile.value?.id).isNotEmpty;
   bool get eligibleToJoin => joinRideController.eligibleToJoin;
   bool get eligibleToLeave => leaveRideController.eligibleToLeave;
-  bool eligibleToFinish = false;
+  bool get eligibleToFinish => finishRideController.eligibleToFinish;
   
   RxList<Rider> riders = RxList([]);
 

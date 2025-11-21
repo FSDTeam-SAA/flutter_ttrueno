@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Gap.h8,
                         Text(
-                          "Sign in to your account.",
+                          "Explore a new ride sharing experience with us.",
                           style: AppText.smRegular_14_400.copyWith(
                             color: AppColors.primaryText,
                           ),

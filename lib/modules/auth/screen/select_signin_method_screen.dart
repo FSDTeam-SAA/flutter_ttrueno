@@ -53,20 +53,21 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Lorum Ipsum",
+                          "Sign in to your account",
                           style: AppText.xxxlSemiBold_32_600.copyWith(
                             color: AppColors.primaryText,
                           ),
                         ),
                         Gap.h8,
                         Text(
-                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                          "Explore a new ride sharing experience with us",
                           style: AppText.smRegular_14_400.copyWith(
                             color: AppColors.primaryText,
                           ),
                         ),
                       ],
                     ),
+                  
                   ),
 
                   Gap.h60,

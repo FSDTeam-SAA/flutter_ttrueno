@@ -11,7 +11,7 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/status.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/ride_model.dart';
-import '../../../../modules/message/ui/view/message_screen.dart';
+import '../../../../modules/message/ui/view/messaging_screen.dart';
 import '../../../../modules/ride&booking/ui/view/share_experience_screen.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/text_style.dart';
@@ -191,9 +191,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
       child: Opacity(
           opacity: bookedRideCardController.eligibleToFinish ? 1.0 : 0.3,
           child: OutlinedButton.icon(
-            onPressed: () {
-              bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
-            },
+            onPressed: () => bookedRideCardController.eligibleToFinish ? bookedRideCardController.finishRide(snackbarNotifier: SnackbarNotifier(context: context)) : null,
             style: OutlinedButton.styleFrom(
               side: BorderSide.none,
               shape: RoundedRectangleBorder(
@@ -294,7 +292,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MessageScreen(
+                    builder: (context) => MessagingScreen(
                       activeRideChatController: chatController,
                     ),
                   ),

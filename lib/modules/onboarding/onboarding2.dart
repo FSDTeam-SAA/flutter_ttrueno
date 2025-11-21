@@ -96,60 +96,60 @@ class OnboardingScreen2 extends StatelessWidget {
                     ),
                   ),
                   Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 0,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(18.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(32.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                      )]
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Share the Ride\nSplit the Cost',
-                          textAlign: TextAlign.center,
-                          // style: AppText.xxxlSemiBold_40_700.copyWith(
-                          //   color: AppColors.primaryTextblack,
-                          //   height: 1
-                          // ),
-                          style: TextStyle(
-                            color: AppColors.primaryTextblack,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            height: 1,
-                            letterSpacing:-2
-                          ),
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 16,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(18.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                          )]
                         ),
-                        Gap.h32,
-                        context.primaryButton(
-                          width: double.infinity,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OnboardingScreen3(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Share the Ride\nSplit the Cost',
+                              textAlign: TextAlign.center,
+                              // style: AppText.xxxlSemiBold_40_700.copyWith(
+                              //   color: AppColors.primaryTextblack,
+                              //   height: 1
+                              // ),
+                              style: TextStyle(
+                                color: AppColors.primaryTextblack,
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                                letterSpacing:-2
                               ),
-                            );
-                          },
-                          text: "Next",
+                            ),
+                            Gap.h32,
+                            context.primaryButton(
+                              width: double.infinity,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OnboardingScreen3(),
+                                  ),
+                                );
+                              },
+                              text: "Next",
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
         
                 ],
         

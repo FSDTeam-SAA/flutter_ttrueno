@@ -19,15 +19,15 @@ import '../../../../core/notifiers/snackbar_notifier.dart';
 import '../../../../core/services/app_pigeon/app_pigeon.dart';
 import '../../../../core/theme/app_gap.dart';
 
-class MessageScreen extends StatefulWidget {
+class MessagingScreen extends StatefulWidget {
   final ActiveRideChatController activeRideChatController;
-  const MessageScreen({super.key, required this.activeRideChatController});
+  const MessagingScreen({super.key, required this.activeRideChatController});
 
   @override
-  State<MessageScreen> createState() => _MessageScreenState();
+  State<MessagingScreen> createState() => _MessagingScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> {
+class _MessagingScreenState extends State<MessagingScreen> {
 
   late final LeaveRideController leaveRideController;
 
@@ -125,6 +125,7 @@ class _MessageScreenState extends State<MessageScreen> {
             widget.activeRideChatController.canFinishNow
             ? RSaveButton(
               key: UniqueKey(), 
+              width: 150,
               buttonStatusNotifier: widget.activeRideChatController.finishRideController.stn,
               onSaveTap: () async{
                 widget.activeRideChatController.finishRideController.finishRide(snackbarNotifier: SnackbarNotifier(context: context));
@@ -132,6 +133,7 @@ class _MessageScreenState extends State<MessageScreen> {
               onDone: () {
                 Navigator.pop(context);
               },
+              saveText: "Finish".tr(),
               loadingText: "Finishing...",
             )
             : Positioned(

@@ -235,7 +235,15 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CreateRideView()),
+                          MaterialPageRoute(builder: (context) => CreateRideView(
+                            inputParam: CreateFromSearchInputParam(
+                              fromLocation: searchRideController.fromLocation,
+                              toLocation: searchRideController.toLocation,
+                              selectedDate: searchRideController.selectedDateTime,
+                              selectedTime: searchRideController.selectedTime,
+                              passengerCount: searchRideController.passengers.value
+                            ),
+                          )),
                         );
                       },
                       style: ElevatedButton.styleFrom(
