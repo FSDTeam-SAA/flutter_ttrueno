@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/service/auth_interface_impl.dart';
@@ -25,11 +27,13 @@ final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
 
+  // Initialize Hive manually
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+
   DebugService.instance(allowsOnly: {DebugLabel.service, DebugLabel.auth, DebugLabel.controller});
   final Dio _dio = Dio();
   final AppPigeon appPigeon = AppPigeon(
-    _dio,
-    FlutterSecureStorage(),
     RefreshTokenManager(ApiEndpoints.refreshToken),
     baseUrl: ApiEndpoints.baseUrl,
   );
@@ -37,6 +41,9 @@ Future<void> initDependencies() async {
   serviceLocator.registerFactory<Dio>(()=> _dio);
 
   serviceLocator.registerFactory<AppPigeon>(()=> appPigeon);
+
+  // final profileCacheService = HiveCacheService.profile();
+  // final onboardingCacheService = HiveCacheService.onboarding();
 
   serviceLocator.registerFactory<OAuthService>(()=> OAuthService(serviceLocator<AppPigeon>()));
   // Dependencies

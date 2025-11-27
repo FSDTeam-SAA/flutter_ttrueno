@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
@@ -10,6 +8,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/interface/ride_interf
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/create_ride_req_model.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/view/create_ride_view.dart';
 import '../../../core/utils/helpers/handle_fold.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../main.dart';
@@ -25,11 +24,15 @@ class CreateNewRideController extends GetxController{
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   RxInt seatAvailable = RxInt(1);
-  BaggageType selectedBaggageIndex = BaggageType.none;
+  BaggageType selectedBaggageIndex = BaggageType.small;
 
   final List<String> baggageTypes = BaggageType.values.map((e) => e.name).toList();
 
-  CreateNewRideController() {
+  CreateNewRideController(CreateFromSearchInputParam? param) {
+    if(param != null) {
+      _initializeWithSearchParams(param);
+      return;
+    }
     _initializeDefaultValues();
   }
 
@@ -41,34 +44,20 @@ class CreateNewRideController extends GetxController{
         "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     timeController.text = selectedTime!.format(navigatorKey.currentContext!);
     seatAvailable.value = 1;
-    await _setCurrentLocation();
   }
 
-  Future<void> _setCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
-    }
-    if (permission == LocationPermission.deniedForever) return;
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
-    if (placemarks.isNotEmpty) {
-      final place = placemarks.first;
-      String address =
-          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}";
-      fromController.text = address;
-    }
+  void _initializeWithSearchParams(CreateFromSearchInputParam param) {
+    debugPrint("Initializing with search params, ${param.toString()}");
+    fromLocation = param.fromLocation;
+    fromController.text = fromLocation?.address ?? "";
+    toLocation = param.toLocation;
+    toController.text = param.toLocation?.address ?? "";
+    selectedDate = param.selectedDate;
+    selectedTime = param.selectedTime;
+    dateController.text =
+        "${param.selectedDate!.year}-${param.selectedDate!.month.toString().padLeft(2, '0')}-${param.selectedDate!.day.toString().padLeft(2, '0')}";
+    timeController.text = param.selectedTime!.format(navigatorKey.currentContext!);
+    seatAvailable.value = param.passengerCount;
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -99,7 +88,7 @@ class CreateNewRideController extends GetxController{
   }
 
   void incrementPassengers() {
-    seatAvailable++;
+    if(seatAvailable < 4) seatAvailable++;
   }
 
   void decrementPassengers() {
@@ -118,7 +107,6 @@ class CreateNewRideController extends GetxController{
     selectedBaggageIndex = BaggageType.none;
     fromController.clear();
     toController.clear();
-    await _setCurrentLocation();
   }
 
   Future<bool> submitRide({

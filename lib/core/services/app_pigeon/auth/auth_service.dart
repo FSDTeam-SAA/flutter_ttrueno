@@ -15,12 +15,11 @@ class _AuthStatusDecider {
 
 class AuthService extends Interceptor {
   final Dio dio;
-  final FlutterSecureStorage _secureStorage;
   final RefreshTokenManagerInterface refreshTokenManager;
   final Debugger _authDebugger = AuthDebugger();
   late final _AuthStorage _authStorage;
-  AuthService(this._secureStorage, this.dio, this.refreshTokenManager){
-    _authStorage = _AuthStorage(secureStorage: _secureStorage);
+  AuthService(this.dio, this.refreshTokenManager){
+    _authStorage = _AuthStorage();
   }
 
   void init() {
@@ -39,7 +38,7 @@ class AuthService extends Interceptor {
   /// Attach access token to every request
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    _authDebugger.dekhao("${options.uri.toString()} ${options.method}");
+    _authDebugger.dekhao(" ${options.method} ${options.uri.toString()}, ${options.data} ");
     final auth = await _authStorage.getCurrentAuth();
     final accessToken = auth?._accessToken;
     if (accessToken != null) {

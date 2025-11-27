@@ -2,6 +2,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/common/widgets/textfields/location_textfield.dart';
+import '../../../../core/common/widgets/textfields/location_textfield_type2.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../location/model/location_address.dart';
 
@@ -39,17 +40,17 @@ class LocationInputs extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              LocationTextfield(
+              LocationTextfieldType2(
                 label: 'From'.tr(),
                 hint: 'Enter your departure location'.tr(),
-                onselect: onSelectingFromLocation,
+                onselect: (locationAddress)=> onSelectingFromLocation(locationAddress),
                 controller: fromController,
               ),
               const SizedBox(height: 15),
-              LocationTextfield(
+              LocationTextfieldType2(
                 label: 'To'.tr(),
                 hint: 'Enter your arrival location'.tr(),
-                onselect: onSelectingToLocation,
+                onselect: (locationAddress)=> onSelectingToLocation(locationAddress),
                 controller: toController,
               ),
             ],

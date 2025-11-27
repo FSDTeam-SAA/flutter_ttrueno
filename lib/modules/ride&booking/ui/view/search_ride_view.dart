@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/notification/screen/notification_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/notification/widget/notification_bell_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/widget/greeting_user_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/search_and_filter_controller.dart';
@@ -15,6 +14,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../widget/location_input.dart';
+import '../widget/passenger_increment_decrement_widget.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});
@@ -39,7 +39,8 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
   void initState() {
     super.initState();
     debugPrint('SearchScreenView initState');
-    searchRideController = Get.find<SearchRideController>();    
+    searchRideController = Get.find<SearchRideController>();   
+    searchRideController.initializeDefaultValues(); 
     Get.find<ProfileDataController>().getCurrentUserProfile();
   }
 
@@ -68,52 +69,54 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
           ),
           // Greeting section
           Positioned(
-            top: 60,
+            top: 50,
             left: 24,
             right: 24,
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GreetingUserWidget(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotificationScreen(),
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.notifications_none,
-                        size: 28,
-                        color: AppColors.primaryTextblack,
-                      ),
-                    ),
-                  ],
-                ),
-                Gap.h4,
-                Text.rich(
-                  TextSpan(
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white30,
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                        offset: const Offset(0, 3),
+                      )
+                    ]
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextSpan(
-                        text: 'Welcome back to'.tr(),
-                        style: TextStyle(color: AppColors.primaryTextblack),
+                      GreetingUserWidget(),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Welcome back to'.tr(),
+                              style: TextStyle(color: AppColors.primaryTextblack),
+                            ),
+                            TextSpan(
+                              text: ' ',
+                              style: TextStyle(color: AppColors.primaryTextblack),
+                            ),
+                            TextSpan(
+                              text: 'Hoplift'.tr(),
+                              style: TextStyle(color: AppColors.primaryTextblack),
+                            ),
+                          ],
+                        ),
                       ),
-                      TextSpan(
-                        text: ' ',
-                        style: TextStyle(color: AppColors.primaryTextblack),
-                      ),
-                      TextSpan(
-                        text: 'Hoplift'.tr(),
-                        style: TextStyle(color: AppColors.primaryTextblack),
-                      ),
+                      
                     ],
                   ),
                 ),
+
+                NotificationBellWidget(),
+                
               ],
             ),
           ),
@@ -230,38 +233,14 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                             ),
                           ),
                           const Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              searchRideController.decrementPassengers();
-                            },
-                            icon: const Icon(Icons.remove_circle_outline),
-                          ),
-                          Container(
-                            height: 35,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey[200]!,
-                                width: 2,
+                          Row(
+                            children: [
+                              PassengerIncrementDecrementWidget(
+                                count: searchRideController.passengers,
+                                onDecrement: searchRideController.decrementPassengers,
+                                onIncrement: searchRideController.incrementPassengers,
                               ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            alignment: Alignment.center,
-                            child: Obx(
-                              ()=> Text(
-                                '${searchRideController.passengers.value}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              searchRideController.incrementPassengers();
-                            },
-                            icon: const Icon(Icons.add_circle_outline),
+                            ],
                           ),
                         ],
                       ),
@@ -292,7 +271,15 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateRideView(),
+                              builder: (context) => CreateRideView(
+                                inputParam: CreateFromSearchInputParam(
+                                  fromLocation: searchRideController.fromLocation,
+                                  toLocation: searchRideController.toLocation,
+                                  selectedDate: searchRideController.selectedDate,
+                                  selectedTime: searchRideController.selectedTime,
+                                  passengerCount: searchRideController.passengers.value,
+                                ),
+                              ),
                             ),
                           );
                         },

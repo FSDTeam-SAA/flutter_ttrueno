@@ -6,7 +6,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/my_booking_controller.dart';
-import '../../../../core/common/widgets/booked_ride_card.dart';
+import '../../../../core/common/components/booked_ride_card/booked_ride_card.dart';
 import '../../../../core/common/widgets/list/paginated_list.dart';
 import '../../../../core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
 
@@ -68,7 +68,7 @@ class _BookingScreenState extends State<BookingScreen>
         controller: _tabController,
         children: [
           PaginatedListWidget(
-            emptyMessage: "No bookings found!".tr(),
+            emptyMessage: "No bookings, right now!, Try refreshing!".tr(),
             pagination: bookingControllers.active.paginatedbookedRideControllers,
             skeleton: BookedRideCardSkeleton(),
             skeletonCount: 4,

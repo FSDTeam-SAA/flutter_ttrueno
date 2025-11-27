@@ -11,10 +11,28 @@ class NotificationController extends GetxController {
   final notifications = <NotificationModel>[].obs;
   final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier();
 
-  final isLoading = false.obs;
+  RxBool isLoading = false.obs;
+  RxnString unreadCountString = RxnString();
+  int _unReadCount = 0;
 
   NotificationController() {
     getAllNotification();
+  }
+
+  void incrementCount() {
+    _unReadCount++;
+    unreadCountString.value = _unReadCount.toString();
+  }
+
+  void _decrementCount({int? count}) {
+    if (count != null) {
+      _unReadCount = count;
+    } else {
+      _unReadCount--;
+    }
+    
+    _unReadCount = _unReadCount < 0 ? 0 : _unReadCount;
+    unreadCountString.value = _unReadCount <= 0 ? null : _unReadCount.toString();
   }
 
   Future<bool> markAsRead(int index) async {
@@ -36,10 +54,12 @@ class NotificationController extends GetxController {
           updatedAt: DateTime.now(),
         );
         notifications.refresh();
+        _decrementCount();
         return true;
       },
     );
   }
+
   Future<void> readAllNotification() async {
     final lr = await serviceLocator<NotificationInterface>()
         .allNotificationRead();
@@ -58,6 +78,7 @@ class NotificationController extends GetxController {
             );
           }
           notifications.refresh();
+          _decrementCount(count: 0);
           update();
         }
       },
@@ -70,7 +91,10 @@ class NotificationController extends GetxController {
 
   void markAsReadById(String id) {
     final idx = notifications.indexWhere((n) => n.id == id);
-    if (idx != -1) markAsRead(idx);
+    if (idx != -1) {
+      markAsRead(idx);
+      _decrementCount();
+    }
   }
 
   Future<void> getAllNotification() async {
@@ -88,7 +112,8 @@ class NotificationController extends GetxController {
         },
         onSuccess: (data) {
           notifications.value = data;
-          print("data >> ${data.length}");
+          _unReadCount = data.where((n) => !n.isRead).length;
+          unreadCountString.value = _unReadCount <= 0 ? null : _unReadCount.toString();
           notifications.refresh();
           update();
         },

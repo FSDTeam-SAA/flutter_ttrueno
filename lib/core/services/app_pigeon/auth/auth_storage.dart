@@ -4,12 +4,19 @@ base class _AuthStorage {
   final Debugger _authDebugger = AuthDebugger();
   late final _AuthManger _authManager;
   late final _CurrentAuthUidManger _currentAuthUidManager;
-  _AuthStorage({FlutterSecureStorage? secureStorage}): _secureStorage = secureStorage ?? FlutterSecureStorage(){
+  _AuthStorage(){
     _authManager = _AuthManger( _secureStorage, _authDebugger);
     _currentAuthUidManager = _CurrentAuthUidManger(_secureStorage);
   }
 
-  final FlutterSecureStorage _secureStorage;
+  final FlutterSecureStorage _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+    ),
+  );
 
   final StreamController<AuthStatus> _authStreamController = StreamController.broadcast();
   static String get currentAuthKey {

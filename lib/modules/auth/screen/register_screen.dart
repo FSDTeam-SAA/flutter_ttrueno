@@ -4,7 +4,7 @@ import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/description_doc_view.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/description_doc_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/verify_code_screen.dart';

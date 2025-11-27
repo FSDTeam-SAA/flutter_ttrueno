@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/list/paginated_list.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/loading/inbox_chat_skeleton.dart';
@@ -12,10 +11,9 @@ import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/extensions.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/message_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/message/ui/view/messaging_screen.dart';
 
-import '../../../../core/base/pagination.dart';
-import '../../../../core/common/controller/inbox_controller/inbox_controller.dart';
+import '../../controller/inbox_controller.dart';
 import '../../../../core/common/model/rider.dart';
 
 class InboxScreen extends StatefulWidget {
@@ -58,7 +56,7 @@ class _InboxScreenState extends State<InboxScreen> with AutomaticKeepAliveClient
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PaginatedListWidget(
-          emptyMessage: "No chats found!".tr(),
+          emptyMessage: "No chats, right now!, Try refreshing!".tr(),
           pagination: chatListController.rideChatPages,
           onRefresh: () => chatListController.getAllChat(forceRefresh: true), 
           skeleton: InboxChatSkeleton(), skeletonCount: 4, 
@@ -106,7 +104,7 @@ class _ChatBriefWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MessageScreen(
+          MaterialPageRoute(builder: (context) => MessagingScreen(
             activeRideChatController: rideChat,
           )),
         );

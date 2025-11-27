@@ -5,13 +5,38 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/location/model/location_address.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/create_new_ride_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/enum/baggage_type_enum.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/ui/widget/passenger_increment_decrement_widget.dart';
 
 import '../widget/location_input.dart';
 
+class CreateFromSearchInputParam {
+  final LocationAdress? fromLocation;
+  final LocationAdress? toLocation;
+  final DateTime? selectedDate;
+  final TimeOfDay? selectedTime;
+  final int passengerCount;
+
+  CreateFromSearchInputParam({
+    this.fromLocation,
+    this.toLocation,
+    this.selectedDate,
+    this.selectedTime,
+    this.passengerCount = 1,
+  });
+
+  @override
+  String toString() {
+    return 'CreateRideView{inputParam: ${fromLocation.toString()}, ${toLocation.toString()}, ${selectedDate?.toIso8601String()}, ${selectedTime.toString()}:${passengerCount}}';
+  }
+
+}
+
 class CreateRideView extends StatefulWidget {
-  const CreateRideView({super.key});
+  final CreateFromSearchInputParam? inputParam;
+  const CreateRideView({super.key, this.inputParam});
 
   @override
   State<CreateRideView> createState() => _CreateRideViewState();
@@ -24,7 +49,13 @@ class _CreateRideViewState extends State<CreateRideView> {
   @override
   void initState() {
     super.initState();
-    _createRideScreenController = CreateNewRideController();
+    _createRideScreenController = CreateNewRideController(widget.inputParam);
+  }
+
+  @override
+  void dispose() {
+    _createRideScreenController.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,26 +83,28 @@ class _CreateRideViewState extends State<CreateRideView> {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 58,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-          child: RSaveButton(
-            height: 50,
-            borderRadius: BorderRadius.circular(20),
-            key: UniqueKey(),
-            buttonStatusNotifier:
-                _createRideScreenController.processStatusNotifier,
-            saveText: 'Create'.tr(),
-            loadingText: "Creating.....".tr(),
-            onSaveTap: () async {
-              _createRideScreenController.submitRide(
-                snackbarNotifier: SnackbarNotifier(context: context)
-              );
-            },
-            onDone: () {
-              Navigator.pop(context);
-            },
+      bottomNavigationBar: SafeArea(
+        child: SizedBox(
+          height: 58,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+            child: RSaveButton(
+              height: 50,
+              borderRadius: BorderRadius.circular(20),
+              key: UniqueKey(),
+              buttonStatusNotifier:
+                  _createRideScreenController.processStatusNotifier,
+              saveText: 'Create'.tr(),
+              loadingText: "Creating.....".tr(),
+              onSaveTap: () async {
+                _createRideScreenController.submitRide(
+                  snackbarNotifier: SnackbarNotifier(context: context)
+                );
+              },
+              onDone: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
       ),
@@ -148,6 +181,7 @@ class _CreateRideViewState extends State<CreateRideView> {
               ],
             ),
             Gap.h40,
+
             Row(
               children: [
                 const Icon(Icons.person_outline, size: 28),
@@ -159,37 +193,18 @@ class _CreateRideViewState extends State<CreateRideView> {
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    if (_createRideScreenController.seatAvailable.value > 1) setState(() => _createRideScreenController.seatAvailable--);
-                  },
-                  icon: const Icon(Icons.remove_circle_outline),
-                ),
-                Container(
-                  height: 35,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[200]!, width: 2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${_createRideScreenController.seatAvailable}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => setState(() => _createRideScreenController.seatAvailable++),
-                  icon: const Icon(Icons.add_circle_outline),
+                PassengerIncrementDecrementWidget(
+                  count: _createRideScreenController.seatAvailable,
+                  onDecrement: _createRideScreenController.decrementPassengers,
+                  onIncrement: _createRideScreenController.incrementPassengers,
                 ),
               ],
             ),
+            
             BaggageSelector(
+              initalSelectedBaggageType: BaggageType.small,
               onBaggageSelected: (p0) {
-                setState(() => _createRideScreenController.selectedBaggageIndex = p0);
+                _createRideScreenController.selectedBaggageIndex = p0;
               },
             ),
             Gap.h24,
@@ -226,8 +241,9 @@ class _CreateRideViewState extends State<CreateRideView> {
 }
 
 class BaggageSelector extends StatefulWidget {
+  final BaggageType? initalSelectedBaggageType;
   final void Function(BaggageType) onBaggageSelected;
-  const BaggageSelector({super.key, required this.onBaggageSelected});
+  const BaggageSelector({super.key, required this.onBaggageSelected, this.initalSelectedBaggageType});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -241,6 +257,12 @@ class _BaggageSelectorState extends State<BaggageSelector> {
 
   final List<String> baggageLabels = BaggageType.values.map((type) => type.name).toList();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedIndex = widget.initalSelectedBaggageType?.index;
+  }
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -67,7 +67,7 @@ final class LocationService extends LocationInterface{
 
   @override
   FutureRequest<Success<List<PlacePrediction>>> searchPlaces({required String query}) async{
-    debugPrint("Search places $query, api key $_apiKey");
+    // debugPrint("Search places $query, api key $_apiKey");
     return await asyncTryCatch(tryFunc: () async{
       final autocompleteRes = await _dio.post(
         'https://places.googleapis.com/v1/places:autocomplete',
@@ -81,7 +81,7 @@ final class LocationService extends LocationInterface{
           },
         ),
       );
-      debugPrint("Search places $autocompleteRes");
+      // debugPrint("Search places $autocompleteRes");
       final predictions = List<Map<String, dynamic>>.from(
         autocompleteRes.data["suggestions"] ?? [],
       );

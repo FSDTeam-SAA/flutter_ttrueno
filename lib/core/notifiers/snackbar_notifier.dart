@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/main.dart';
 import '../utils/extensions/textstyle_ext.dart';
 
 
@@ -9,6 +10,7 @@ class SnackbarNotifier {
   SnackbarNotifier({required this.context});
 
   notifySuccess({String? message}) {
+    if(!(context.mounted && context.owner != null)) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message ?? "Success", maxLines: 3, style: TextStyle(color: Colors.white).bold.regular),
@@ -20,6 +22,10 @@ class SnackbarNotifier {
   }
 
   notify({String? message}) {
+   // if(!(context.mounted && context.owner != null)) return;
+   if(!context.mounted && navigatorKey.currentContext != null) {
+     context = navigatorKey.currentContext!;
+   }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message ?? "", maxLines: 3, style: TextStyle(color: Colors.white).bold.regular),

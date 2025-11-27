@@ -39,7 +39,7 @@ class RIcon extends StatefulWidget {
 class _RIconState extends State<RIcon> {
 
   _listenUpdate() {
-    if(widget.processStatusNotifier.status == SuccessStatus()){
+    if(widget.processStatusNotifier.status is SuccessStatus){
       if(widget.onDone != null) widget.onDone!();
     }
   }

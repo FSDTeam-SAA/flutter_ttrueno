@@ -36,7 +36,7 @@ class EditProfileInfoController extends GetxController {
   void _loadInitialData() {
     fullNameController.text = beforeUserProfile?.name ?? "";
     emailController.text = beforeUserProfile?.email ?? "";
-    phoneController.text = beforeUserProfile?.number ?? "";
+    phoneController.text = beforeUserProfile?.phoneNumber ?? "";
   }
 
   Future<void> pickImage() async {
@@ -56,7 +56,7 @@ class EditProfileInfoController extends GetxController {
         id: (Get.find<AppManager>().authStatus as Authenticated).auth.userId,
         name: fullNameController.text.trim(),
         email: emailController.text.trim(),
-        number: phoneController.text.trim()
+        phoneNumber: phoneController.text.trim()
       )
     ).then((lr) {
       

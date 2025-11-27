@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/button/button_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 
@@ -41,6 +43,7 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -51,20 +54,24 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Lorum Ipsum",
+                          "Sign in to your account",
                           style: AppText.xxxlSemiBold_32_600.copyWith(
                             color: AppColors.primaryText,
                           ),
                         ),
                         Gap.h8,
-                        Text(
-                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                          style: AppText.smRegular_14_400.copyWith(
-                            color: AppColors.primaryText,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            "Explore a new ride sharing experience with Hoplift!",
+                            style: AppText.smRegular_14_400.copyWith(
+                              color: AppColors.primaryText,
+                            ),
                           ),
                         ),
                       ],
                     ),
+                  
                   ),
 
                   Gap.h60,
@@ -126,15 +133,21 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SelectSigninMethodScreen._socialIcon(
-                              'assets/images/google.png',
-                            ),
-                            Gap.w32,
-                            SelectSigninMethodScreen._socialIcon('assets/images/apple.png'),
-                            Gap.w32,
-                            SelectSigninMethodScreen._socialIcon(
-                              'assets/images/facebook.png',
-                            ),
+                            InkWell(
+                                onTap: () => serviceLocator<AuthInterface>().googleLogin(),
+                                child: SelectSigninMethodScreen._socialIcon(
+                                  'assets/images/google.png',
+                                ),
+                              ),
+                              Gap.w32,
+                              InkWell(
+                                onTap: () {
+                                  serviceLocator<AuthInterface>().facebookLogin();
+                                },
+                                child: SelectSigninMethodScreen._socialIcon(
+                                  'assets/images/facebook.png',
+                                ),
+                              ),
                           ],
                         ),
                         Gap.h120,

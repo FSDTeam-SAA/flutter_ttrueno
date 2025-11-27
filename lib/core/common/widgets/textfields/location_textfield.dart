@@ -90,6 +90,7 @@ class _LocationTextfieldState extends State<LocationTextfield> {
               contentPadding: EdgeInsets.zero,
             ),
           ),
+
         ],
       ),
     );

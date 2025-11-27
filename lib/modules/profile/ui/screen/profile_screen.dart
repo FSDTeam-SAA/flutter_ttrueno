@@ -9,8 +9,7 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_gap.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/message/ui/widget/alart_message_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/onboarding/splash_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/core/common/widgets/bottomsheets/confirm_action_bottomsheet.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/profile_data_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/interface/profile_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/change_password_screen.dart';
@@ -116,9 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           
-                          if((profileDataController.userProfile.value?.number ?? "").isNotEmpty) FittedBox(
+                          if((profileDataController.userProfile.value?.phoneNumber ?? "").isNotEmpty) FittedBox(
                             child: Text(
-                              profileDataController.userProfile.value?.number ?? "",
+                              profileDataController.userProfile.value?.phoneNumber ?? "",
                               style: AppText.mdRegular_16_400.copyWith(
                                 color: AppColors.secondaryText,
                               ),
@@ -169,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LanguageSelectionScreen(),
+                      builder: (context) => LanguageSelectionScreen.general(),
                     ),
                   );
 
@@ -178,15 +177,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       selectedLanguage = result;
                     });
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Language changed to $result',
-                          style: const TextStyle(color: Colors.white),
+                    if(context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Language changed to $result',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.green,
                         ),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                      );
+                    }
                   }
                 },
               ),
@@ -270,7 +271,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           serviceLocator<ProfileInterface>().logout();
                         },
                         confirmStn: ProcessStatusNotifier(initialStatus: EnabledStatus()),
-                        onCancel: () {},
                         confirmButtonText: 'Logout'.tr(),
                         cancelButtonText: 'Not Now'.tr(),
                         height: 200,

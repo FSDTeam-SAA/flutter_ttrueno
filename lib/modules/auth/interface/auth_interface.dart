@@ -14,6 +14,8 @@ import '../model/login_entity.dart';
  abstract base class AuthInterface extends BaseRepository{
   FutureRequest<Success> login(LoginRequestParams params);
 
+  FutureRequest<Success<bool>> isFirstTimeLogin(); 
+
   FutureRequest<Success> googleLogin();
 
   FutureRequest<Success> facebookLogin();

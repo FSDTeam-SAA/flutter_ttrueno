@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttrueno_fo827e642a0c4/app/view/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/onboarding/onboarding1.dart';
 import 'app/app_manager.dart';
 import 'core/services/app_pigeon/app_pigeon.dart';
 import 'core/theme/app_theme.dart';
@@ -119,10 +120,17 @@ class _MyAppState extends State<MyApp> {
                   return LoginScreen();
                 },
               );
+
+          case RouteNames.onboarding:
+            return MaterialPageRoute(
+                builder: (context) {
+                  return OnboardingScreen();
+                },
+              );
           default:
             return MaterialPageRoute(
                 builder: (context) {
-                  return LoginScreen();
+                  return SplashScreen();
                 },
               );
         }

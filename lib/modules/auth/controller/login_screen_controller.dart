@@ -69,7 +69,7 @@ class LoginsScreenController extends ChangeNotifier {
           either: lr,
           processStatusNotifier: processStatusNotifier,
           successSnackbarNotifier: snackbarNotifier,
-          errorSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
         );
       });
   }
@@ -81,7 +81,7 @@ class LoginsScreenController extends ChangeNotifier {
           either: lr,
           processStatusNotifier: processStatusNotifier,
           successSnackbarNotifier: snackbarNotifier,
-          errorSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
         );
       });
   }

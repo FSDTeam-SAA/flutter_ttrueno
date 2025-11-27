@@ -4,35 +4,29 @@ import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/utils/helpers/url_launch.dart';
+
 class HelpCenterPage extends StatelessWidget {
   const HelpCenterPage({super.key});
 
-  Future<void> _launchURL(Uri appUri, Uri webUri) async {
-    try {
-      if (!await launchUrl(appUri, mode: LaunchMode.externalApplication)) {
-        await launchUrl(webUri, mode: LaunchMode.externalApplication);
-      }
-    } catch (e) {
-      await launchUrl(webUri, mode: LaunchMode.externalApplication);
-    }
-  }
+  
 
   void _openSocial(String platform) {
     switch (platform) {
       case 'Instagram':
-        _launchURL(
+        launchURL(
           Uri.parse('instagram://user?username=hopliftapp'),
           Uri.parse('https://www.instagram.com/hopliftapp/'),
         );
         break;
       case 'TikTok':
-        _launchURL(
+        launchURL(
           Uri.parse('tiktok://user?username=hopliftapp'),
           Uri.parse('https://www.tiktok.com/@hopliftapp'),
         );
         break;
       case 'Twitter':
-        _launchURL(
+        launchURL(
           Uri.parse('twitter://user?screen_name=Hopliftapp'),
           Uri.parse('https://x.com/Hopliftapp'),
         );

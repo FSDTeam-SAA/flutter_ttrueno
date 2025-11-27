@@ -67,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Gap.h8,
                         Text(
-                          "Sign in to your account.",
+                          "Explore a new ride sharing experience with Hoplift!",
                           style: AppText.smRegular_14_400.copyWith(
                             color: AppColors.primaryText,
                           ),
