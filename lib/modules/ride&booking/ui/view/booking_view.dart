@@ -68,7 +68,7 @@ class _BookingScreenState extends State<BookingScreen>
         controller: _tabController,
         children: [
           PaginatedListWidget(
-            emptyMessage: "No bookings found!".tr(),
+            emptyMessage: "No bookings, right now!, Try refreshing!".tr(),
             pagination: bookingControllers.active.paginatedbookedRideControllers,
             skeleton: BookedRideCardSkeleton(),
             skeletonCount: 4,

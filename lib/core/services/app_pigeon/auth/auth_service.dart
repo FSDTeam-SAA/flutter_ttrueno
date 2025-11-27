@@ -15,12 +15,11 @@ class _AuthStatusDecider {
 
 class AuthService extends Interceptor {
   final Dio dio;
-  final FlutterSecureStorage _secureStorage;
   final RefreshTokenManagerInterface refreshTokenManager;
   final Debugger _authDebugger = AuthDebugger();
   late final _AuthStorage _authStorage;
-  AuthService(this._secureStorage, this.dio, this.refreshTokenManager){
-    _authStorage = _AuthStorage(secureStorage: _secureStorage);
+  AuthService(this.dio, this.refreshTokenManager){
+    _authStorage = _AuthStorage();
   }
 
   void init() {

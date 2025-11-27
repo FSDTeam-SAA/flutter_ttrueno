@@ -57,8 +57,8 @@ android {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
             // Disable code shrinking and resource shrinking
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
 }

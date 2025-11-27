@@ -130,7 +130,7 @@ class _MyAppState extends State<MyApp> {
           default:
             return MaterialPageRoute(
                 builder: (context) {
-                  return LoginScreen();
+                  return SplashScreen();
                 },
               );
         }

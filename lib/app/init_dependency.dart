@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/debug/debug_service.dart';
 import 'package:ttrueno_fo827e642a0c4/core/services/oauth/o_auth_service.dart';
@@ -34,8 +34,6 @@ Future<void> initDependencies() async {
   DebugService.instance(allowsOnly: {DebugLabel.service, DebugLabel.auth, DebugLabel.controller});
   final Dio _dio = Dio();
   final AppPigeon appPigeon = AppPigeon(
-    _dio,
-    FlutterSecureStorage(),
     RefreshTokenManager(ApiEndpoints.refreshToken),
     baseUrl: ApiEndpoints.baseUrl,
   );

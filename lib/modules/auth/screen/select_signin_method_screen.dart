@@ -43,6 +43,7 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -59,10 +60,13 @@ class _SelectSigninMethodScreenState extends State<SelectSigninMethodScreen> {
                           ),
                         ),
                         Gap.h8,
-                        Text(
-                          "Explore a new ride sharing experience with us",
-                          style: AppText.smRegular_14_400.copyWith(
-                            color: AppColors.primaryText,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            "Explore a new ride sharing experience with Hoplift!",
+                            style: AppText.smRegular_14_400.copyWith(
+                              color: AppColors.primaryText,
+                            ),
                           ),
                         ),
                       ],

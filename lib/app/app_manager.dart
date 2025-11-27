@@ -30,18 +30,24 @@ class AppManager extends GetxController {
 
   _init() async{
     // Get initail auth status
-    final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
-    handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
-    // Start listening to the auth status changes
-    _authStreamSubscription = getAuthStream().listen((newStatus) async{
-      _decideRoute(newStatus);
+    // Wait for splash screen
+    await Future.delayed(const Duration(seconds: 2)).then((_) async{
+      final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
+      handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
+      // Start listening to the auth status changes
+      _authStreamSubscription = getAuthStream().listen((newStatus) async{
+        _decideRoute(newStatus);
+      });
     });
+
+    
   }
 
-  _decideRoute(AuthStatus? authStatus) async{
-    debugPrint("(In Appmanager)Auth status: $authStatus");
-    if(authStatus != null) {
-      _authStatus = authStatus; 
+  _decideRoute(AuthStatus? newAuthStatus) async{
+    debugPrint("(In Appmanager)Auth status: $newAuthStatus");
+    if(newAuthStatus == _authStatus) return;
+    if(newAuthStatus != null) {
+      _authStatus = newAuthStatus; 
       if(_authStatus is UnAuthenticated) {
         //navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);   
         final isFirstTimeLogin = await HiveCacheService.onboarding().get<bool>(HiveCacheKeys.isFirstTimeLogin) ?? true;

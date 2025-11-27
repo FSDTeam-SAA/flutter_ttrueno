@@ -1,4 +1,5 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
+
 import 'i_cache_service.dart';
 
 class HiveCacheService implements ICacheService {
