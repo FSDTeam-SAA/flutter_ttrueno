@@ -1,24 +1,51 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/verify_account_view_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/create_new_password_screen.dart';
 import '../../../core/common/widgets/reactive_buttons/save_button.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
-import 'signin_screen.dart';
+
+enum _VerifyCodeType { verifyAccount, forgetPassword }
 
 class VerifyCodeScreen extends StatefulWidget {
   final String email;
   final VoidCallback onDone;
-  const VerifyCodeScreen({
+  final _VerifyCodeType type;
+  const VerifyCodeScreen._({
     super.key,
     required this.email,
     required this.onDone,
+    required this.type,
   });
+
+  factory VerifyCodeScreen.verifyAccount({
+    required String email,
+    required VoidCallback onDone,
+    Key? key,
+  }) {
+    return VerifyCodeScreen._(
+      key: key,
+      email: email,
+      onDone: onDone,
+      type: _VerifyCodeType.verifyAccount,
+    );
+  }
+
+  factory VerifyCodeScreen.forgetPassword({
+    required String email,
+    required VoidCallback onDone,
+    Key? key,
+  }) {
+    return VerifyCodeScreen._(
+      key: key,
+      email: email,
+      onDone: onDone,
+      type: _VerifyCodeType.forgetPassword,
+    );
+  }
 
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
@@ -26,17 +53,24 @@ class VerifyCodeScreen extends StatefulWidget {
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   final TextEditingController _otpController = TextEditingController();
-  late final VerifyAccountViewController _verifyAccountViewController;
+  late final VerifyOtpController _verifyAccountViewController;
   int _secondsRemaining = 59;
   late final Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _verifyAccountViewController = VerifyAccountViewController(
-      email: widget.email,
-      snackbarNotifier: SnackbarNotifier(context: context)
-    );
+    if (widget.type == _VerifyCodeType.verifyAccount) {
+      _verifyAccountViewController = VerifyAccountViewController(
+        email: widget.email,
+        snackbarNotifier: SnackbarNotifier(context: context),
+      );
+    } else {
+      _verifyAccountViewController = VerifyForgetPasswordOtpController(
+        email: widget.email,
+        snackbarNotifier: SnackbarNotifier(context: context),
+      );
+    }
     _startTimer();
   }
 
@@ -111,16 +145,17 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             children: [
                               TextSpan(
                                 text:
-                                    "Please enter the code we just sent to Phone Number",
+                                    "Please enter the code we just sent to your email",
                                 style: AppText.mdRegular_16_400.copyWith(
                                   color: AppColors.secondaryTextblack,
                                 ),
                               ),
                               TextSpan(
-                                text: "Alberxxx@gmail.com",
-                                style: AppText.mdSemiBold_16_600.copyWith(
-                                  color: AppColors.primaryTextblack,
-                                ),
+                                // "Alberxxx@gmail.com",
+                                text: " ${widget.email.replaceFirstMapped(
+                                  RegExp(r'(\w{3})\w+@'),
+                                  (match) => '${match[1]}xxx@',
+                                )}",
                               ),
                             ],
                           ),
@@ -128,30 +163,34 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       ),
                       Gap.h24,
 
-                      PinCodeTextField(
-                        appContext: context,
-                        controller: _otpController,
-                        length: 6,
-                        obscureText: false,
-                        animationType: AnimationType.fade,
-                        keyboardType: TextInputType.none,
-                        pinTheme: PinTheme(
-                          shape: PinCodeFieldShape.box,
-                          borderRadius: BorderRadius.circular(16),
-                          fieldHeight: 58,
-                          fieldWidth: 58,
-                          activeFillColor: Colors.grey.shade100,
-                          inactiveFillColor: Colors.grey.shade100,
-                          selectedFillColor: Colors.white,
-                          inactiveColor: Colors.grey.shade100,
-                          selectedColor: Colors.blue,
-                          activeColor: Colors.blue,
-                        ),
-                        animationDuration: const Duration(milliseconds: 300),
-                        enableActiveFill: true,
-                        onChanged: (value) {
-                          _verifyAccountViewController.otp = value;
-                        },
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return PinCodeTextField(
+                            appContext: context,
+                            controller: _otpController,
+                            length: 6,
+                            obscureText: false,
+                            animationType: AnimationType.fade,
+                            keyboardType: TextInputType.none,
+                            pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              borderRadius: BorderRadius.circular(16),
+                              fieldHeight: (constraints.maxWidth / 6) - 4,
+                              fieldWidth: (constraints.maxWidth / 6) - 4,
+                              activeFillColor: Colors.grey.shade100,
+                              inactiveFillColor: Colors.grey.shade100,
+                              selectedFillColor: Colors.white,
+                              inactiveColor: Colors.grey.shade100,
+                              selectedColor: Colors.blue,
+                              activeColor: Colors.blue,
+                            ),
+                            animationDuration: const Duration(milliseconds: 300),
+                            enableActiveFill: true,
+                            onChanged: (value) {
+                              _verifyAccountViewController.otp = value;
+                            },
+                          );
+                        }
                       ),
 
                       Gap.h8,
@@ -164,35 +203,29 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       ),
                       Gap.h24,
                       RSaveButton(
-                          key: UniqueKey(),
-                          width: double.infinity,
-                          height: 52,
-                          buttonStatusNotifier: _verifyAccountViewController.prcessNotifier,
-                          saveText: "Verify",
-                          loadingText: "Verifying",
-                          doneText: "Done",
-                          onDone: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const LoginScreen();
-                                  },
-                                ),
-                              );
-                          },
-                          onSaveTap: () async{
-                            if (_otpController.text.trim().length != 6) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please enter the 4-digit code'),
-                                  ),
-                                );
-                                return;
-                              }
-                            _verifyAccountViewController.verify();
-                          },
-                        ),
+                        key: UniqueKey(),
+                        width: double.infinity,
+                        height: 52,
+                        buttonStatusNotifier:
+                            _verifyAccountViewController.prcessNotifier,
+                        saveText: "Verify",
+                        loadingText: "Verifying",
+                        doneText: "Done",
+                        onDone: () {
+                          widget.onDone();
+                        },
+                        onSaveTap: () {
+                          if (_otpController.text.trim().length != 6) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please enter the 4-digit code'),
+                              ),
+                            );
+                            return;
+                          }
+                          _verifyAccountViewController.verify();
+                        },
+                      ),
 
                       Gap.h24,
 
@@ -247,7 +280,8 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   _otpController.text.length - 1,
                 );
               }
-            } else if (_otpController.text.length < _verifyAccountViewController.otpLength) {
+            } else if (_otpController.text.length <
+                _verifyAccountViewController.otpLength) {
               _otpController.text += key;
             }
             setState(() {});

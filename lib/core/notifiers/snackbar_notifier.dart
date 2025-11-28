@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
-import '../extensions/textstyle_ext.dart';
+import 'package:ttrueno_fo827e642a0c4/main.dart';
+import '../utils/extensions/textstyle_ext.dart';
 
 
 class SnackbarNotifier {
@@ -9,10 +10,11 @@ class SnackbarNotifier {
   SnackbarNotifier({required this.context});
 
   notifySuccess({String? message}) {
+    if(!(context.mounted && context.owner != null)) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message ?? "Success", maxLines: 3, style: TextStyle(color: Colors.white).bold.regular),
-        backgroundColor: const Color.fromARGB(255, 23, 117, 37),
+        backgroundColor: const Color.fromARGB(255, 20, 26, 35),
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
       ),
@@ -20,6 +22,10 @@ class SnackbarNotifier {
   }
 
   notify({String? message}) {
+   // if(!(context.mounted && context.owner != null)) return;
+   if(!context.mounted && navigatorKey.currentContext != null) {
+     context = navigatorKey.currentContext!;
+   }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message ?? "", maxLines: 3, style: TextStyle(color: Colors.white).bold.regular),

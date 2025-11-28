@@ -1,14 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/Button/button_widget.dart';
+import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/description_doc_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/verify_code_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_docs_loader.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
@@ -27,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscure = true;
-  bool _agreedToTerms = false; // New state for the checkbox
+  bool _agreedToTerms = false;
 
   @override
   void initState() {
@@ -242,7 +243,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Scaffold(),
+                                                      DescriptionDocView(descriptionScreenType: DescriptionViewType.termsAndCondition, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.termsAndCondition ?? "",),
                                                 ),
                                               );
                                             },
@@ -267,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Scaffold(),
+                                                      DescriptionDocView(descriptionScreenType: DescriptionViewType.privacyPolicy, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.privacyPolicy ?? "",),
                                                 ),
                                               );
                                             },
@@ -292,7 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => VerifyCodeScreen(
+                                    builder: (context) => VerifyCodeScreen.verifyAccount(
                                       email: emailController.text.trim(),
                                       onDone: () {
                                         Navigator.push(
@@ -341,7 +342,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SelectSigninMethodScreen(),
+                                      builder: (context) => LoginScreen(),
                                     ),
                                   );
                                 },
@@ -354,6 +355,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ],
                           ),
+                          Gap.h40
                         ],
                       ),
                     ),

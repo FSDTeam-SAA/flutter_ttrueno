@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/core/api_handler/failure.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/handle_fold.dart';
-import 'package:ttrueno_fo827e642a0c4/core/helpers/validation.dart';
+import 'package:ttrueno_fo827e642a0c4/core/base/failure.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/handle_fold.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/helpers/validation.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/init_dependency.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 
 import '../../../core/notifiers/button_status_notifier.dart';
-import '../interface/auth_inerface.dart';
+import '../interface/auth_interface.dart';
 import '../model/login_entity.dart';
 
 class LoginsScreenController extends ChangeNotifier {
@@ -48,17 +48,41 @@ class LoginsScreenController extends ChangeNotifier {
   }) async {
     processStatusNotifier.setLoading();
     Future.delayed(const Duration(seconds: 1)).then((_) async {
-      await serviceLocator<AuthInterface>().login(LoginRequestParams(email: email, password: password)).then((lr) {
+      await serviceLocator<AuthInterface>().login(LoginRequestParams.emailLogin(email: email, password: password)).then((lr) {
             handleFold(
               either: lr,
               processStatusNotifier: processStatusNotifier,
-              snackbarNotifier: snackbarNotifier,
+              successSnackbarNotifier: snackbarNotifier,
+              errorSnackbarNotifier: snackbarNotifier,
               onError: (error) {
                 if (error.failure == Failure.forbidden) needVerification();
               },
             );
           });
       });
+  }
 
+  Future<void> googleLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().googleLogin().then((lr) {
+        handleFold(
+          either: lr,
+          processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
+  }
+
+  Future<void> facebookLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().facebookLogin().then((lr) {
+        handleFold(
+          either: lr,
+          processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
   }
 }

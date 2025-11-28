@@ -1,15 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ttrueno_fo827e642a0c4/bottom_nabar_page.dart';
+import 'package:ttrueno_fo827e642a0c4/app/view/bottom_nab_bar_page.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
-import 'package:ttrueno_fo827e642a0c4/core/notifiers/button_status_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
-import 'package:ttrueno_fo827e642a0c4/core/services/app_services.dart';
-import 'package:ttrueno_fo827e642a0c4/core/services/network/auth/auth_service.dart';
+import 'package:ttrueno_fo827e642a0c4/app/init_dependency.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/login_screen_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/forget_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
-import 'package:ttrueno_fo827e642a0c4/features/auth/presentation/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
@@ -38,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late final LoginsScreenController _loginsScreenController;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
 
   bool _obscure = true;
 
@@ -46,7 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loginsScreenController = LoginsScreenController(SnackbarNotifier(context: context));
+    _loginsScreenController = LoginsScreenController(
+      SnackbarNotifier(context: context),
+    );
   }
 
   @override
@@ -67,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Gap.h8,
                         Text(
-                          "Sign in to your account.",
+                          "Explore a new ride sharing experience with Hoplift!",
                           style: AppText.smRegular_14_400.copyWith(
                             color: AppColors.primaryText,
                           ),
@@ -206,7 +207,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 50,
                               borderRadius: BorderRadius.circular(20),
                               key: UniqueKey(),
-                              buttonStatusNotifier: _loginsScreenController.processStatusNotifier,
+                              buttonStatusNotifier:
+                                  _loginsScreenController.processStatusNotifier,
                               saveText: "Log in".tr(),
                               loadingText: "Logging in".tr(),
                               onSaveTap: () async {
@@ -215,23 +217,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => VerifyCodeScreen(
+                                        builder: (context) => VerifyCodeScreen.verifyAccount(
                                           email: emailController.text,
                                           onDone: () {
                                             
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  if(AppServices.authController.authStatus is Authenticated){
-                                                    return BottomNabarScreen();
-                                                  } else {
-                                                    return LoginScreen();
-                                                  }
-                                                }
-                                              ),
-                                              (route) => false,
-                                            );
                                           },
                                         ),
                                       ),
@@ -243,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BottomNabarScreen(),
+                                    builder: (context) => BottomNabBarScreen(),
                                   ),
                                   (route) => false,
                                 );
@@ -281,16 +270,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              LoginScreen._socialIcon(
-                                'assets/images/google.png',
+                              InkWell(
+                                onTap: () => _loginsScreenController.googleLogin(),
+                                child: LoginScreen._socialIcon(
+                                  'assets/images/google.png',
+                                ),
                               ),
                               Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/apple.png',
-                              ),
-                              Gap.w32,
-                              LoginScreen._socialIcon(
-                                'assets/images/facebook.png',
+                              InkWell(
+                                onTap: () {
+                                  _loginsScreenController.facebookLogin();
+                                },
+                                child: LoginScreen._socialIcon(
+                                  'assets/images/facebook.png',
+                                ),
                               ),
                             ],
                           ),
@@ -323,6 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
+                          Gap.h40,
                         ],
                       ),
                     ),
