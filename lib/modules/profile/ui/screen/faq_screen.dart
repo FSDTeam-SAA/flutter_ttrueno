@@ -110,75 +110,77 @@ class FaqScreen extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: faqs.length,
-        itemBuilder: (context, index) {
-          final item = faqs[index];
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade300),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.06),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ExpansionTile(
-              tilePadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
+      body: SafeArea(
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: faqs.length,
+          itemBuilder: (context, index) {
+            final item = faqs[index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade300),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.06),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              collapsedIconColor: Colors.blue,
-              iconColor: Colors.blue,
-              title: Text(
-                item['question']!,
-                style: AppText.mdSemiBold_16_600.copyWith(
-                  color: AppColors.primaryTextblack,
+              child: ExpansionTile(
+                tilePadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: MarkdownBody(
-                    data: item['answer']!,
-                    selectable: true,
-                    styleSheet: MarkdownStyleSheet(
-                      
-                      p: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54,
-                        height: 1.4,
-                      ),
-                      a: const TextStyle(
-                        color: AppColors.primarybutton,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.w600,
-                        decorationColor: AppColors.primarybutton
-                      ),
-                    ),
-                    onTapLink: (text, href, title) async {
-                      if (href == null) return;
-                      final uri = Uri.parse(href);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri,
-                            mode: LaunchMode.externalApplication);
-                      }
-                    },
+                collapsedIconColor: Colors.blue,
+                iconColor: Colors.blue,
+                title: Text(
+                  item['question']!,
+                  style: AppText.mdSemiBold_16_600.copyWith(
+                    color: AppColors.primaryTextblack,
                   ),
                 ),
-              ],
-            ),
-          );
-        },
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: MarkdownBody(
+                      data: item['answer']!,
+                      selectable: true,
+                      styleSheet: MarkdownStyleSheet(
+                        
+                        p: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54,
+                          height: 1.4,
+                        ),
+                        a: const TextStyle(
+                          color: AppColors.primarybutton,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w600,
+                          decorationColor: AppColors.primarybutton
+                        ),
+                      ),
+                      onTapLink: (text, href, title) async {
+                        if (href == null) return;
+                        final uri = Uri.parse(href);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri,
+                              mode: LaunchMode.externalApplication);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

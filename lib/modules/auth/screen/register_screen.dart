@@ -13,6 +13,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_doc
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
+import '../widget/social_icon.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -285,7 +286,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             key: UniqueKey(),
                             width: double.infinity,
                             height: 52,
-                            buttonStatusNotifier: signupController.processNotifier,
+                            buttonStatusNotifier: signupController.processStatusNotifier,
                             saveText: "Register",
                             loadingText: "Registering...",
                             doneText: "Done",
@@ -312,7 +313,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               if (_formKey.currentState!.validate() &&
                                   _agreedToTerms) {
                                 await signupController.signup(
-                                  buttonNotifier: signupController.processNotifier,
+                                  buttonNotifier: signupController.processStatusNotifier,
                                   snackbarNotifier: signupController.snackbarNotifier,
                                 );
                               } else if (!_agreedToTerms) {
@@ -327,35 +328,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
 
-                          Gap.h40,
+                          Gap.h20,
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                "Do you already have an account? ",
-                                style: AppText.smRegular_14_400.copyWith(
-                                  color: AppColors.secondaryText,
+                              Expanded(
+                                child: Divider(
+                                  thickness: 1,
+                                  color: Colors.grey[300],
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ),
-                                  );
-                                },
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
                                 child: Text(
-                                  "Log in",
-                                  style: AppText.smRegular_14_400.copyWith(
-                                    color: Colors.black,
+                                  "OR",
+                                  style: AppText.mdRegular_16_400.copyWith(
+                                    color: AppColors.secondaryText,
                                   ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  thickness: 1,
+                                  color: Colors.grey[300],
                                 ),
                               ),
                             ],
                           ),
-                          Gap.h40
+
+                          Gap.h20,
+                          Column(
+                            children: [
+                              Row(
+                                spacing: 16,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () => signupController.googleLogin(),
+                                    child: SocialIcon(
+                                      assetPath: 'assets/images/google.png',
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      signupController.facebookLogin();
+                                    },
+                                    child: SocialIcon(
+                                      assetPath: 'assets/images/facebook.png',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Gap.h24,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Do you already have an account? ",
+                                    style: AppText.smRegular_14_400.copyWith(
+                                      color: AppColors.secondaryText,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Log in",
+                                      style: AppText.smRegular_14_400.copyWith(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Gap.h40,
+
+                          
                         ],
                       ),
                     ),

@@ -12,7 +12,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/kickout_ri
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/leave_ride_controller.dart';
 import '../../../modules/profile/controller/profile_data_controller.dart';
 import '../../../modules/ride&booking/model/enum/baggage_type_enum.dart';
-import '../../../modules/ride&booking/ui/view/join_ride_bottomsheet.dart';
+import 'bottomsheets/join_ride_bottomsheet.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_gap.dart';
 import '../model/rider.dart';

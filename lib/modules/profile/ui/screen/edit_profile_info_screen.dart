@@ -50,6 +50,31 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 52,
+            width: double.infinity,
+            child: RSaveButton(
+              key: UniqueKey(),
+              saveText: "Save",
+              loadingText: "Saving...",
+              doneText: "Done",
+              onSaveTap: () {
+                controller.saveProfile(
+                  buttonNotifier: processNotifier,
+                  snackbarNotifier: SnackbarNotifier(context: context),
+                );
+              },
+              onDone: () {
+                
+              },
+              buttonStatusNotifier: processNotifier,
+            ),
+          ),
+        ),
+      ),
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -142,26 +167,7 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 300),
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: RSaveButton(
-                  key: UniqueKey(),
-                  saveText: "Save",
-                  loadingText: "Saving...",
-                  doneText: "Done",
-                  onSaveTap: () {
-                    controller.saveProfile(
-                      buttonNotifier: processNotifier,
-                      snackbarNotifier: SnackbarNotifier(context: context),
-                    );
-                  },
-                  onDone: () {
-                    
-                  },
-                  buttonStatusNotifier: processNotifier,
-                ),
-              ),
+              
             ],
           ),
         ),

@@ -20,6 +20,7 @@ abstract base class BaseRepository {
       } on DioException catch (e){
         debugPrint(".. \n..\n");
         debugPrint(e.response?.data["message"].toString());
+        debugPrint(e.stackTrace.toString());
         debugPrint(".. \n..\n");
         //debugger?.dekhao("DioFailure $e");
         switch (e.type) {
@@ -34,8 +35,9 @@ abstract base class BaseRepository {
           default:
             return Left(DataCRUDFailure(failure: Failure.unknownFailure, uiMessage: e.response?.data["message"] ?? "Some error occured.", fullError: 'Some error occured. ${'\n'} Error: ${e.toString()}',));
         }
-      } catch (e) {
+      } catch (e, stackTrace) {
         debugPrint(e.toString());
+        debugPrint(stackTrace.toString());
         //debugger?.dekhao(e);
         return Left(DataCRUDFailure(failure: Failure.unknownFailure, uiMessage: 'Some error occured.', fullError: "Some error occured. ${'\n'} Error: ${e.toString()}"));
       }

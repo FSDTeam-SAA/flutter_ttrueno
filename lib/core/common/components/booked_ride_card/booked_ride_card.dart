@@ -170,7 +170,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
               ),
               child: Text(
-                widget.date.dmyAth24,
+                widget.date.dmyAthm,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -214,6 +214,16 @@ class _BookedRideCardState extends State<BookedRideCard> {
                 ),
               ),
               processStatusNotifier: bookedRideCardController.finishRideStn,
+              onDone: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShareExperienceScreen(
+                      ride: bookedRideCardController.booking.ride,
+                    ),
+                  ),
+                );
+              },
             ),
             label: Text(
               'Finish Ride'.tr(),
@@ -285,9 +295,9 @@ class _BookedRideCardState extends State<BookedRideCard> {
         ),
 
         TextButton.icon(
-          onPressed: () {
+          onPressed: () async{
             final rideId = bookedRideCardController.booking.ride.id;
-            Get.find<InboxController>().getChatByRideId(rideId).then((chatController) {
+            await Get.find<InboxController>().getChatByRideId(rideId).then((chatController) {
               if(chatController != null && mounted) {
                 Navigator.push(
                   context,
@@ -298,7 +308,7 @@ class _BookedRideCardState extends State<BookedRideCard> {
                   ),
                 );
               } else {
-                if(mounted) SnackbarNotifier(context: context).notify(message: "Chat for this ride is not available for now!".tr());
+                if(mounted) SnackbarNotifier(context: context).notify(message: "Chat for this ride is not available at this moment!".tr());
                 return;
               }
             });

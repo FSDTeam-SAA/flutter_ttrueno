@@ -31,7 +31,7 @@ class AppManager extends GetxController {
   _init() async{
     // Get initail auth status
     // Wait for splash screen
-    await Future.delayed(const Duration(seconds: 2)).then((_) async{
+    await Future.delayed(const Duration(seconds: 0)).then((_) async{
       final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
       handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
       // Start listening to the auth status changes

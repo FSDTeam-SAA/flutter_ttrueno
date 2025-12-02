@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -79,6 +79,8 @@ base class ApiEndpoints {
   // ---------------------- Message -----------------------------
   /// ### Get
   static const String getAllChat = _Message.getAllChat;
+  /// ### Get
+  static String getChatByRideId(String rideId) => _Message.getChatByRideId(rideId);
   /// ### Get
   static String getMessages(String chatId) => _Message.getMessages(chatId);
   /// ### Post
@@ -180,6 +182,8 @@ class _Message {
   static const String _messageRoute = '${ApiEndpoints.baseUrl}/message';
   
   static const String getAllChat = "$_messageRoute/rooms";
+  /// Get
+  static String getChatByRideId(String rideId) => "$_messageRoute/ride/$rideId/chat";
   /// Get
   static String getMessages(String chatId) => "$_messageRoute/$chatId";
   /// Post

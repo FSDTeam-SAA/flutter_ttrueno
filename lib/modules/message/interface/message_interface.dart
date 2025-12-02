@@ -9,6 +9,9 @@ import '../model/message.dart';
 import '../model/send_message_req_param.dart';
 
 abstract base class MessageInterface extends BaseRepository{
+  
+  FutureRequest<Success<ChatRoom>> getChatByRideId(String rideId);
+
   FutureRequest<Success<List<ChatRoom>>> getAllChat(GetChatsParam param);
   
   FutureRequest<Success> sendMessage(SendMessageReqParam param);

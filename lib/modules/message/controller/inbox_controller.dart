@@ -62,7 +62,20 @@ class InboxController extends GetxController{
         return rideChatPages.value.data[i];
       }
     }
-    return null;
+    // Fetch from server if not found locally
+    ActiveRideChatController? chatController;
+    final lr = await serviceLocator<MessageInterface>().getChatByRideId(rideId);
+    handleFold(
+      either: lr,
+      processStatusNotifier: null,
+      onSuccess: (data) {
+        chatController = ActiveRideChatController(_refresh, _refresh, _refresh, chat: data);
+        
+        rideChatPages.value.data.add(chatController!);
+        rideChatPages.refresh();
+      },
+    );
+    return chatController;
   }
   
   Future<void> getAllChat({bool? forceRefresh}) async{

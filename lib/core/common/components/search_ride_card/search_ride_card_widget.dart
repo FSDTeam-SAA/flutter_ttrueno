@@ -145,7 +145,7 @@ class _SearchRideCardWidgetState extends State<SearchRideCardWidget> {
                 ),
               ),
               child: Text(
-                widget.date.dmyAth24,
+                widget.date.dmyAthm,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -115,7 +117,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          searchRideController.selectedDateTime?.dmyAth24 ?? '',
+                          searchRideController.selectedDateTime?.dmyAthm ?? '',
                           style: AppText.smMedium_14_600.copyWith(
                             color: AppColors.secondaryTextblack,
                           ),
@@ -241,7 +243,7 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                               toLocation: searchRideController.toLocation,
                               selectedDate: searchRideController.selectedDateTime,
                               selectedTime: searchRideController.selectedTime,
-                              passengerCount: searchRideController.passengers.value
+                              passengerCount: max(0, (4 - searchRideController.passengers.value)),
                             ),
                           )),
                         );

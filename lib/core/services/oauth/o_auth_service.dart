@@ -48,7 +48,7 @@ class OAuthService {
     debugPrint(body.toString());
     await _extractAndSaveAuth(body);
     //await cacheService.put<bool>(HiveCacheKeys.isFirstTimeLogin, false);
-    return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
+    return Success(message: extractSuccessMessage(resp) ?? "Welcome to Hoplift!");
   }
 
   Future<Success> loginWithFacebook() async {
@@ -70,7 +70,7 @@ class OAuthService {
       final body = extractBodyData(resp);
       await _extractAndSaveAuth(body);
       //await cacheService.put<bool>(HiveCacheKeys.isFirstTimeLogin, false);
-      return Success(message: extractSuccessMessage(resp) ?? "Successfully logged in.");
+      return Success(message: extractSuccessMessage(resp) ?? "Welcome to Hoplift!");
     } else {
       throw Exception('Facebook login failed: ${result.status}');
     }

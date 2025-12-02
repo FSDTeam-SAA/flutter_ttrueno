@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -277,7 +279,7 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                                   toLocation: searchRideController.toLocation,
                                   selectedDate: searchRideController.selectedDate,
                                   selectedTime: searchRideController.selectedTime,
-                                  passengerCount: searchRideController.passengers.value,
+                                  passengerCount:  max(0, (4 - searchRideController.passengers.value)),
                                 ),
                               ),
                             ),

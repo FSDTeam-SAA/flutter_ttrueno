@@ -9,6 +9,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/auth/interface/auth_interface.dart
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/forget_password_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/register_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/auth/widget/social_icon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
@@ -20,16 +21,6 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 
-  static Widget _socialIcon(String assetPath) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Image.asset(assetPath, width: 24, height: 24),
-    );
-  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -272,8 +263,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               InkWell(
                                 onTap: () => _loginsScreenController.googleLogin(),
-                                child: LoginScreen._socialIcon(
-                                  'assets/images/google.png',
+                                child: SocialIcon(
+                                  assetPath: 'assets/images/google.png',
                                 ),
                               ),
                               Gap.w32,
@@ -281,8 +272,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onTap: () {
                                   _loginsScreenController.facebookLogin();
                                 },
-                                child: LoginScreen._socialIcon(
-                                  'assets/images/facebook.png',
+                                child: SocialIcon(
+                                  assetPath: 'assets/images/facebook.png',
                                 ),
                               ),
                             ],

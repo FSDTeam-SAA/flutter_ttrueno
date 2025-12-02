@@ -99,4 +99,15 @@ base class MessageService extends MessageInterface{
       }
     });
   }
+  
+  @override
+  FutureRequest<Success<ChatRoom>> getChatByRideId(String rideId) async{
+    return await asyncTryCatch(
+      tryFunc: () async{
+        final response = await appPigeon.get(ApiEndpoints.getChatByRideId(rideId));
+        final chatRoom = ChatRoom.fromJson(extractBodyData(response));
+        return Success(message: extractSuccessMessage(response), data: chatRoom);
+      },
+    );
+  }
 }

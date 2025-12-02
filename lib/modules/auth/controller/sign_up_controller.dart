@@ -8,7 +8,7 @@ import '../model/signup_param.dart';
 
 class SignUpController extends ChangeNotifier {
 
-  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
+  final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier(initialStatus: EnabledStatus());
   final SnackbarNotifier snackbarNotifier;
   SignUpController(this.snackbarNotifier);
   
@@ -18,7 +18,7 @@ class SignUpController extends ChangeNotifier {
     debugPrint("Setting name to $value");   
     if (value != _name) {
       _name = value;
-      processNotifier.setEnabled();
+      processStatusNotifier.setEnabled();
       notifyListeners();
     }
   }
@@ -29,7 +29,7 @@ class SignUpController extends ChangeNotifier {
     debugPrint("Setting email to $value");
     if (value != _email) {
       _email = value;
-      processNotifier.setEnabled();
+      processStatusNotifier.setEnabled();
       notifyListeners();
     }
   }
@@ -40,7 +40,7 @@ class SignUpController extends ChangeNotifier {
     debugPrint("Setting password to $value");
     if (value != _password) {
       _password = value;
-      processNotifier.setEnabled();
+      processStatusNotifier.setEnabled();
       notifyListeners();
     }
   }
@@ -52,7 +52,7 @@ class SignUpController extends ChangeNotifier {
   set confirmPassword(String value) {
     if (value != _confirmPassword) {
       _confirmPassword = value;
-      processNotifier.setEnabled();
+      processStatusNotifier.setEnabled();
       notifyListeners();
     }
   }
@@ -72,5 +72,31 @@ class SignUpController extends ChangeNotifier {
           );
       });
     }); // Simulate a delay for loading state
+  }
+
+  Future<void> googleLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().googleLogin().then((lr) {
+        handleFold(
+          either: lr,
+          //processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
+    processStatusNotifier.setEnabled();
+  }
+
+  Future<void> facebookLogin() async{
+    processStatusNotifier.setLoading();
+    await serviceLocator<AuthInterface>().facebookLogin().then((lr) {
+        handleFold(
+          either: lr,
+          //processStatusNotifier: processStatusNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          //errorSnackbarNotifier: snackbarNotifier,
+        );
+      });
+    processStatusNotifier.setEnabled();
   }
 }

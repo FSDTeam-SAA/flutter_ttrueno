@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
+import 'package:ttrueno_fo827e642a0c4/core/utils/extensions/datetime_ext.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/message/controller/inbox_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/model/rider.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
@@ -44,16 +45,16 @@ class _ChatRideCardWidgetState extends State<ChatRideCardWidget> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Row(
               children: [
+                // Text(
+                //   DateFormat.yMMMMEEEEd().format(widget.activeRideChatController.ride.value.departureTime),
+                //   style: TextStyle(
+                //     fontSize: 16,
+                //     color: AppColors.primaryTextblack,
+                //   ),
+                // ),
+                // Gap.w12,
                 Text(
-                  DateFormat.yMMMMEEEEd().format(widget.activeRideChatController.ride.value.departureTime),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.primaryTextblack,
-                  ),
-                ),
-                Gap.w12,
-                Text(
-                  DateFormat.Hm().format(widget.activeRideChatController.ride.value.departureTime),
+                  widget.activeRideChatController.ride.value.departureTime.dmyAthm,
                   style: TextStyle(
                     fontSize: 16,
                     color: AppColors.primaryTextblack,

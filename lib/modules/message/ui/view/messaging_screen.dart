@@ -63,36 +63,39 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   leaveRideController.leaveRide(snackbarNotifier: SnackbarNotifier(context: context));
                 }
               },
-              child: Row(
-                children: [
-                  Text(
-                    'Leave'.tr(),
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Image.asset(
-                    'assets/images/leave.png',
-                    width: 28,
-                    height: 28,
-                    color: Colors.red,
-                  ),
-                  RIcon(
-                    key: UniqueKey(),
-                    iconWidget: Container(),
-                    processStatusNotifier: leaveRideController.stn,
-                    loadingStateWidget: SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
+              child: Opacity(
+                opacity: widget.activeRideChatController.eligibleToLeave ? 1 : 00,
+                child: Row(
+                  children: [
+                    Text(
+                      'Leave'.tr(),
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )
-                ],
+                    const SizedBox(width: 8),
+                    Image.asset(
+                      'assets/images/leave.png',
+                      width: 28,
+                      height: 28,
+                      color: Colors.red,
+                    ),
+                    RIcon(
+                      key: UniqueKey(),
+                      iconWidget: Container(),
+                      processStatusNotifier: leaveRideController.stn,
+                      loadingStateWidget: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
