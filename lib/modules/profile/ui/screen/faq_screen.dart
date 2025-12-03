@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
@@ -116,7 +117,28 @@ class FaqScreen extends StatelessWidget {
           itemCount: faqs.length,
           itemBuilder: (context, index) {
             final item = faqs[index];
-            return Container(
+            return _AliveFaqWidget(item: item, index: index);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _AliveFaqWidget extends StatefulWidget {
+  final Map<String, String> item;
+  final int index;
+  const _AliveFaqWidget({super.key, required this.item, required this.index});
+
+  @override
+  State<_AliveFaqWidget> createState() => __AliveFaqWidgetState();
+}
+
+class __AliveFaqWidgetState extends State<_AliveFaqWidget> with AutomaticKeepAliveClientMixin{
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Container(
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -136,10 +158,10 @@ class FaqScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                collapsedIconColor: Colors.blue,
-                iconColor: Colors.blue,
+                collapsedIconColor: Colors.black,
+                iconColor: Colors.black,
                 title: Text(
-                  item['question']!,
+                  widget.item['question']!,
                   style: AppText.mdSemiBold_16_600.copyWith(
                     color: AppColors.primaryTextblack,
                   ),
@@ -149,7 +171,7 @@ class FaqScreen extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: MarkdownBody(
-                      data: item['answer']!,
+                      data: widget.item['answer']!,
                       selectable: true,
                       styleSheet: MarkdownStyleSheet(
                         
@@ -178,10 +200,20 @@ class FaqScreen extends StatelessWidget {
                   ),
                 ],
               ),
+            ).animate(
+              delay: (100 * widget.index).ms,
+            ).slideY(
+              begin: 01.0,
+              end: 0,
+              duration: 300.ms,
+              curve: Curves.easeIn,
+            ).fadeIn(
+              duration: 300.ms,
+              curve: Curves.easeIn,
             );
-          },
-        ),
-      ),
-    );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

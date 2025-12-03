@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
+import 'package:ttrueno_fo827e642a0c4/core/constants/assets.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/description_doc_view.dart';
@@ -13,6 +14,7 @@ import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_doc
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
+import '../../profile/ui/screen/pdf_description_view.dart';
 import '../widget/social_icon.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -269,7 +271,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      DescriptionDocView(descriptionScreenType: DescriptionViewType.privacyPolicy, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.privacyPolicy ?? "",),
+                                                      PdfDescriptionView(
+                                                        assetPath: Assets.privacyPolicy,
+                                                      ),
                                                 ),
                                               );
                                             },

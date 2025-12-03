@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import '../../../base/pagination.dart';
 
@@ -46,7 +47,7 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
                   Center(child: Text(widget.emptyMessage)),
                   IconButton(onPressed: widget.onRefresh, icon: const Icon(Icons.refresh))
                 ],
-              );
+              ).animate().fadeIn(duration: 300.ms);
             }
             return ListView.builder(
               itemCount: data.value.data.length + 1,
@@ -63,14 +64,24 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
                           )
                         )
                       ],
-                    );
+                    ).animate().fadeIn(duration: 300.ms);
                   } else {
                     return Container();
                   }
 
                 }
                 final element = data.value.data[index];
-                return widget.builder(index, element);
+                return widget.builder(index, element).animate(
+                  delay: 300.ms
+                ).slideY(
+                  begin: 0.1,
+                  end: 0,
+                  duration: 300.ms,
+                  curve: Curves.easeOutCubic,
+                ).fadeIn(
+                  duration: 300.ms,
+                  curve: Curves.easeOutCubic,
+                );
               },
             );
           },

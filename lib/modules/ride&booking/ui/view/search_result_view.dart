@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
@@ -266,7 +267,12 @@ class _SearchResultsViewState extends State<SearchResultsView> {
                   ),
                 ),
               ],
-            ),
+            ).animate(delay: Duration(milliseconds: 500)).slideY(
+              begin: 0.2,
+              end: 0,
+              duration: 500.ms,
+              curve: Curves.easeOutCubic,
+            ).fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
           );
         }
       ),

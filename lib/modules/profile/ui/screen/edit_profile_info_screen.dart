@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/cache/smart_network_image.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/circle_shape.dart';
@@ -169,9 +170,19 @@ class _EditProfileInfoScreenState extends State<EditProfileInfoScreen> {
               const SizedBox(height: 300),
               
             ],
-          ),
+          )
         ),
-      ),
+      ).animate(
+        delay: 300.ms
+      ).slideY(
+          begin: 0.2,
+          end: 0,
+          duration: 300.ms,
+          curve: Curves.easeIn,
+        ).fadeIn(
+          duration: 300.ms,
+          curve: Curves.easeIn,
+        ),
     );
   }
 }

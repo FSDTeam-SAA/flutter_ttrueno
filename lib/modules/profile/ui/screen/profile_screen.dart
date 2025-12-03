@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
@@ -294,7 +295,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ],
-          ),
+          ).animate().slideY(
+            begin: 0.2,
+            end: 0,
+            duration: 500.ms,
+            curve: Curves.easeOutCubic,
+          ).fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
         ),
       ),
     );

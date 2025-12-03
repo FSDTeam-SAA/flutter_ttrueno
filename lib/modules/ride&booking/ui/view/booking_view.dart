@@ -6,7 +6,9 @@ import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/app_colors.dart';
 import 'package:ttrueno_fo827e642a0c4/core/theme/text_style.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/controller/my_booking_controller.dart';
+import 'package:ttrueno_fo827e642a0c4/modules/ride&booking/model/booking.dart';
 import '../../../../core/common/components/booked_ride_card/booked_ride_card.dart';
+import '../../../../core/common/components/booked_ride_card/booked_ride_card_controller.dart';
 import '../../../../core/common/widgets/list/paginated_list.dart';
 import '../../../../core/common/widgets/loading/ride_card_shimmer_skeleton.dart';
 
@@ -92,20 +94,42 @@ class _BookingScreenState extends State<BookingScreen>
             skeletonCount: 4,
             onRefresh:()=> bookingControllers.completed.getBookings(forceRefresh: true),
             builder: (index, data) {
-              return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: BookedRideCard.fromRide(
-                    data.booking.ride,
-                    data,
-                    allowJoin: false,
-                    elevation: 2,
-                  ),
-                );
+              return _AliveBookingCard(bookingController: data);
             },
           ),
         ],
       ),
     );
+  }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+
+class _AliveBookingCard extends StatefulWidget {
+  final BookedRideCardActionController bookingController;
+  const _AliveBookingCard({super.key, required this.bookingController});
+
+  @override
+  State<_AliveBookingCard> createState() => _AliveBookingCardState();
+}
+
+class _AliveBookingCardState extends State<_AliveBookingCard> with AutomaticKeepAliveClientMixin{
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Padding(
+        key: Key(widget.bookingController.booking.hashCode.toString()),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: BookedRideCard.fromRide(
+          widget.bookingController.booking.ride,
+          widget.bookingController,
+          allowJoin: false,
+          elevation: 2,
+        ),
+      );
   }
   
   @override

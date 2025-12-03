@@ -3,4 +3,8 @@ class Assets {
   static const String applogo = 'assets/icons/applogo.png';
   static const String instagram = 'assets/icons/instagram.png';
   static const String twitter = 'assets/icons/twitter.png';
+
+
+  // pdf paths
+  static const String privacyPolicy = 'assets/docs/hoplift-privacy-policy.pdf';
 }

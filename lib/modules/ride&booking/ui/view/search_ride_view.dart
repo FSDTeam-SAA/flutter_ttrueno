@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
@@ -120,7 +121,12 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                 NotificationBellWidget(),
                 
               ],
-            ),
+            ).animate().slideY(
+              begin: -0.5,
+              end: 0,
+              duration: 500.ms,
+              curve: Curves.easeOutCubic,
+            ).fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -301,11 +307,17 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                       ),
                       Gap.h24,
                     ],
-                  ),
+                  ).animate().slideY(
+                    begin: 0.2,
+                    end: 0,
+                    duration: 500.ms,
+                    curve: Curves.easeOutCubic,
+                  ).fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
                 ),
-              ),
+              )
             ),
-          ),
+          )
+          
         ],
       ),
     );
