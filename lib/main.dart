@@ -73,7 +73,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  late AppManager appManager;
   @override
   void initState() {
     super.initState();
@@ -83,8 +82,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    appManager = AppManager();
-    Get.put(appManager);
+    Get.put(AppManager());
   }
 
   @override
@@ -102,6 +100,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       onGenerateRoute: (settings) {
+        final appManager = Get.find<AppManager>();
         switch (settings.name) {
           case RouteNames.home:
             if (appManager.authStatus is Authenticated) {

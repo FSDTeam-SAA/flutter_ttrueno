@@ -23,35 +23,35 @@ class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
   /// Initializes the stream to listen to auth status
   AppManager() {
-    Get.put<DescriptionDocsLoader>(DescriptionDocsLoader());
-    Get.find<DescriptionDocsLoader>().init();
+    Get.put<DescriptionDocsLoader>(DescriptionDocsLoader()).init();
     _init();
   }
 
   _init() async{
     // Get initail auth status
     // Wait for splash screen
-    await Future.delayed(const Duration(seconds: 0)).then((_) async{
-      final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
-      handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
-      // Start listening to the auth status changes
+
+    // await Future.delayed(const Duration(seconds: 1)).then((_) async{
+    //   final lr = await serviceLocator<AuthInterface>().getCurrentAuth();
+    //   handleFold(either: lr, onSuccess: (initialStatus) => _decideRoute(initialStatus),);
+     
+    // });
+
+     // Start listening to the auth status changes
       _authStreamSubscription = getAuthStream().listen((newStatus) async{
         _decideRoute(newStatus);
       });
-    });
-
-    
   }
 
   _decideRoute(AuthStatus? newAuthStatus) async{
-    debugPrint("(In Appmanager)Auth status: $newAuthStatus");
+    debugPrint('AppManager: Deciding route for auth status: $newAuthStatus');
     if(newAuthStatus == _authStatus) return;
+
     if(newAuthStatus != null) {
       _authStatus = newAuthStatus; 
       if(_authStatus is UnAuthenticated) {
         //navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.login, (route) => false);   
         final isFirstTimeLogin = await HiveCacheService.onboarding().get<bool>(HiveCacheKeys.isFirstTimeLogin) ?? true;
-        debugPrint("isFirstTimeLogin: $isFirstTimeLogin");
         if(isFirstTimeLogin == true) {
           navigatorKey.currentState?.pushNamedAndRemoveUntil(RouteNames.onboarding, (route) => false);
         } else {

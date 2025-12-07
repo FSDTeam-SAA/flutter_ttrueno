@@ -313,7 +313,7 @@ class _FilterRidesViewState extends State<FilterRidesView> {
                 const Icon(Icons.person_outline, size: 28),
                 Gap.w12,
                 Text(
-                  "Passengers".tr(),
+                  "Seats Availavle".tr(),
                   style: AppText.lgMedium_18_500.copyWith(
                     color: AppColors.primaryTextblack,
                   ),

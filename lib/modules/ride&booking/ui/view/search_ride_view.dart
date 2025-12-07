@@ -235,7 +235,7 @@ class _SearchScreenViewState extends State<SearchScreenView> with AutomaticKeepA
                           const Icon(Icons.person_outline, size: 28),
                           Gap.w12,
                           Text(
-                            "Passengers".tr(),
+                            "Seats Available".tr(),
                             style: AppText.mdRegular_16_400.copyWith(
                               color: AppColors.primaryTextblack,
                             ),
