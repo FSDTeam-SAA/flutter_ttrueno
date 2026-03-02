@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -41,7 +41,7 @@ base class ApiEndpoints {
   static const String markAllAsRead = _Notification.markAllAsRead;
 
   // ---------------------- USER -----------------------------
-  
+
   /// ### get
   static String getuserbyId(String id) => _User.getuserbyId(id);
 
@@ -56,7 +56,6 @@ base class ApiEndpoints {
 
   /// ### get
   static const String history = _User.history;
-
 
   // ---------------------- RIDE -----------------------------
   /// ### post
@@ -73,41 +72,49 @@ base class ApiEndpoints {
   static String changeBaggage(String rideId) => _Booking.changeBaggage(rideId);
 
   // ---------------------- Booking -----------------------------
-  static String getAllBookingsForARide(String rideId) => _Booking.getAllBookingsForARide(rideId);
+  static String getAllBookingsForARide(String rideId) =>
+      _Booking.getAllBookingsForARide(rideId);
   static const String getMyBookings = _Booking.getMyBookings;
 
   // ---------------------- Message -----------------------------
   /// ### Get
   static const String getAllChat = _Message.getAllChat;
+
   /// ### Get
   static String getMessages(String chatId) => _Message.getMessages(chatId);
-  /// ### Post
-  static String sendMessage(String chatId) => _Message.sendMessage(chatId);
-  /// ### Put
-  static String messageRead(String messageId) => _Message.messageRead(messageId);
-  /// ### Put
-  static String editMessage(String messageId) => _Message.editMessage(messageId);
-  /// ### Delete
-  static String deleteMessage(String messageId) => _Message.deleteMessage(messageId);
 
+  /// ### Post
+  static String getChatByRideId(String rideId) =>
+      _Message.getChatByRideId(rideId);
+
+  static String sendMessage(String chatId) => _Message.sendMessage(chatId);
+
+  /// ### Put
+  static String messageRead(String messageId) =>
+      _Message.messageRead(messageId);
+
+  /// ### Put
+  static String editMessage(String messageId) =>
+      _Message.editMessage(messageId);
+
+  /// ### Delete
+  static String deleteMessage(String messageId) =>
+      _Message.deleteMessage(messageId);
 }
 
 //arrow360degree@gmail.com
 
 class _RemoteServer {
-  static const String socketUrl =
-      'https://api.hopliftapp.com';
+  static const String socketUrl = 'https://api.hopliftapp.com';
 
-  static const String baseUrl =
-      'https://api.hopliftapp.com/api/v1';
+  static const String baseUrl = 'https://api.hopliftapp.com/api/v1';
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.90:5006';
+  static const String socketUrl = 'http://10.10.5.46:5006';
 
-  static const String baseUrl = 'http://10.10.5.90:5006/api/v1';
+  static const String baseUrl = 'http://10.10.5.46:5006/api/v1';
 }
-
 
 class _Auth {
   @protected
@@ -127,8 +134,6 @@ class _Auth {
   static const String createNewPassword = '$_authRoute/reset-password';
 }
 
-
-
 // ---------------------- Notification -----------------------------
 class _Notification {
   static const String _notificationRoute =
@@ -136,8 +141,7 @@ class _Notification {
   static String markNotificationAsRead(String notificationId) =>
       '$_notificationRoute/$notificationId/read';
 
-  static const String readAllNotifications =
-      '$_notificationRoute/read-all';
+  static const String readAllNotifications = '$_notificationRoute/read-all';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
   static const String getUserNotifications = '$_notificationRoute/user';
 }
@@ -150,7 +154,6 @@ class _User {
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
 }
-
 
 // ---------------------- RIDE -----------------------------
 class _Ride {
@@ -165,30 +168,38 @@ class _Ride {
   static String voteForKick(String id) => "$_rideRoute/$id/kick";
   static String deleteRide(String id) => "$_rideRoute/$id";
   static String rateRide(String rideId) => "$_rideRoute/$rideId/rate";
-  
 }
 
 class _Booking {
   static const String _bookingRoute = '${ApiEndpoints.baseUrl}/booking';
   static const String getMyBookings = "$_bookingRoute/my";
-  static String getAllBookingsForARide(String rideId) => "$_bookingRoute/ride/$rideId";
+  static String getAllBookingsForARide(String rideId) =>
+      "$_bookingRoute/ride/$rideId";
   static String changeBaggage(String id) => "$_bookingRoute/$id";
 }
 
 // ---------------------- MESSAGE -----------------------------
 class _Message {
   static const String _messageRoute = '${ApiEndpoints.baseUrl}/message';
-  
+
   static const String getAllChat = "$_messageRoute/rooms";
+
   /// Get
   static String getMessages(String chatId) => "$_messageRoute/$chatId";
+
   /// Post
+  static String getChatByRideId(String rideId) =>
+      "$_messageRoute/ride/$rideId/chat";
+
   static String sendMessage(String chatId) => "$_messageRoute/$chatId";
+
   /// Put
-  static String messageRead(String messageId) => "$_messageRoute/read/$messageId";
+  static String messageRead(String messageId) =>
+      "$_messageRoute/read/$messageId";
+
   /// Put
   static String editMessage(String messageId) => "$_messageRoute/$messageId";
+
   /// Delete
   static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
 }
-
