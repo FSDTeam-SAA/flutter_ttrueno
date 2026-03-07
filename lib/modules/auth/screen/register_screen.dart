@@ -1,15 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:ttrueno_fo827e642a0c4/core/common/widgets/reactive_buttons/save_button.dart';
 import 'package:ttrueno_fo827e642a0c4/core/notifiers/snackbar_notifier.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/controller/sign_up_controller.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/ui/screen/description_doc_view.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/select_signin_method_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/signin_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/modules/auth/screen/verify_code_screen.dart';
 import 'package:ttrueno_fo827e642a0c4/app/widget/custom_text_field_widget.dart';
-import 'package:ttrueno_fo827e642a0c4/modules/profile/controller/description_docs_loader.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gap.dart';
 import '../../../core/theme/text_style.dart';
@@ -35,8 +33,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // TODO: implement initState
     super.initState();
     signupController = SignUpController(SnackbarNotifier(context: context));
-
   }
+  Future<void> openTerms() async {
+  final Uri url = Uri.parse("https://www.hopliftapp.com/legal");
+
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     return 'Username is required';
                                   }
                                   return null;
-                                }, obscureText: false,
+                                },
+                                obscureText: false,
                               ),
                               Gap.h16,
                               Text(
@@ -161,7 +166,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     return 'Enter a valid email address';
                                   }
                                   return null;
-                                }, obscureText: false,
+                                },
+                                obscureText: false,
                               ),
                               Gap.h16,
                               Text(
@@ -231,7 +237,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: "Term of Service",
+                                          text:
+                                              "Term of Service & Privacy Policy",
                                           style: AppText.smRegular_14_400
                                               .copyWith(
                                                 color:
@@ -239,40 +246,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               ),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DescriptionDocView(descriptionScreenType: DescriptionViewType.termsAndCondition, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.termsAndCondition ?? "",),
-                                                ),
-                                              );
+                                              openTerms();
                                             },
                                         ),
-                                        TextSpan(
-                                          text: " and ",
-                                          style: AppText.smRegular_14_400
-                                              .copyWith(
-                                                color: AppColors.secondaryText,
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: "Privacy Policy",
-                                          style: AppText.smRegular_14_400
-                                              .copyWith(
-                                                color:
-                                                    AppColors.primaryTextblack,
-                                              ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DescriptionDocView(descriptionScreenType: DescriptionViewType.privacyPolicy, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.privacyPolicy ?? "",),
-                                                ),
-                                              );
-                                            },
-                                        ),
+                                        // TextSpan(
+                                        //   text: "Term of Service & Privacy Policy",
+                                        //   style: AppText.smRegular_14_400
+                                        //       .copyWith(
+                                        //         color:
+                                        //             AppColors.primaryTextblack,
+                                        //       ),
+                                        //   recognizer: TapGestureRecognizer()
+                                        //     ..onTap = () {
+                                        //       Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //           builder: (context) =>
+                                        //               DescriptionDocView(descriptionScreenType: DescriptionViewType.termsAndCondition, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.termsAndCondition ?? "",),
+                                        //         ),
+                                        //       );
+                                        //     },
+                                        // ),
+                                        // TextSpan(
+                                        //   text: " and ",
+                                        //   style: AppText.smRegular_14_400
+                                        //       .copyWith(
+                                        //         color: AppColors.secondaryText,
+                                        //       ),
+                                        // ),
+                                        // TextSpan(
+                                        //   text: "Privacy Policy",
+                                        //   style: AppText.smRegular_14_400
+                                        //       .copyWith(
+                                        //         color:
+                                        //             AppColors.primaryTextblack,
+                                        //       ),
+                                        //   recognizer: TapGestureRecognizer()
+                                        //     ..onTap = () {
+                                        //       Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //           builder: (context) =>
+                                        //               DescriptionDocView(descriptionScreenType: DescriptionViewType.privacyPolicy, descriptionText: Get.find<DescriptionDocsLoader>().descriptionDocs?.privacyPolicy ?? "",),
+                                        //         ),
+                                        //       );
+                                        //     },
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -285,35 +304,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             key: UniqueKey(),
                             width: double.infinity,
                             height: 52,
-                            buttonStatusNotifier: signupController.processNotifier,
+                            buttonStatusNotifier:
+                                signupController.processNotifier,
                             saveText: "Register",
                             loadingText: "Registering...",
                             doneText: "Done",
                             onDone: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VerifyCodeScreen.verifyAccount(
-                                      email: emailController.text.trim(),
-                                      onDone: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SelectSigninMethodScreen(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VerifyCodeScreen.verifyAccount(
+                                        email: emailController.text.trim(),
+                                        onDone: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SelectSigninMethodScreen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                ),
+                              );
                             },
-                            onSaveTap: () async{
+                            onSaveTap: () async {
                               if (_formKey.currentState!.validate() &&
                                   _agreedToTerms) {
                                 await signupController.signup(
-                                  buttonNotifier: signupController.processNotifier,
-                                  snackbarNotifier: signupController.snackbarNotifier,
+                                  buttonNotifier:
+                                      signupController.processNotifier,
+                                  snackbarNotifier:
+                                      signupController.snackbarNotifier,
                                 );
                               } else if (!_agreedToTerms) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -355,7 +378,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ],
                           ),
-                          Gap.h40
+                          Gap.h40,
                         ],
                       ),
                     ),
