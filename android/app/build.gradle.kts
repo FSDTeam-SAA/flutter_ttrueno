@@ -45,21 +45,34 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+    create("release") {
+        val keyAliasValue = keystoreProperties["keyAlias"] as String?
+        val keyPasswordValue = keystoreProperties["keyPassword"] as String?
+        val storeFileValue = keystoreProperties["storeFile"] as String?
+        val storePasswordValue = keystoreProperties["storePassword"] as String?
+
+        if (
+            keyAliasValue != null &&
+            keyPasswordValue != null &&
+            storeFileValue != null &&
+            storePasswordValue != null
+        ) {
+            keyAlias = keyAliasValue
+            keyPassword = keyPasswordValue
+            storeFile = file(storeFileValue)
+            storePassword = storePasswordValue
         }
     }
+}
 
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-            // Disable code shrinking and resource shrinking
-            isMinifyEnabled = true
-            isShrinkResources = true
-        }
+    if (signingConfigs.findByName("release") != null) {
+        signingConfig = signingConfigs.getByName("release")
+    }
+    isMinifyEnabled = true
+    isShrinkResources = true
+}
     }
 }
 
