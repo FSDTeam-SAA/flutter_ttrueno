@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,10 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Hide Android gesture navigation and status bar, reveal on swipe (immersive mode)
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  
   await EasyLocalization.ensureInitialized();
   await initDependencies();
 

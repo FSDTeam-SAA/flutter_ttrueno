@@ -45,22 +45,25 @@ android {
     }
 
     signingConfigs {
+    if (keystorePropertiesFile.exists()) {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = keystoreProperties["keyAlias"] as String? ?: ""
+            keyPassword = keystoreProperties["keyPassword"] as String? ?: ""
+            storeFile = keystoreProperties["storeFile"]?.let { file(it.toString()) }
+            storePassword = keystoreProperties["storePassword"] as String? ?: ""
         }
     }
+}
 
     buildTypes {
-        getByName("release") {
+    getByName("release") {
+        if (keystorePropertiesFile.exists()) {
             signingConfig = signingConfigs.getByName("release")
-            // Disable code shrinking and resource shrinking
-            isMinifyEnabled = true
-            isShrinkResources = true
         }
+        isMinifyEnabled = true
+        isShrinkResources = true
     }
+}
 }
 
 flutter {
